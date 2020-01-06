@@ -1,7 +1,12 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Test = ({ text }) => (
-  <div>This is a test: {text}</div>
-)
+  <div>{`This is a test: ${text}`}</div>
+);
 
-export default Test
+Test.propTypes = {
+  text: PropTypes.string.isRequired,
+};
+
+export default Test;
