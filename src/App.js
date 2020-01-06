@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
+import Test from './Test'
 
 import {
   About,
@@ -97,6 +98,7 @@ class App extends Component {
           <Link className="link" to="/about">About</Link>
           <Link className="link" to="/favorites">Favorite Pokémons</Link>
         </nav>
+        <Test text="Hello, world" />
         {this.renderRoutes()}
       </div>
     );
