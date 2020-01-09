@@ -25,7 +25,7 @@ test('shows the Pokedéx when the route is `/`', () => {
 
 test('the Pokedéx must show only 1 pokémon', () => {
   const { queryAllByText } = render(
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter>
       <App />
     </MemoryRouter>,
   );
