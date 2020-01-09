@@ -193,9 +193,9 @@ Por default, os _endpoints_ da PokéAPI retornam no máximo 20 resultados. Utili
 ### ANTES DE COMEÇAR A DESENVOLVER:
 
 1. Clone o repositório
-  * `git clone git@github.com:tryber/sd-01-week15-react-testing.git`.
+  * `git clone git@github.com:tryber/sd-01-week15-react-tests.git`.
   * Entre na pasta do repositório que você acabou de clonar:
-    * `cd sd-01-week15-react-testing`
+    * `cd sd-01-week15-react-tests`
 
 2. Instale as dependências
   * `npm install`
