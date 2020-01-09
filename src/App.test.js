@@ -53,3 +53,20 @@ test('Ao apertar o botão de próximo, a página deve exibir o próximo pokémon
   }
   expect(namePokemon.textContent).toBe(pokemon);
 });
+test('A Pokédex deve conter botões de filtro', () => {
+  const { getByText, getByTestId } = render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>,
+  );
+  let btnTypePokemon = null;
+  const typePokemon = getByTestId('pokemon-type');
+  const pokemon = getByTestId('pokemon-type').textContent;
+  const lista = data.map(tiposPokemons => tiposPokemons.type);
+  const listaPokemon = [...new Set(lista)];
+  for (let btn of listaPokemon) {
+    btnTypePokemon = getByText(btn);
+    fireEvent.click(btnTypePokemon);
+  }
+  expect(pokemon).not.toBe(typePokemon.textContent);
+});
