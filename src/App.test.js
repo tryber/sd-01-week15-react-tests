@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import App from './App';
+// import Pokemon from './components/Pokemon';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
@@ -20,4 +21,14 @@ test('shows the Pokedéx when the route is `/`', () => {
   );
 
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
+});
+test('A Pokédex deve exibir apenas um pokémon por vez', () => {
+  const { queryAllByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>,
+  );
+  const pokemon = queryAllByText(/Average weight:/i);
+
+  expect(pokemon.length).toBe(1);
 });
