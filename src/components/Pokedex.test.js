@@ -407,7 +407,7 @@ describe('5 -  A Pokédex deve conter um botão para resetar o filtro', () => {
     const details = getByText('More details');
     const names = () => arrayPokemon.map(() => {
       const name = details.previousSibling.previousSibling.previousSibling.textContent;
-      fireEvent.click(btnNext)
+      fireEvent.click(btnNext);
       return name;
     })
     expect(names()).toStrictEqual(getAllName);
@@ -473,19 +473,19 @@ describe('7 -O botão de Próximo pokémon deve ser desabilitado se a lista filt
     const btnAll = getByText('All');
     const btnNext = getByText('Próximo pokémon');
     const btnType = btnAll.nextSibling;
-    
+
   }
 
   test('7-1 - testando com array padrao', () => {
-    test7(pokemons, isPokemonFavoriteById)
+    test7(pokemons, isPokemonFavoriteById);
   });
 
   test('7-2 - testando com array com um elemento', () => {
-    test7(pokemonsOneElement, favoriteOneElement)
+    test7(pokemonsOneElement, favoriteOneElement);
   });
 
   test('7-3 - testando com todos os pokemons com o mesmo tipo', () => {
-    test7(pokemonsAllOneType, isPokemonFavoriteById)
+    test7(pokemonsAllOneType, isPokemonFavoriteById);
   });
 });
 
