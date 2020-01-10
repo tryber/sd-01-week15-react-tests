@@ -10,7 +10,6 @@ const Button = ({
   onClick,
 }) => (
   <button
-    data-testid={`type-${children}`}
     onClick={onClick}
     className={`button-text ${className}`}
     disabled={disabled}
