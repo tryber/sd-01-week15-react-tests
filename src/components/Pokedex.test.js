@@ -239,9 +239,11 @@ describe('3.', () => {
     );
     const nextButton = queryByText(/Próximo pokémon/i);
     expect(nextButton).toBeInTheDocument();
+
     for (let i = 0; i < pokemonList.length; i += 1) {
       expect(getByText(pokemonList[i].name)).toBeInTheDocument();
       fireEvent.click(nextButton);
     }
+    expect(getByText(pokemonList[0].name)).toBeInTheDocument();
   });
 });
