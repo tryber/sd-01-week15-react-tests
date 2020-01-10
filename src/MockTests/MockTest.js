@@ -1,4 +1,4 @@
-export const pokemons_mock = [
+export const pokemons_Mock = [
   {
     id: 1,
     name: 'Ditto',
@@ -7,7 +7,7 @@ export const pokemons_mock = [
       value: '4.0',
       measurementUnit: 'kg',
     },
-    image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
+    image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png',
     moreInfo: 'https://archives.bulbagarden.net/media/upload/5/50/Spr_3e_132.png',
     foundAt: [
       {
@@ -75,7 +75,7 @@ export const pokemons_mock = [
   },
 ];
 
-export const isPokemonFavoriteById_mock = {
+export const isPokemonFavoriteById_Mock = {
   1: false,
   2: false,
   3: false,
