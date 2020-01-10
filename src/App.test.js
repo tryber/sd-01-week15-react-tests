@@ -19,5 +19,6 @@ test('shows the Pokédex when the route is "/"', () => {
       <App />
     </MemoryRouter>
   );
+
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
-})
+});
