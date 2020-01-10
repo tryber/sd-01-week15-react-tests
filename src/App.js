@@ -99,7 +99,7 @@ class App extends Component {
         </nav>
         {this.renderRoutes()}
       </div>
-    );
+    )
   }
 }
 
