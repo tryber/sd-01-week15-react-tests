@@ -2,7 +2,6 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import App from '../App';
-// import data from './dataForTests';
 import { Pokedex } from '../components';
 
 afterEach(cleanup);
