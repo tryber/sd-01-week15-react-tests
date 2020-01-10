@@ -219,6 +219,28 @@ const isPokemonFavoriteById = {
   9: false,
 };
 
+const {
+  Electric,
+  Fire,
+  Bug,
+  Poison,
+  Psychic,
+  Normal,
+  Dragon,
+} = [];
+
+const typeOfPokemon = [Electric, Fire, Bug, Poison, Psychic, Normal, Dragon];
+const stringTypeOfPokemon = ['Electric', 'Fire', 'Bug', 'Poison', 'Psychic', 'Normal', 'Dragon'];
+
+for (let i = 0; i < typeOfPokemon.length; i += 1) {
+  pokemonList.forEach((pokemon) => {
+    if (pokemon.type === stringTypeOfPokemon[i]) {
+      typeOfPokemon[i].push(pokemon);
+    }
+  });
+  console.log(typeOfPokemon);
+}
+
 describe('2.', () => {
   test('Shows just one pokemon', () => {
     const { queryAllByText } = render(
@@ -245,5 +267,10 @@ describe('3.', () => {
       fireEvent.click(nextButton);
     }
     expect(getByText(pokemonList[0].name)).toBeInTheDocument();
+  });
+});
+
+describe('4.', () => {
+  test('when select a type of pokemon, don`t have other type of', () => {
   });
 });
