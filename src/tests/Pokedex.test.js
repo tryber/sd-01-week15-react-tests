@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import App from '../App';
-import data from './dataForTests';
+// import data from './dataForTests';
 import { Pokedex } from '../components';
 
 afterEach(cleanup);
@@ -173,8 +173,7 @@ test(' 4 - A Pokédex deve conter botões de filtro', () => {
   for (let i = 0; i < listaPokemon.length; i += 1) {
     expect(auxiliar.nextSibling.textContent).toBe(listaPokemon[i]);
     auxiliar = auxiliar.nextSibling;
-    const buttonType =
-      getAllByText(listaPokemon[i])[1] || getByText(listaPokemon[i]);
+    const buttonType = getAllByText(listaPokemon[i])[1] || getByText(listaPokemon[i]);
     fireEvent.click(buttonType);
     expect(queryAllByText(listaPokemon[i]).length).toBe(2);
     fireEvent.click(getByText(/Próximo pokémon/i));
