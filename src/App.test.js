@@ -47,3 +47,17 @@ test('Ao clicar no link "Home" na barra de navegação, a aplicação deve ser r
   const homeInfo = getByText(/Próximo pokémon/i);
   expect(homeInfo).toBeInTheDocument();
 });
+
+//19
+test('Ao clicar no link "About" na barra de navegação, a aplicação deve ser redirecionada para a página de About, na URL "/about"', () => {
+  const { getByText } = render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>
+  );
+
+  fireEvent.click(getByText(/About/i));
+  
+  const aboutInfo = getByText(/About Pokédex/i);
+  expect(aboutInfo).toBeInTheDocument();
+});
