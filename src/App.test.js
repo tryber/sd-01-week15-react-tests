@@ -61,3 +61,17 @@ test('Ao clicar no link "About" na barra de navegação, a aplicação deve ser 
   const aboutInfo = getByText(/About Pokédex/i);
   expect(aboutInfo).toBeInTheDocument();
 });
+
+//20
+test('Ao clicar no link "Favorite Pokémons" na barra de navegação, a aplicação deve ser redirecionada para a página de pokémons favoritados, na URL "/favorites"', () => {
+  const { getByText } = render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>
+  );
+
+  fireEvent.click(getByText(/Favorite Pokémons/i));
+  
+  const noFavoritePokemonInfo = getByText(/No favorite pokemon found/i);
+  expect(noFavoritePokemonInfo).toBeInTheDocument();  
+});
