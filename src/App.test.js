@@ -43,6 +43,14 @@ function renderWithRouter(
   };
 }
 
+describe('Render the pokedex with the pokemon', () => {
+  test('2 render one image', () => {
+    const { getAllByText } = renderWithRouter(<App />);
+
+    expect(getAllByText(/Average weight/i).length).toBe(1);
+  });
+});
+
 describe('Routes', () => {
   afterEach(cleanup);
 
@@ -98,8 +106,17 @@ describe('21 Page About', () => {
     expect(aboutInfo).toBeInTheDocument();
   });
 
-  // test('21.2 The page must containing two paragraths with text about Pokedex', () => {
-  // });
+  test('21.2 The page must containing two paragraths with text about Pokedex', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    const homePage = getByText(/Encountered pokémons/i);
+    expect(homePage).toBeInTheDocument();
+
+    fireEvent.click(getByText(/About/i));
+
+    const twoParagraphs = document.getElementsByTagName('p');
+    expect(twoParagraphs.length).toBe(2);
+  });
 
   test('21.3 The page must containing a image about Pokedex', () => {
     const { getByText, getByAltText } = renderWithRouter(<App />);
@@ -110,22 +127,6 @@ describe('21 Page About', () => {
     fireEvent.click(getByText(/About/i));
 
     const imagePageAbout = getByAltText(/Pokédex/i);
-    expect(imagePageAbout).toBeInTheDocument();
-  });
-});
-
-describe('23 Show error', () => {
-  test('23.1 The page shows error 404', () => {
-    const { getByText } = renderWithRouter(<App />, { route: '/coruja' });
-
-    const pageNotFound = getByText(/Page requested not found/i);
-    expect(pageNotFound).toBeInTheDocument();
-  });
-
-  test('23.2 The page must containing a image about Pokedex', () => {
-    const { getByAltText } = renderWithRouter(<App />, { route: '/coruja'});
-
-    const imagePageAbout = getByAltText(/Pikachu crying because the page requested was not found/i);
     expect(imagePageAbout).toBeInTheDocument();
   });
 });
