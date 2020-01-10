@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
-import App from './App';
+import App from '../App';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
@@ -31,13 +31,6 @@ test('renders a reading with the text `Próximo pokémon`', () => {
   );
   const button = getByText(/Próximo pokémon/i);
   expect(button).toBeInTheDocument();
-});
-test('Successive clicks on show `Pikachu`', () => {
-  const { getByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
   const Pikachu = getByText(/Pikachu/i);
   fireEvent.click(Pikachu);
   expect(Pikachu).toBeInTheDocument();
