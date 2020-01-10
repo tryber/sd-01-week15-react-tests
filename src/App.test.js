@@ -43,7 +43,7 @@ function renderWithRouter(
   };
 }
 
-describe('routes', () => {
+describe('Routes', () => {
   afterEach(cleanup);
 
   test('18 page shows home page', () => {
@@ -71,14 +71,61 @@ describe('routes', () => {
   });
 
   test('20 page shows home page', () => {
-    const { getAllByText } = renderWithRouter(<App />);
+    const { getByText } = renderWithRouter(<App />);
 
-    const homePage = getAllByText(/Encountered pokémons/i);
+    const homePage = getByText(/Encountered pokémons/i);
     expect(homePage).toBeInTheDocument();
 
-    fireEvent.click(getAllByText(/Favorite Pokémons/i));
+    fireEvent.click(getByText(/Favorite Pokémons/i));
 
-    const favoritePage = getAllByText(/Favorite Pokémons/i);
+    const favoritePage = getByText(/No favorite pokemon found/i);
     expect(favoritePage).toBeInTheDocument();
+  });
+});
+
+describe('21 Page About', () => {
+  afterEach(cleanup);
+
+  test('21.1 The page must containing a heading with text (About Pokédex)', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    const homePage = getByText(/Encountered pokémons/i);
+    expect(homePage).toBeInTheDocument();
+
+    fireEvent.click(getByText(/About/i));
+
+    const aboutInfo = getByText(/About Pokédex/i);
+    expect(aboutInfo).toBeInTheDocument();
+  });
+
+  // test('21.2 The page must containing two paragraths with text about Pokedex', () => {
+  // });
+
+  test('21.3 The page must containing a image about Pokedex', () => {
+    const { getByText, getByAltText } = renderWithRouter(<App />);
+
+    const homePage = getByText(/Encountered pokémons/i);
+    expect(homePage).toBeInTheDocument();
+
+    fireEvent.click(getByText(/About/i));
+
+    const imagePageAbout = getByAltText(/Pokédex/i);
+    expect(imagePageAbout).toBeInTheDocument();
+  });
+});
+
+describe('23 Show error', () => {
+  test('23.1 The page shows error 404', () => {
+    const { getByText } = renderWithRouter(<App />, { route: '/coruja' });
+
+    const pageNotFound = getByText(/Page requested not found/i);
+    expect(pageNotFound).toBeInTheDocument();
+  });
+
+  test('23.2 The page must containing a image about Pokedex', () => {
+    const { getByAltText } = renderWithRouter(<App />, { route: '/coruja'});
+
+    const imagePageAbout = getByAltText(/Pikachu crying because the page requested was not found/i);
+    expect(imagePageAbout).toBeInTheDocument();
   });
 });
