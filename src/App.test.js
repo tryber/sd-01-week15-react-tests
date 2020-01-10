@@ -51,6 +51,23 @@ describe('Render the pokedex with the pokemon', () => {
   });
 });
 
+describe('17 Fixed set of navigation links', () => {
+  afterEach(cleanup);
+
+  test('17.1 First link Home with URL (/)', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    const home = getByText(/Home/i);
+    expect(home.href).toBe('http://localhost/');
+
+    const about = getByText(/About/i);
+    expect(about.href).toBe('http://localhost/about');
+
+    const favorites = getByText(/Favorite Pokémons/i);
+    expect(favorites.href).toBe('http://localhost/favorites');
+  });
+});
+
 describe('Routes', () => {
   afterEach(cleanup);
 
