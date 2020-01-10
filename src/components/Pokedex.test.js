@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, fireEvent, cleanup } from '@testing-library/react';
+import { render, fireEvent, cleanup, waitForDomChange } from '@testing-library/react';
 import Pokedex from './Pokedex';
 
 afterEach(cleanup);
@@ -368,7 +368,6 @@ describe('4 -  A Pokédex deve conter botões de filtro- Botao filtro ser clicad
         <Pokedex pokemons={arrayPokemon} isPokemonFavoriteById={arrayFavorite} />
       </MemoryRouter>,
     );
-    const details = getByText('More details');
     const btnNext = getByText('Próximo pokémon');
     const getAllType = [...new Set(arrayPokemon.map(pokemon => pokemon.type))];
     getAllType.forEach((type) => {
@@ -376,6 +375,7 @@ describe('4 -  A Pokédex deve conter botões de filtro- Botao filtro ser clicad
       expect(btnType).toBeInTheDocument();
       fireEvent.click(btnType);
       fireEvent.click(btnNext);
+      const details = getByText('More details');
       expect(details.previousSibling.previousSibling.textContent).toBe(type);
     })
   }
@@ -464,16 +464,24 @@ describe('6 - Verificar se o programa está criando todos os botoes de type corr
 
 describe('7 -O botão de Próximo pokémon deve ser desabilitado se a lista filtrada de pokémons tiver um só pokémon', () => {
   const test7 = (arrayPokemon, arrayFavorite) => {
-    const { getByText } = render(
+    const { getByText, getAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={arrayPokemon} isPokemonFavoriteById={arrayFavorite} />
       </MemoryRouter>,
     );
     const getAllType = [...new Set(arrayPokemon.map(pokemon => pokemon.type))];
-    const btnAll = getByText('All');
     const btnNext = getByText('Próximo pokémon');
-    const btnType = btnAll.nextSibling;
-
+    getAllType.forEach(type => {
+      const btnType = getAllByText(type)[1] || getByText(type);
+      fireEvent.click(btnType);
+      const details = getByText('More details');
+      const oldName = details.previousSibling.previousSibling.previousSibling.textContent;
+      fireEvent.click(btnNext);
+      const newName = details.previousSibling.previousSibling.previousSibling.textContent;
+      if (oldName === newName) {
+        expect(btnNext.disabled).toBe(true);
+      }
+    })
   }
 
   test('7-1 - testando com array padrao', () => {
@@ -489,16 +497,97 @@ describe('7 -O botão de Próximo pokémon deve ser desabilitado se a lista filt
   });
 });
 
-// test('7 - O botão de Próximo pokémon deve ser desabilitado se a lista filtrada de pokémons tiver um só pokémon', () => {
-//   const { getByText } = render(
-//     <MemoryRouter initialEntries={['/']}>
-//       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-//     </MemoryRouter>,
-//   );
 
-//   const btnNext = getByText('Próximo pokémon');
-//   const btnType = getByText('Fire');
-//   expect(btnNext.disabled).toBe(false);
-//   fireEvent.click(btnType);
-//   expect(btnNext.disabled).toBe(true);
-// });
+describe('8 -A Pokedéx deve exibir o nome, tipo, peso médio e imagem do pokémon exibido', () => {
+  const test8 = (arrayPokemon, arrayFavorite) => {
+    const { getByText, getAllByText, getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={arrayPokemon} isPokemonFavoriteById={arrayFavorite} />
+      </MemoryRouter>,
+    );
+    const btnNext = getByText('Próximo pokémon');
+    arrayPokemon.forEach(pokemon => {
+      const type = getAllByText(pokemon.type)[0];
+      const name = getByText(pokemon.name);
+      const averageWeight = getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`);
+      const img = getByAltText(`${pokemon.name} sprite`);
+      expect(type).toBeInTheDocument();
+      expect(name).toBeInTheDocument();
+      expect(averageWeight).toBeInTheDocument();
+      expect(img.src).toBe(pokemon.image);
+      fireEvent.click(btnNext);
+    })
+  }
+
+  test('8-1 - testando com array padrao', () => {
+    test8(pokemons, isPokemonFavoriteById);
+  });
+
+  test('8-2 - testando com array com um elemento', () => {
+    test8(pokemonsOneElement, favoriteOneElement);
+  });
+
+  test('8-3 - testando com todos os pokemons com o mesmo tipo', () => {
+    test8(pokemonsAllOneType, isPokemonFavoriteById);
+  });
+});
+
+describe('9 -O pokémon exibido na Pokedéx deve conter um link de navegação para exibir detalhes deste pokémon', () => {
+  const test9 = (arrayPokemon, arrayFavorite) => {
+    const { getByText, getAllByText, getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={arrayPokemon} isPokemonFavoriteById={arrayFavorite} />
+      </MemoryRouter>,
+    );
+    const btnNext = getByText('Próximo pokémon')
+    arrayPokemon.forEach(pokemon => {
+      const details = getByText('More details');
+      expect(details.href).toBe(`http://localhost/pokemons/${pokemon.id}`);
+      fireEvent.click(btnNext);
+    })
+  }
+
+  test('9-1 - testando com array padrao', () => {
+    test9(pokemons, isPokemonFavoriteById);
+  });
+
+  test('9-2 - testando com array com um elemento', () => {
+    test9(pokemonsOneElement, favoriteOneElement);
+  });
+
+  test('9-3 - testando com todos os pokemons com o mesmo tipo', () => {
+    test9(pokemonsAllOneType, isPokemonFavoriteById);
+  });
+});
+
+describe('10 - Ao clicar no link de navegação do pokémon, a aplicação deve ser redirecionada para a página de detalhes de pokémon', () => {
+  const test9 = (arrayPokemon, arrayFavorite) => {
+    const { getByText, getAllByText, getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={arrayPokemon} isPokemonFavoriteById={arrayFavorite} />
+      </MemoryRouter>,
+    );
+    const btnNext = getByText('Próximo pokémon')
+    arrayPokemon.forEach( async pokemon => {
+      const details = getByText('More details');
+      expect(details.href).toBe(`http://localhost/pokemons/${pokemon.id}`);
+      fireEvent.click(details);
+      await waitForDomChange();
+      const home = getByText('Home');
+      fireEvent.click(home);
+      fireEvent.click(btnNext);
+    })
+  }
+
+  test('10-1 - testando com array padrao', () => {
+    test9(pokemons, isPokemonFavoriteById);
+  });
+
+  test('10-2 - testando com array com um elemento', () => {
+    test9(pokemonsOneElement, favoriteOneElement);
+  });
+
+  test('10-3 - testando com todos os pokemons com o mesmo tipo', () => {
+    test9(pokemonsAllOneType, isPokemonFavoriteById);
+  });
+});
