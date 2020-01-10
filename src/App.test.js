@@ -173,13 +173,36 @@ test('filter the pokedéx by the type of pokemon', () => {
   for (let i = 0; i < pokemonTypes.length; i += 1) {
     expect(aux.nextSibling.textContent).toBe(pokemonTypes[i]);
     aux = aux.nextSibling;
-    if (queryAllByText(pokemonTypes[i]).length === 2) {
-      fireEvent.click(getAllByText(pokemonTypes[i])[1]);
-    } else {
-      fireEvent.click(getByText(pokemonTypes[i]));
-    }
+
+    const buttonType = getAllByText(pokemonTypes[i])[1] || getByText(pokemonTypes[i]);
+    fireEvent.click(buttonType);
     expect(queryAllByText(pokemonTypes[i]).length).toBe(2);
     fireEvent.click(getByText(/Próximo pokémon/i));
     expect(getByText(/Average weight:/i).previousSibling.textContent).toBe(pokemonTypes[i]);
   }
+});
+
+test('Pokedéx must contain a reset button', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+    </MemoryRouter>,
+  );
+  const resetButton = getByText(/All/i);
+  expect(resetButton).toBeInTheDocument();
+
+  const nextButton = getByText(/Próximo pokémon/i);
+  const allPokemons = pokemons.map((pokemon) => pokemon.name);
+
+  const containedPokemons = () => allPokemons.map(() => {
+    const pokemonName = getByText(/Average weight:/i).previousSibling.previousSibling.textContent;
+    fireEvent.click(nextButton);
+    return pokemonName;
+  });
+
+  expect(containedPokemons()).toStrictEqual(allPokemons);
+  fireEvent.click(resetButton.nextSibling);
+  expect(containedPokemons()).not.toStrictEqual(allPokemons);
+  fireEvent.click(resetButton);
+  expect(containedPokemons()).toStrictEqual(allPokemons);
 });
