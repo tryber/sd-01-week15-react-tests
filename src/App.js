@@ -42,8 +42,8 @@ class App extends Component {
 
   renderPokedex() {
     const { isPokemonFavoriteById } = this.state;
-    console.log(isPokemonFavoriteById)
-    console.log(pokemons)
+    console.log(isPokemonFavoriteById);
+    console.log(pokemons);
     return (
       <Pokedex
         pokemons={pokemons}
