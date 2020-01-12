@@ -98,7 +98,7 @@ describe('Pokédex filter type buttons', () => {
   });
 
   test('the button label must be the type name', () => {
-    const { getByText, getAllByRole, queryAllByText } = render(
+    const { getAllByRole, queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
       </MemoryRouter>
@@ -111,8 +111,38 @@ describe('Pokédex filter type buttons', () => {
             return true
           } return false
         });
-        
-        expect(typeButton).toHaveTextContent(type);
+
+      expect(typeButton).toHaveTextContent(type);
     });
   });
+
+  describe('Type all button', () => {
+    test('must have the all button with the label "all"', () => {
+      const { getByText } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+        </MemoryRouter>
+      );
+
+      expect(getByText(/all/i)).toHaveTextContent(/all/i);
+    });
+
+    test('when clicked, must show all pokémons', () => {
+      const { getByText, queryAllByText } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+        </MemoryRouter>
+      );
+
+      fireEvent.click(getByText(/all/i));
+
+      pokeName.forEach((pokemon, index) => {
+        pokemon === pokeName[index] ? expect(queryAllByText(pokemon).length).toBe(1)
+          : expect(queryAllByText(pokemon).length).toBe(0);
+
+        fireEvent.click(getByText(/Próximo pokémon/i));
+      });
+    });
+  })
 })
+

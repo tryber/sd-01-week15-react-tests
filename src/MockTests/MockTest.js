@@ -129,7 +129,7 @@ export const pokemonsMock = [
         map: 'https://cdn.bulbagarden.net/upload/e/e9/Kanto_Route_21_Map.png',
       },
     ],
-    summary: '	As long as the center section is unharmed, it can grow back fully even if it is chopped to bits.',
+    summary: 'As long as the center section is unharmed, it can grow back fully even if it is chopped to bits.',
   },
 ];
 
