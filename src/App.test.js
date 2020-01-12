@@ -73,7 +73,7 @@ test.skip('check if the pokedex returns to the first pokemon when button is pres
   expect(oldPoke).toBe(newPoke);
 });
 
-test('check if filter works', () => {
+test.skip('check if filter works', () => {
   const { queryByText, container } = render(
     <MemoryRouter initialEntries={['/']}>
       <App />
@@ -124,4 +124,61 @@ test('check if filter works', () => {
   filterTest(buttonPsychic);
   filterTest(buttonPoison);
   filterTest(buttonNormal);
+});
+
+it.skip('5 - check reset filter button functionality', () => {
+  const { getByText, queryByText, container } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>,
+  );
+  const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
+  const buttonNextPoke = queryByText(/Próximo pokémon/i);
+  const goToNextPoke = () => {
+    if (buttonNextPoke.disabled) return undefined;
+    return fireEvent.click(buttonNextPoke);
+  };
+  const buttons = container.querySelectorAll('.button-text.filter-button');
+  const categories = ['Electric',
+    'Fire',
+    'Bug',
+    'Poison',
+    'Psychic',
+    'Normal',
+    'Dragon'];
+  const categoriesButtons = Array(buttons).filter((button) => (
+    categories.map((category) => (button.innerHTML === category))));
+
+  const clickButtonBug = () => (fireEvent.click(categoriesButtons[0][3]));
+
+  const buttonAll = getByText(/All/i);
+  const clickButtonAll = () => fireEvent.click(buttonAll);
+  const testFilterAll = () => {
+    const defaultCategory = actualCategory();
+    clickButtonBug();
+    clickButtonAll();
+    while (defaultCategory === actualCategory()) goToNextPoke();
+    expect(defaultCategory).not.toBe(actualCategory());
+  };
+  testFilterAll();
+});
+
+it.skip('5 - check if "All" filter is default', () => {
+  const { getByText, queryByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>,
+  );
+  const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
+  const buttonNextPoke = queryByText(/Próximo pokémon/i);
+  const goToNextPoke = () => {
+    if (buttonNextPoke.disabled) return undefined;
+    return fireEvent.click(buttonNextPoke);
+  };
+  const testFilterAll = () => {
+    const defaultCategory = actualCategory();
+    while (defaultCategory === actualCategory()) goToNextPoke();
+    expect(defaultCategory).not.toBe(actualCategory());
+  };
+  testFilterAll();
 });
