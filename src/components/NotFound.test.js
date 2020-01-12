@@ -18,8 +18,8 @@ describe('23 Show error', () => {
   test('23.1 The page shows error 404', () => {
     const { getByText } = renderWithRouter(<NotFound />, { route: '/coruja' });
 
-    const pageNotFound = getByText(/Page requested not found/i);
-    expect(pageNotFound).toBeInTheDocument();
+    expect(getByText(/Page requested not found/i)).toBeInTheDocument();
+    expect(getByText(/Page requested not found/i).tagName).toBe('H2');
   });
 
   test('23.2 The page must containing a image about Pokedex', () => {

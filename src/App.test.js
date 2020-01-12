@@ -51,10 +51,43 @@ describe('Render the pokedex with the pokemon', () => {
   });
 });
 
-describe('10 page of details', () => {
+describe('3 Next pokemon', () => {
   afterEach(cleanup);
 
-  test('10.1 The URL must change for pokemon/id', () => {
+  test('3.1, 3.2 click on the button, appear next pokemon', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    expect(nextPokemon).toBeInTheDocument();
+
+    const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
+      'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
+
+    for (let index = 0; index < namePokemon.length; index += 1) {
+      expect(getByText(namePokemon[index])).toBeInTheDocument();
+      fireEvent.click(nextPokemon);
+    }
+  });
+
+  test('3.3 Last pokemon to first pokemon', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    const nextPokemon = getByText(/Próximo pokémon/i);
+
+    const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
+      'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
+
+    for (let index = 0; index < namePokemon.length; index += 1) {
+      fireEvent.click(nextPokemon);
+    }
+    expect(getByText(/Pikachu/i)).toBeInTheDocument();
+  });
+});
+
+describe('9 navigation links, page of details', () => {
+  afterEach(cleanup);
+
+  test('9.1 The URL must change for pokemon/id', () => {
     const { getByText } = renderWithRouter(<App />);
 
     const moreDetails = getByText(/More details/i);
@@ -71,6 +104,42 @@ describe('10 page of details', () => {
     }
   });
 });
+
+// describe('10 Page of details', () => {
+//   afterEach(cleanup);
+
+//   test('10.1 The URL must change for pokemon/id details', () => {
+//     const { getByText } = renderWithRouter(<App />);
+
+//     const moreDetails = getByText(/More details/i);
+//     expect(moreDetails).toBeInTheDocument();
+
+//     const nextPokemon = getByText(/Próximo pokémon/i);
+//     expect(nextPokemon).toBeInTheDocument();
+
+//     const home = getByText(/Home/i);
+//     expect(home).toBeInTheDocument();
+
+//     const idArray = [25, 4, 10, 23, 65, 151, 78, 143, 148];
+//     // const averageWeightValue = [6.0, 8.5, 2.9, 6.9, 48.0, 4.0, 95.0, 460.0, 16.5];
+//     // const namePokemon = ['Pikachu Details', 'Charmander Details', 'Caterpie Details', 'Ekans Details',
+//     //   'Alakazam Details', 'Mew Details', 'Rapidash Details', 'Snorlax Details', 'Dragonair Details'];
+//     // fireEvent.click(moreDetails);
+//     // expect(moreDetails.href).toBe('http://localhost/pokemons/25');
+
+//     fireEvent.click(home);
+
+//     for (let index = 0; index < idArray.length; index += 1) {
+//       // for (let cont = 1; cont <= index; cont += 1) {
+//       //   fireEvent.click(nextPokemon);
+//       // }
+//       expect(moreDetails.href).toBe(`http://localhost/pokemons/${idArray[index]}`);
+//       fireEvent.click(nextPokemon);
+//       // const pokemon = getByText(averageWeightValue[index]);
+//       // expect(pokemon).toBeInTheDocument();
+//     }
+//   });
+// });
 
 // describe('12 No details', () => {
 //   afterEach(cleanup);
@@ -146,8 +215,8 @@ describe('21 Page About', () => {
 
     fireEvent.click(getByText(/About/i));
 
-    const aboutInfo = getByText(/About Pokédex/i);
-    expect(aboutInfo).toBeInTheDocument();
+    expect(getByText(/About Pokédex/i)).toBeInTheDocument();
+    expect(getByText(/About Pokédex/i).tagName).toBe('H2');
   });
 
   test('21.2 The page must containing two paragraths with text about Pokedex', () => {
