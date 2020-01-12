@@ -44,6 +44,18 @@ test('when button is clicked must display the others pokémons', () => {
 
     fireEvent.click(getByText(/Próximo pokémon/i));
   });
+});
+
+test('after gets in the last pokémon, when click the button again must show the first pokémon', () => {
+  const { getByText, queryAllByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+    </MemoryRouter>
+  );
+
+  pokeName.forEach(() => {
+    fireEvent.click(getByText(/Próximo pokémon/i));
+  });
 
   pokeName.forEach(pokemon => {
     pokemon === pokeName[0] ? expect(queryAllByText(pokemon).length).toBe(1)
