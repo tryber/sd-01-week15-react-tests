@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, cleanup, fireEvent, getAllByText, getByText } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { render, cleanup, fireEvent, getAllByText, getByText, waitForDomChange } from '@testing-library/react';
+import { Router, MemoryRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history'
 import Pokedex from './Pokedex';
 import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock } from '../MockTests/MockTest';
 
@@ -9,6 +10,25 @@ afterEach(cleanup);
 const pokeName = pokemonsMock.map(pokemon => pokemon.name);
 const pokeTypes = pokemonsMock.map(pokemon => pokemon.type);
 const pokeTypeFilter = pokeTypes.filter((pokemon, index) => pokeTypes.indexOf(pokemon) === index);
+
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual('react-router-dom')
+  return {
+    ...originalModule,
+    BrowserRouter: ({ children }) => (<div> {children} </div>),
+  }
+});
+
+function renderWithRouter(
+  ui,
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history,
+  };
+}
+
 
 describe('Pokédex pokémon check', () => {
   test('expect the Pokédex only shows one pokémon at the time', () => {
@@ -190,13 +210,13 @@ describe('Pokédex filter type buttons', () => {
           <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
         </MemoryRouter>
       );
-      
+
       expect(getByRole('img')).toBeInTheDocument();
       expect(getByRole('img').src).toBe(pokemonsMock[0].image);
       expect(getByRole('img').alt).toBe(pokemonsMock[0].name + ' sprite');
     });
 
-    test('should have a link to details', () => {
+    test('should have a link', () => {
       const { getByRole } = render(
         <MemoryRouter initialEntries={['/']}>
           <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
@@ -206,7 +226,20 @@ describe('Pokédex filter type buttons', () => {
       expect(getByRole('link')).toBeInTheDocument();
       expect(getByRole('link')).toHaveTextContent(/More Details/i);
       expect(getByRole('link').href).toBe(`http://localhost/pokemons/${pokemonsMock[0].id}`);
-    })
+    });
+
+    test('when clicked the link must direct to page details', () => {
+      const { history, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />)
+
+      expect(getByRole('link')).toBeInTheDocument();
+
+      expect(history.location.pathname).toBe('/');
+
+      fireEvent.click(getByRole('link'));
+
+      expect(history.location.pathname).toBe(`/pokemons/${pokemonsMock[0].id}`);
+      
+    });
   })
 })
 
