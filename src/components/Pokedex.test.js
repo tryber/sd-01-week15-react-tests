@@ -71,7 +71,7 @@ describe('Pokédex button "Próximo pokémon"', () => {
 
 describe('Pokédex filter type buttons', () => {
   test('when click a filter type button only pokémons that type must appear', () => {
-    const { debug, getByText, getAllByRole, queryAllByText } = render(
+    const { getByText, getAllByRole, queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
       </MemoryRouter>
@@ -94,6 +94,25 @@ describe('Pokédex filter type buttons', () => {
 
         fireEvent.click(getByText(/Próximo pokémon/i));
       });
+    });
+  });
+
+  test('the button label must be the type name', () => {
+    const { getByText, getAllByRole, queryAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+      </MemoryRouter>
+    );
+
+    pokeTypeFilter.forEach(type => {
+      const typeButton = queryAllByText(type)
+        .find(elm => {
+          if (getAllByRole('button').find(button => button === elm) !== undefined) {
+            return true
+          } return false
+        });
+        
+        expect(typeButton).toHaveTextContent(type);
     });
   });
 })
