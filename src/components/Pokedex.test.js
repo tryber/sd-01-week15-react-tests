@@ -147,7 +147,7 @@ describe('Pokédex filter type buttons', () => {
 
   describe('Disable "Próximo pokémon" button', () => {
     test('when the list have one pokémon the button must be disable', () => {
-      const { debug, getByText, getAllByRole, queryAllByText } = render(
+      const { getByText, getAllByRole, queryAllByText } = render(
         <MemoryRouter initialEntries={['/']}>
           <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
         </MemoryRouter>
@@ -170,6 +170,30 @@ describe('Pokédex filter type buttons', () => {
       fireEvent.click(typeButton);
 
       expect(getByText(/Próximo pokémon/i).disabled).toBeTruthy();
+    });
+  })
+
+  describe('Pokémon Display', () => {
+    test('checking the weight', () => {
+      const { getByText, queryAllByText } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+        </MemoryRouter>
+      );
+
+      expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
+    });
+
+    test('checking the image', () => {
+      const { getByRole } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+        </MemoryRouter>
+      );
+      
+      expect(getByRole('img')).toBeInTheDocument();
+      expect(getByRole('img').src).toBe(pokemonsMock[0].image);
+      expect(getByRole('img').alt).toBe(pokemonsMock[0].name + ' sprite');
     });
   })
 })
