@@ -175,7 +175,7 @@ describe('Pokédex filter type buttons', () => {
 
   describe('Pokémon Display', () => {
     test('checking the weight', () => {
-      const { getByText, queryAllByText } = render(
+      const { getByText } = render(
         <MemoryRouter initialEntries={['/']}>
           <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
         </MemoryRouter>
@@ -195,6 +195,18 @@ describe('Pokédex filter type buttons', () => {
       expect(getByRole('img').src).toBe(pokemonsMock[0].image);
       expect(getByRole('img').alt).toBe(pokemonsMock[0].name + ' sprite');
     });
+
+    test('should have a link to details', () => {
+      const { getByRole } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+        </MemoryRouter>
+      );
+
+      expect(getByRole('link')).toBeInTheDocument();
+      expect(getByRole('link')).toHaveTextContent(/More Details/i);
+      expect(getByRole('link').href).toBe(`http://localhost/pokemons/${pokemonsMock[0].id}`);
+    })
   })
 })
 
