@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import About from './About';
 
-test('No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
+test('A página "About" deve exibir informações sobre a Pokédex', () => {
   const { getByText } = render(
     <MemoryRouter initialEntries={['/']}>
       <About />

@@ -3,15 +3,9 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import Pokedex from './Pokedex';
-import { notDeepEqual } from 'assert';
-
 
 const favoriteOneElement = {
   99: true,
-}
-
-const favoriteOneElementfalse = {
-  99: false,
 }
 
 const isPokemonFavoriteByIdAllTrue = {
