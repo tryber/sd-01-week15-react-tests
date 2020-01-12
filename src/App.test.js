@@ -51,6 +51,33 @@ describe('Render the pokedex with the pokemon', () => {
   });
 });
 
+describe('10 page of details', () => {
+  afterEach(cleanup);
+
+  test('10.1 The URL must change for pokemon/id', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    const moreDetails = getByText(/More details/i);
+    expect(moreDetails).toBeInTheDocument();
+
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    expect(nextPokemon).toBeInTheDocument();
+
+    const idArray = [25, 4, 10, 23, 65, 151, 78, 143, 148];
+
+    for (let index = 0; index < idArray.length; index += 1) {
+      expect(moreDetails.href).toBe(`http://localhost/pokemons/${idArray[index]}`);
+      fireEvent.click(nextPokemon);
+    }
+  });
+});
+
+// describe('12 No details', () => {
+//   afterEach(cleanup);
+//   test('Without link t details about pokemon', () => {
+//   })
+// })
+
 describe('17 Fixed set of navigation links', () => {
   afterEach(cleanup);
 
