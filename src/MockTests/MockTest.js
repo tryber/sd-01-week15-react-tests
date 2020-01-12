@@ -1,4 +1,4 @@
-export const pokemons_Mock = [
+export const pokemonsMock = [
   {
     id: 1,
     name: 'Ditto',
@@ -75,7 +75,7 @@ export const pokemons_Mock = [
   },
 ];
 
-export const isPokemonFavoriteById_Mock = {
+export const isPokemonFavoriteByIdMock = {
   1: false,
   2: false,
   3: false,
