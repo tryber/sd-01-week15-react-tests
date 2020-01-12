@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent, getAllByText } from '@testing-library/react';
+import { render, cleanup, fireEvent, getAllByText, getByText } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Pokedex from './Pokedex';
 import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock } from '../MockTests/MockTest';
@@ -97,7 +97,7 @@ describe('Pokédex filter type buttons', () => {
     });
   });
 
-  test('the button label must be the type name', () => {
+  test('must have all the type buttons and label must be the type name', () => {
     const { getAllByRole, queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
@@ -144,5 +144,34 @@ describe('Pokédex filter type buttons', () => {
       });
     });
   })
+
+  describe('Disable "Próximo pokémon" button', () => {
+    test('when the list have one pokémon the button must be disable', () => {
+      const { debug, getByText, getAllByRole, queryAllByText } = render(
+        <MemoryRouter initialEntries={['/']}>
+          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
+        </MemoryRouter>
+      );
+      const justOnePokémonOfTheType = pokeTypeFilter.filter(type => {
+        const typePokemons = pokemonsMock.filter(pokemon => pokemon.type === type).map(pokemon => pokemon.name);
+        if (typePokemons.length === 1) return true;
+        return false;
+      });
+
+      const typeButton = queryAllByText(justOnePokémonOfTheType[0])
+        .find(elm => {
+          if (getAllByRole('button').find(button => button === elm) !== undefined) {
+            return true;
+          } return false;
+        });
+
+      expect(getByText(/Próximo pokémon/i).disabled).toBeFalsy();
+
+      fireEvent.click(typeButton);
+
+      expect(getByText(/Próximo pokémon/i).disabled).toBeTruthy();
+    });
+  })
 })
+
 
