@@ -107,7 +107,7 @@ const pokemonsList = [
   },
 ];
 
-const sameTypePokemons = [
+const sameTypePokemonList = [
   {
     id: 1,
     name: 'Raivoso',
@@ -249,6 +249,10 @@ const notFavoritePokemons = {
   4: false,
 };
 
+const uniqueFavoritePokemons = {
+  1: true,
+};
+
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
     <MemoryRouter>
@@ -284,10 +288,10 @@ describe('Pokedéx should display only 1 pokémon', () => {
     ex2(pokemonsList, allFavoritePokemons);
   });
   test('case 2', () => {
-    ex2(uniquePokemonList, allFavoritePokemons);
+    ex2(uniquePokemonList, uniqueFavoritePokemons);
   });
   test('case 3', () => {
-    ex2(sameTypePokemons, allFavoritePokemons);
+    ex2(sameTypePokemonList, notFavoritePokemons);
   });
 });
 
@@ -311,10 +315,10 @@ describe('shows the next pókemon when press the button', () => {
     ex3(pokemonsList, allFavoritePokemons);
   });
   test('case 2', () => {
-    ex3(uniquePokemonList, allFavoritePokemons);
+    ex3(uniquePokemonList, uniqueFavoritePokemons);
   });
   test('case 3', () => {
-    ex3(sameTypePokemons, allFavoritePokemons);
+    ex3(sameTypePokemonList, notFavoritePokemons);
   });
 });
 
@@ -345,10 +349,10 @@ describe('filter the pokedéx by the type of pokemon', () => {
     ex4(pokemonsList, allFavoritePokemons);
   });
   test('case 2', () => {
-    ex4(uniquePokemonList, allFavoritePokemons);
+    ex4(uniquePokemonList, uniqueFavoritePokemons);
   });
   test('case 3', () => {
-    ex4(sameTypePokemons, allFavoritePokemons);
+    ex4(sameTypePokemonList, notFavoritePokemons);
   });
 });
 
@@ -381,9 +385,36 @@ describe('Pokedéx must contain a reset button', () => {
     ex5(pokemonsList, allFavoritePokemons);
   });
   test('case 2', () => {
-    ex5(uniquePokemonList, allFavoritePokemons);
+    ex5(uniquePokemonList, uniqueFavoritePokemons);
   });
   test('case 3', () => {
-    ex5(sameTypePokemons, allFavoritePokemons);
+    ex5(sameTypePokemonList, notFavoritePokemons);
+  });
+});
+
+describe('Pokedéx should render a filter button to each type of pokemóns', () => {
+  function ex6(pokemons, isPokemonFavoriteById) {
+    const { getByText, getAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+
+    const pokemonTypes = [...new Set(pokemons.map((pokemon) => pokemon.type))];
+    pokemonTypes.forEach((type) => {
+      const buttonType = getAllByText(type)[1] || getByText(type);
+      expect(buttonType).toBeInTheDocument();
+      expect(getByText(/All/i)).toBeInTheDocument();
+    });
+  }
+
+  test('case 1', () => {
+    ex6(pokemonsList, allFavoritePokemons);
+  });
+  test('case 2', () => {
+    ex6(uniquePokemonList, uniqueFavoritePokemons);
+  });
+  test('case 3', () => {
+    ex6(sameTypePokemonList, notFavoritePokemons);
   });
 });
