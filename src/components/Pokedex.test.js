@@ -3,8 +3,6 @@ import { createMemoryHistory } from 'history';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import Pokedex from './Pokedex';
-import App from '../App';
-
 
 jest.mock('react-router-dom', () => {
   const originalModule = jest.requireActual('react-router-dom')
@@ -609,8 +607,8 @@ describe('10', () => {
     expect(history.location.pathname).toBe('/');
 
     fireEvent.click(getByRole('link'));
-
     expect(history.location.pathname).toBe(`/pokemons/${pokemons[0].id}`);
+    console.log(history)
   });
 });
 
