@@ -5,6 +5,16 @@ import { createMemoryHistory } from 'history';
 import { render, fireEvent, cleanup, waitForDomChange } from '@testing-library/react';
 import Pokedex from './components/Pokedex';
 
+function renderWithRouter(
+  ui,
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history,
+  };
+}
+
 const isPokemonFavoriteById = {
   25: true,
   4: false,
@@ -171,4 +181,35 @@ test('No topo da aplicação, deve haver um conjunto fixo de links de navegaçã
   expect(getByText('About').href).toBe('http://localhost/about' || '/about');
   expect(getByText('Favorite Pokémons')).toBeInTheDocument();
   expect(getByText('Favorite Pokémons').href).toBe('http://localhost/favorites' || '/favorites');
+});
+
+describe('Rotas', () => {
+  afterEach(cleanup);
+
+  test('18- Navegação click no botao HOME ', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    fireEvent.click(getByText('Home'));
+
+    const titleHome = getByText('Encountered pokémons');
+    expect(titleHome).toBeInTheDocument();
+  });
+
+  test('19- Navegação click no botao Pokédex', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    fireEvent.click(getByText('About'));
+
+    const about = getByText('About Pokédex');
+    expect(about).toBeInTheDocument();
+  });
+
+  test('20- Navegação click no botao Favoritos', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    fireEvent.click(getByText('Favorite Pokémons'));
+
+    const favorite = getByText('No favorite pokemon found');
+    expect(favorite).toBeInTheDocument();
+  });
 });

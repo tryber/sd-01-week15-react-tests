@@ -1,10 +1,8 @@
 import React from 'react';
 
 import { MemoryRouter } from 'react-router-dom';
-import { render, fireEvent, cleanup, queryByAltText } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import PokemonDetails from './PokemonDetails';
-import { jsxEmptyExpression } from '@babel/types';
-import { exec } from 'child_process';
 
 
 
@@ -424,6 +422,7 @@ describe('14 - A página de detalhes deve exibir uma seção com um resumo do po
       expect(getByText(value.location).parentElement.previousSibling.tagName).toBe('IMG');
       expect(getByText(value.location).parentElement.previousSibling.src).toBe(value.map);
     })
+    expect(getAllByAltText(`${pokemonValue.name} location`)[0]).toBeInTheDocument()
     expect(getAllByAltText(`${pokemonValue.name} location`).length).toBe(pokemonValue.foundAt.length);
   }
 
