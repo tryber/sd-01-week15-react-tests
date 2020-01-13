@@ -84,6 +84,50 @@ describe('3 Next pokemon', () => {
   });
 });
 
+describe('5 reset filter', () => {
+  afterEach(cleanup);
+  const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
+    'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
+
+  test('5.1 The text of button must be All', () => {
+    const { getByText } = renderWithRouter(<App />);
+    expect(getByText(/All/i)).toBeInTheDocument();
+  });
+
+  test('5.2 after clicking, The pokédex must show all pokemons', () => {
+    const { getByText } = renderWithRouter(<App />);
+
+    fireEvent.click(getByText(/All/i));
+
+    const firstTagP = document.getElementsByTagName('p')[0];
+    const nextPokemon = getByText(/Próximo pokémon/i);
+
+    for (let index = 0; index < namePokemon.length; index += 1) {
+      expect(firstTagP.innerHTML).toBe(namePokemon[index]);
+      fireEvent.click(nextPokemon);
+    }
+  });
+
+  test('5.3 when the page reload, the filter is the button All', () => {
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/about']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(getByText(/Home/i));
+    expect(getByText(/Encountered pokémons/i)).toBeInTheDocument();
+
+    const firstTagP = document.getElementsByTagName('p')[0];
+    const nextPokemon = getByText(/Próximo pokémon/i);
+
+    for (let index = 0; index < namePokemon.length; index += 1) {
+      expect(firstTagP.innerHTML).toBe(namePokemon[index]);
+      fireEvent.click(nextPokemon);
+    }
+  });
+});
+
 describe('9 navigation links, page of details', () => {
   afterEach(cleanup);
 
@@ -143,9 +187,16 @@ describe('9 navigation links, page of details', () => {
 
 // describe('12 No details', () => {
 //   afterEach(cleanup);
-//   test('Without link t details about pokemon', () => {
-//   })
-// })
+
+//   test('12.1 Without link of details about pokemon at details page', () => {
+//     const { getByText } = renderWithRouter(<App />);
+
+//     const moreDetails = getByText(/More details/i);
+
+//     fireEvent.click(moreDetails);
+
+//   });
+// });
 
 describe('17 Fixed set of navigation links', () => {
   afterEach(cleanup);
@@ -204,42 +255,26 @@ describe('Routes', () => {
   });
 });
 
-describe('21 Page About', () => {
-  afterEach(cleanup);
+// describe('22 Page shows favorites paokemons', () => {
+//   afterEach(cleanup);
+//   const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
+//     'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
 
-  test('21.1 The page must containing a heading with text (About Pokédex)', () => {
-    const { getByText } = renderWithRouter(<App />);
+//   test('22.1 the page shows all favorites pokemons, one pokemon', () => {
+//     const { getByText, getByLabelText } = renderWithRouter(<App />);
+//     for (let index = 0; index < namePokemon.length; index += 1) {
+//       for (let cont = 0; cont < index; cont += 1) {
+//         if (cont !== 0) {
+//           fireEvent.click(getByText(/Próximo pokémon/i));
+//         }
+//       }
+//       fireEvent.click(getByText(/More details/i));
+//       fireEvent.click(getByLabelText(/Pokémon favoritado?/i));
+//       fireEvent.click(getByText(/Favorite Pokémons/i));
 
-    const homePage = getByText(/Encountered pokémons/i);
-    expect(homePage).toBeInTheDocument();
-
-    fireEvent.click(getByText(/About/i));
-
-    expect(getByText(/About Pokédex/i)).toBeInTheDocument();
-    expect(getByText(/About Pokédex/i).tagName).toBe('H2');
-  });
-
-  test('21.2 The page must containing two paragraths with text about Pokedex', () => {
-    const { getByText } = renderWithRouter(<App />);
-
-    const homePage = getByText(/Encountered pokémons/i);
-    expect(homePage).toBeInTheDocument();
-
-    fireEvent.click(getByText(/About/i));
-
-    const twoParagraphs = document.getElementsByTagName('p');
-    expect(twoParagraphs.length).toBe(2);
-  });
-
-  test('21.3 The page must containing a image about Pokedex', () => {
-    const { getByText, getByAltText } = renderWithRouter(<App />);
-
-    const homePage = getByText(/Encountered pokémons/i);
-    expect(homePage).toBeInTheDocument();
-
-    fireEvent.click(getByText(/About/i));
-
-    const imagePageAbout = getByAltText(/Pokédex/i);
-    expect(imagePageAbout).toBeInTheDocument();
-  });
-});
+//       const firstTagP = document.getElementsByTagName('p')[0];
+//       expect(firstTagP.innerHTML).toBe(namePokemon[index]);
+//       fireEvent.click(getByText(/Home/i));
+//     }
+//   });
+// });

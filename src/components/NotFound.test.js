@@ -27,5 +27,8 @@ describe('23 Show error', () => {
 
     const imagePageAbout = getByAltText(/Pikachu crying because the page requested was not found/i);
     expect(imagePageAbout).toBeInTheDocument();
+
+    const img = document.getElementsByTagName('img')[0];
+    expect(img.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
   });
 });
