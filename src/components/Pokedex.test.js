@@ -10,8 +10,8 @@ const pokeName = pokemonsMock.map(pokemon => pokemon.name);
 const pokeTypes = pokemonsMock.map(pokemon => pokemon.type);
 const pokeTypeFilter = pokeTypes.filter((pokemon, index) => pokeTypes.indexOf(pokemon) === index);
 
+// Task 02
 describe('Pokédex pokémon check', () => {
-  // Task 02
   test('expect the Pokédex only shows one pokémon at the time', () => {
     const { queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
@@ -26,6 +26,7 @@ describe('Pokédex pokémon check', () => {
   });
 })
 
+// Task 03
 describe('Pokédex button "Próximo pokémon"', () => {
   test('button label must be "Próximo pokémon"', () => {
     const { getByText } = render(
