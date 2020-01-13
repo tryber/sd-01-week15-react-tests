@@ -184,19 +184,16 @@ it.skip('5 - check if "All" filter is default', () => {
 });
 
 it('7 - next pokemon button should be disable if filtered pokes equals 1', () => {
-  const { getByText, queryByText } = render(
+  const { getByText, queryByText, container } = render(
     <MemoryRouter initialEntries={['/']}>
       <App />
     </MemoryRouter>,
   );
+
   const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
-
   const oldPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
-
   fireEvent.click(queryByText('Próximo pokémon'));
-
   let newPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
-
   const pokeList = [];
 
   const getPokeList = () => {
@@ -211,19 +208,18 @@ it('7 - next pokemon button should be disable if filtered pokes equals 1', () =>
     }
     return pokeList;
   };
-
   getPokeList();
 
-  const testStep8 = () => {
-    const lonePokes = pokeList.reduce((acc, poke) => {
-      if (acc.includes(...poke[1])) {
-        acc.push(poke);
-        return acc
-      }
-      return acc
-    }, [pokeList[0]]);
-    console.log(lonePokes)
-    return lonePokes;
-  };
-  testStep8();
+  const buttonNextPoke = queryByText(/Próximo pokémon/i);
+  const lonePokes = pokeList.filter(([, poke]) => {
+    const oneOfAKindPoke = pokeList.filter((pokemon) => pokemon.includes(poke));
+    if (oneOfAKindPoke.length === 1) return oneOfAKindPoke;
+    return undefined;
+  });
+
+  const categories = lonePokes.map((category) => category[1]);
+  categories.forEach((category) => {
+    fireEvent.click(getByText(category));
+    expect(buttonNextPoke.disabled).toBeTruthy();
+  });
 });
