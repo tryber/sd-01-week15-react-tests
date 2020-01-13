@@ -179,7 +179,7 @@ describe('Pokédex filter type buttons', () => {
     });
   })
 
-  // Task 08
+  // Task 08 and Task 09
   describe('Pokémon Display', () => {
     test('checking the weight', () => {
       const { getByText } = render(
@@ -203,6 +203,7 @@ describe('Pokédex filter type buttons', () => {
       expect(getByRole('img').alt).toBe(pokemonsMock[0].name + ' sprite');
     });
 
+    // Task 09
     test('should have a link', () => {
       const { getByRole } = render(
         <MemoryRouter initialEntries={['/']}>
