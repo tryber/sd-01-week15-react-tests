@@ -1,11 +1,9 @@
 import React from 'react';
 import { render, cleanup, fireEvent, getAllByText, getByText, waitForDomChange } from '@testing-library/react';
-import { Router, MemoryRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
-import Pokedex from './Pokedex';
 import PokemonDetails from './PokemonDetails';
-import App from '../App';
-import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock } from '../MockTests/MockTest';
+import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock, matchMock, onUpdateFavoritePokemonsMock } from '../MockTests/MockTest';
 import { element } from 'prop-types';
 
 afterEach(cleanup);
@@ -28,55 +26,42 @@ function renderWithRouter(
   };
 }
 
-// Task 10
-describe('Details page', () => {
-  test('when clicked the link must direct to page details', () => {
-    const { history, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />)
+describe('Details Page', () => {
+  // Task 11
+  test('should have an average weight', () => {
+    pokemonsMock.forEach((element) => {
+      const { getByText } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${element.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
-    expect(getByRole('link')).toBeInTheDocument();
+      expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
+    });
+  });
+  // Task 11
+  test('should have a pokemon image', () => {
+    pokemonsMock.forEach((element) => {
+      const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${element.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
-    expect(history.location.pathname).toBe('/');
+      expect(queryAllByRole('img')[0]).toBeInTheDocument();
+      expect(queryAllByRole('img')[0].src).toBe(pokemonsMock[0].image);
+      expect(queryAllByRole('img')[0].alt).toBe(pokemonsMock[0].name + ' sprite');
+    });
+  });
+  // Task 12
+  test('link must not to be avaible', () => {
+    pokemonsMock.forEach((element) => {
+      const { queryByText } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${element.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
-    fireEvent.click(getByRole('link'));
+      expect(queryByText(/More details/i)).toBeNull();
+    });
+  });
+  // Task 13
+  pokemonsMock.forEach((element) => {
+    test(`should have a summary for ${element.name}`, () => {
+      const { queryByText, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${element.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+      const array = queryAllByRole('heading').map(HTML => HTML.innerHTML);
 
-    expect(history.location.pathname).toBe(`/pokemons/${pokemonsMock[0].id}`);
+      expect(array.includes(' Summary ')).toBeTruthy();
+      expect(queryByText(element.summary)).toBeInTheDocument();
+    });
   });
 })
 
-const matchMock = jest.fn((id) => {
-  return { 'params': { id } };
-});
-
-const onUpdateFavoritePokemonsMock = jest.fn();
-
-// Task 11
-test('details page content', () => {
-  pokemonsMock.forEach((element) => {
-    const { getByText, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${element.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-
-    expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
-    expect(queryAllByRole('img')[0]).toBeInTheDocument();
-    expect(queryAllByRole('img')[0].src).toBe(pokemonsMock[0].image);
-    expect(queryAllByRole('img')[0].alt).toBe(pokemonsMock[0].name + ' sprite');
-  })
-
-})
-
-// test('details page content', () => {
-//   const { getByText, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />)
-
-//   fireEvent.click(getByRole('link'));
-
-//   expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
-//   expect(getByRole('img')).toBeInTheDocument();
-//   expect(getByRole('img').src).toBe(pokemonsMock[0].image);
-//   expect(getByRole('img').alt).toBe(pokemonsMock[0].name + ' sprite');
-// });
-
-// test('details page must not contain a link', () => {
-//   const { debug, getByRole } = renderWithRouter(<App />, { route: `/pokemons/${pokemonsMock[0].id}`})
-
-//   console.log(debug());
-
-
-// })

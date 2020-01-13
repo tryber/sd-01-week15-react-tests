@@ -141,3 +141,9 @@ export const isPokemonFavoriteByIdMock = {
   5: true,
   6: false,
 };
+
+export const matchMock = jest.fn((id) => {
+  return { 'params': { id } };
+});
+
+export const onUpdateFavoritePokemonsMock = jest.fn();
