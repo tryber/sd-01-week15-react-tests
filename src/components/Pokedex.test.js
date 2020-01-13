@@ -11,6 +11,7 @@ const pokeTypes = pokemonsMock.map(pokemon => pokemon.type);
 const pokeTypeFilter = pokeTypes.filter((pokemon, index) => pokeTypes.indexOf(pokemon) === index);
 
 describe('Pokédex pokémon check', () => {
+  // Task 02
   test('expect the Pokédex only shows one pokémon at the time', () => {
     const { queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
