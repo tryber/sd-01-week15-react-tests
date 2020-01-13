@@ -86,7 +86,7 @@ A seguir estão listados todos os requisitos do projeto. Lembre-se: Cada requisi
 
   - A imagem da localização deve ter um atributo `src` com a URL da localização;
 
-  - A imagem da localização deve ter um atributo `alt` com o txto `<name> location`, onde `<name>` é o nome da localização.
+  - A imagem da localização deve ter um atributo `alt` com o texto `<name> location`, onde `<name>` é o nome do pokémon.
 
 ### 15 - A página de detalhes deve permitir favoritar um pokémon
 
@@ -132,7 +132,7 @@ A seguir estão listados todos os requisitos do projeto. Lembre-se: Cada requisi
 
   - A página deve conter um heading `h2` com o texto `Page requested not found 😭`;
 
-  - A página deve exibir a imagem `https://testing-library.com/`.
+  - A página deve exibir a imagem `https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif`.
 
 ### 24 - A cobertura de testes deve ser 100%
 
