@@ -71,7 +71,9 @@ describe('Pokédex button "Próximo pokémon"', () => {
   });
 })
 
+// Task 04 and Task 06
 describe('Pokédex filter type buttons', () => {
+  // Task 04
   test('when click a filter type button only pokémons that type must appear', () => {
     const { getByText, getAllByRole, queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
@@ -87,9 +89,10 @@ describe('Pokédex filter type buttons', () => {
           } return false
         });
 
+      const typePokemons = pokemonsMock.filter(pokemon => pokemon.type === type).map(pokemon => pokemon.name);
+
       fireEvent.click(typeButton);
 
-      const typePokemons = pokemonsMock.filter(pokemon => pokemon.type === type).map(pokemon => pokemon.name);
       typePokemons.forEach((pokemon, index) => {
         pokemon === typePokemons[index] ? expect(queryAllByText(pokemon).length).toBe(1)
           : expect(queryAllByText(pokemon).length).toBe(0);
@@ -99,13 +102,13 @@ describe('Pokédex filter type buttons', () => {
     });
   });
 
+  // Task 06 and Task 04
   test('must have all the type buttons and label must be the type name', () => {
     const { getAllByRole, queryAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
       </MemoryRouter>
     );
-
     pokeTypeFilter.forEach(type => {
       const typeButton = queryAllByText(type)
         .find(elm => {
@@ -118,6 +121,7 @@ describe('Pokédex filter type buttons', () => {
     });
   });
 
+  // Task 05
   describe('Type all button', () => {
     test('must have the all button with the label "all"', () => {
       const { getByText } = render(
@@ -147,6 +151,7 @@ describe('Pokédex filter type buttons', () => {
     });
   })
 
+  // Task 07
   describe('Disable "Próximo pokémon" button', () => {
     test('when the list have one pokémon the button must be disable', () => {
       const { getByText, getAllByRole, queryAllByText } = render(
@@ -159,7 +164,6 @@ describe('Pokédex filter type buttons', () => {
         if (typePokemons.length === 1) return true;
         return false;
       });
-
       const typeButton = queryAllByText(justOnePokémonOfTheType[0])
         .find(elm => {
           if (getAllByRole('button').find(button => button === elm) !== undefined) {
@@ -175,6 +179,7 @@ describe('Pokédex filter type buttons', () => {
     });
   })
 
+  // Task 08
   describe('Pokémon Display', () => {
     test('checking the weight', () => {
       const { getByText } = render(
