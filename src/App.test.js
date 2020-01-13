@@ -182,3 +182,48 @@ it.skip('5 - check if "All" filter is default', () => {
   };
   testFilterAll();
 });
+
+it('7 - next pokemon button should be disable if filtered pokes equals 1', () => {
+  const { getByText, queryByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>,
+  );
+  const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
+
+  const oldPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
+
+  fireEvent.click(queryByText('Próximo pokémon'));
+
+  let newPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
+
+  const pokeList = [];
+
+  const getPokeList = () => {
+    pokeList.push([newPoke, actualCategory()]);
+    while (oldPoke !== newPoke) {
+      fireEvent.click(queryByText('Próximo pokémon'));
+      newPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
+      if (newPoke === undefined) {
+        return null;
+      }
+      pokeList.push([newPoke, actualCategory()]);
+    }
+    return pokeList;
+  };
+
+  getPokeList();
+
+  const testStep8 = () => {
+    const lonePokes = pokeList.reduce((acc, poke) => {
+      if (acc.includes(...poke[1])) {
+        acc.push(poke);
+        return acc
+      }
+      return acc
+    }, [pokeList[0]]);
+    console.log(lonePokes)
+    return lonePokes;
+  };
+  testStep8();
+});
