@@ -1,9 +1,28 @@
 import React from 'react';
-
-import { MemoryRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import Pokedex from './Pokedex';
+import App from '../App';
 
+
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual('react-router-dom')
+  return {
+    ...originalModule,
+    BrowserRouter: ({ children }) => (<div> {children} </div>),
+  }
+});
+
+function renderWithRouter(
+  ui,
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history,
+  };
+}
 const favoriteOneElement = {
   99: true,
 }
@@ -579,6 +598,25 @@ describe('9 -O pokémon exibido na Pokedéx deve conter um link de navegação p
   });
 });
 
+describe('10', () => {
+  afterEach(cleanup);
+  test('10 - Testando botao more details ', () => {
+    const { history, getByRole } = renderWithRouter(
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+    );
+    expect(getByRole('link')).toBeInTheDocument();
+
+    expect(history.location.pathname).toBe('/');
+
+    fireEvent.click(getByRole('link'));
+
+    expect(history.location.pathname).toBe(`/pokemons/${pokemons[0].id}`);
+  });
+});
+
+
+
+
 describe('16 - O pokémon exibido na Pokedéx deve conter um link de navegação para exibir detalhes deste pokémon', () => {
   afterEach(cleanup);
   const test16 = (arrayPokemon, arrayFavorite) => {
@@ -589,8 +627,8 @@ describe('16 - O pokémon exibido na Pokedéx deve conter um link de navegação
     );
     const btnNext = getByText('Próximo pokémon')
     arrayPokemon.forEach(pokemon => {
-      if(arrayFavorite[pokemon.id]){
-        const star= getByAltText(`${pokemon.name} is marked as favorite`);
+      if (arrayFavorite[pokemon.id]) {
+        const star = getByAltText(`${pokemon.name} is marked as favorite`);
         expect(star).toBeInTheDocument();
         expect(star.src).toBe('http://localhost/star-icon.svg');
       } else {

@@ -2,7 +2,7 @@ import React from 'react';
 import App from './App'
 import { MemoryRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, fireEvent, cleanup, waitForDomChange } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import Pokedex from './components/Pokedex';
 
 function renderWithRouter(

@@ -1,9 +1,7 @@
 import React from 'react';
-
 import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import PokemonDetails from './PokemonDetails';
-
 
 
 const favoriteOneElement = {
@@ -290,6 +288,7 @@ describe('11 -A página de detalhes de pokémon deve exibir o nome, tipo, peso m
         <PokemonDetails pokemons={arrayPokemon} onUpdateFavoritePokemons={func} isPokemonFavoriteById={arrayFavorite} match={fakeMatch} />
       </MemoryRouter>,
     );
+    
     const pokemonValue = arrayPokemon[index];
     const elementName = getByText(pokemonValue.name);
     const elementType = getByText(pokemonValue.type);
@@ -300,6 +299,7 @@ describe('11 -A página de detalhes de pokémon deve exibir o nome, tipo, peso m
     expect(elementAverageWeight).toBeInTheDocument();
     expect(elementImg.src).toBe(pokemonValue.image);
   }
+
   pokemons.forEach((pokemon, index) => {
     test(`11-1 - testando com array padrao - ([${pokemon.name}])`, () => {
       test11(pokemons, isPokemonFavoriteById, index)
