@@ -143,12 +143,3 @@ test('shows the Pokedéx when the route is `/`', () => {
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
 });
 
-test('Pokedex should only show one pokemon at time.', () => {
-  const { getByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById}/>
-    </MemoryRouter>,
-  );
-  const textToSinglePokemon = 'More details';
-  expect(getByText(textToSinglePokemon)).toBeInTheDocument();
-});
