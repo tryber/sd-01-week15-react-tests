@@ -454,3 +454,33 @@ describe('the button `Próximo pokémon` should be disabled if the list has only
     ex7(sameTypePokemonList, notFavoritePokemons);
   });
 });
+
+describe('Pokedéx should display the name, type, average weight and image of the displayed pokemon', () => {
+  function ex8(pokemons, isPokemonFavoriteById) {
+    const { getByText, getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    pokemons.forEach((pokemon) => {
+      const averageWeight = getByText(/More details/i).previousSibling.textContent;
+      const pokemonWeight = `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`;
+      const pokemonImage = getByAltText(`${pokemon.name} sprite`);
+      expect(averageWeight).toBe(pokemonWeight);
+      expect(pokemonImage.src).toBe(pokemon.image);
+      expect(pokemonImage.alt).toBe(`${pokemon.name} sprite`);
+      fireEvent.click(nextPokemon);
+    });
+  }
+
+  test('case 1', () => {
+    ex8(pokemonsList, allFavoritePokemons);
+  });
+  test('case 2', () => {
+    ex8(uniquePokemonList, uniqueFavoritePokemons);
+  });
+  test('case 3', () => {
+    ex8(sameTypePokemonList, notFavoritePokemons);
+  });
+});
