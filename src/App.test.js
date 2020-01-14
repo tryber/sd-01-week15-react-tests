@@ -275,13 +275,17 @@ test('shows the Pokedéx when the route is `/`', () => {
 
 describe('Pokedéx should display only 1 pokémon', () => {
   function ex2(pokemons, isPokemonFavoriteById) {
-    const { queryAllByText } = render(
+    const { queryAllByText, getByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
       </MemoryRouter>,
     );
-    const pokemon = queryAllByText(/Average weight:/i);
-    expect(pokemon.length).toBe(1);
+    const nextButton = getByText(/Próximo pokémon/i);
+    pokemons.forEach((pokemon) => {
+      const allPokemon = queryAllByText(pokemon.name);
+      expect(allPokemon.length).toBe(1);
+      fireEvent.click(nextButton);
+    });
   }
 
   test('case 1', () => {
@@ -416,5 +420,37 @@ describe('Pokedéx should render a filter button to each type of pokemóns', () 
   });
   test('case 3', () => {
     ex6(sameTypePokemonList, notFavoritePokemons);
+  });
+});
+
+describe('the button `Próximo pokémon` should be disabled if the list has only 1 pokémon', () => {
+  function ex7(pokemons, isPokemonFavoriteById) {
+    const { getByText, getAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    const nextButton = getByText(/Próximo pokémon/i);
+    const pokemonTypes = [...new Set(pokemons.map((pokemon) => pokemon.type))];
+
+    pokemonTypes.forEach((type) => {
+      const buttonType = getAllByText(type)[1] || getByText(type);
+      fireEvent.click(buttonType);
+      const pokemonName = getByText(/Average weight:/i).previousSibling.previousSibling.textContent;
+      fireEvent.click(nextButton);
+      const nextPokemon = getByText(/Average weight:/i).previousSibling.previousSibling.textContent;
+      if (pokemonName === nextPokemon) expect(nextButton.disabled).toBe(true);
+      else expect(nextButton.disabled).toBe(false);
+    });
+  }
+
+  test('case 1', () => {
+    ex7(pokemonsList, allFavoritePokemons);
+  });
+  test('case 2', () => {
+    ex7(uniquePokemonList, uniqueFavoritePokemons);
+  });
+  test('case 3', () => {
+    ex7(sameTypePokemonList, notFavoritePokemons);
   });
 });
