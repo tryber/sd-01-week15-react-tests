@@ -1,7 +1,25 @@
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Router } from "react-router-dom";
+import { createMemoryHistory } from 'history';
 import { render, fireEvent, cleanup, getByAltText } from "@testing-library/react";
 import Pokedex from "./Pokedex";
+
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual('react-router-dom')
+  return {
+    ...originalModule,
+    BrowserRouter: ({ children }) => (<div> {children} </div>),
+  }
+});
+function renderWithRouter(
+  ui,
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history,
+  };
+}
 
 const isPokemonFavoriteById = {
   4: false,
@@ -389,3 +407,16 @@ describe('9 - O pokémon exibido na Pokedéx deve conter um link de navegação 
     }
   })
 })
+
+describe('10,  Ao clicar no link de navegação do pokémon, a aplicação deve ser redirecionada para a página de detalhes de pokémon', () => {
+  test('A URL exibida no navegador deve mudar para /pokemon/<id>, onde <id> é o id do pokémon cujos detalhes se deseja ver.', () => {
+    const { history, getByRole, getByText } = renderWithRouter(
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+    );
+    
+    expect(history.location.pathname).toBe('/');
+      const link = getByRole('link');
+      fireEvent.click(link);
+      expect(`http://localhost/pokemons${history.location.pathname}`).toBe(link.href);
+  });
+});
