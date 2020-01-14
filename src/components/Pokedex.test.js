@@ -1,7 +1,7 @@
-import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { render, fireEvent } from '@testing-library/react';
-import Pokedex  from './Pokedex';
+import React from "react";
+import { MemoryRouter } from "react-router-dom";
+import { render, fireEvent, cleanup } from "@testing-library/react";
+import Pokedex from "./Pokedex";
 
 const isPokemonFavoriteById = {
   4: false,
@@ -120,67 +120,49 @@ const pokemons = [
   }
 ];
 
-// describe("Requisito 2, A Pokédex deve exibir apenas um pokémon por vez", () => {
-//   test("testando a quantidade de pokemons exibidos", () => {
-//     // const { getByText, getAllByText } = render(
-//     //   <MemoryRouter initialEntries={['/']}>
-//     //     <Pokedex
-//     //       pokemons={pokemons}
-//     //       isPokemonFavoriteById={isPokemonFavoriteById}
-//     //     />
-//     //   </MemoryRouter>
-//     // );
-
-//     // pokemons.forEach((pokemon) => {
-//     //   const allPokemons = getAllByText('More details').length;
-//     //   expect(allPokemons).toBe(1);
-//     //   fireEvent.click(getByText('Próximo pokémon'));
-//     // })
-//     // const { queryAllByText, getByText } = render(
-//     //   <MemoryRouter initialEntries={['/']}>
-//     //     <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-//     //   </MemoryRouter>,
-//     // );
-//     // const nextButton = getByText(/Próximo pokémon/i);
-//     // pokemons.forEach((pokemon) => {
-//     //   const allPokemon = queryAllByText(pokemon.name);
-//     //   expect(allPokemon.length).toBe(1);
-//     //   fireEvent.click(nextButton);
-//     }
-//     );
-//   });
-// });
-
-test('Pokédex should only display one Pokémon at a time.', () => {
-  const { getAllByText, getByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-    </MemoryRouter>,
-  );
-  pokemons.forEach(() => {
-    fireEvent.click(getByText('Próximo pokémon'));
-    const pokemoncont = getAllByText(/More details/i).length;
-    expect(pokemoncont).toBe(1);
+describe("Requisito 2, A Pokédex deve exibir apenas um pokémon por vez", () => {
+  test("Pokédex should only display one Pokémon at a time.", () => {
+    const { getAllByText, getByText } = render(
+      <MemoryRouter initialEntries={["/"]}>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    pokemons.forEach(() => {
+      fireEvent.click(getByText("Próximo pokémon"));
+      const pokemoncont = getAllByText(/More details/i).length;
+      expect(pokemoncont).toBe(1);
+    });
   });
 });
 
 describe("Requisito 3, Ao apertar o botão de próximo, a página deve exibir o próximo pokémon da lista", () => {
   afterEach(cleanup);
-  const { getByText } = render(
-    <MemoryRouter>
-      <Pokedex
-        pokemons={pokemons}
-        isPokemonFavoriteById={isPokemonFavoriteById}
-      />
-    </MemoryRouter>
-  );
-  const buttonNext = getByText("Próximo pokémon");
-  const details = getByText("More details");
   test("O botão deve conter o texto Próximo pokémon;", () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    const buttonNext = getByText("Próximo pokémon");
     expect(buttonNext).toBeInTheDocument();
   });
 
   test("Cliques sucessivos no botão devem mostrar o próximo pokémon da lista", () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    const buttonNext = getByText("Próximo pokémon");
     const pokemonNames = pokemons.map(pokemon => pokemon.name);
     const arrayOfNameValidation = [];
     for (let index = 0; index < pokemons.length; index += 1) {
@@ -191,9 +173,19 @@ describe("Requisito 3, Ao apertar o botão de próximo, a página deve exibir o 
   });
 
   test("Ao se chegar ao último pokémon da lista, a Pokédex deve voltar para o primeiro pokémon no apertar do botão", () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    const buttonNext = getByText("Próximo pokémon");
+    const details = getByText("More details");
     let nameOfPokemon;
     const firstPokemon = pokemons[0].name;
-    for (let i = 0; i <= pokemons.length; i += 1) {
+    for (let i = 0; i < pokemons.length; i += 1) {
       fireEvent.click(buttonNext);
       nameOfPokemon =
         details.previousSibling.previousSibling.previousSibling.innerHTML;
@@ -203,15 +195,15 @@ describe("Requisito 3, Ao apertar o botão de próximo, a página deve exibir o 
 });
 
 describe("Requisito 4, A Pokédex deve conter botões de filtro", () => {
-  const { getByText } = render(
-    <MemoryRouter>
-      <Pokedex
-        pokemons={pokemons}
-        isPokemonFavoriteById={isPokemonFavoriteById}
-      />
-    </MemoryRouter>
-  );
+  // const { getByText } = render(
+  //   <MemoryRouter>
+  //     <Pokedex
+  //       pokemons={pokemons}
+  //       isPokemonFavoriteById={isPokemonFavoriteById}
+  //     />
+  //   </MemoryRouter>
+  // );
 
-  test("A partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo", () => { });
-  test("O texto do botão deve ser o nome do tipo, p. ex. Psychic.", () => { });
+  test("A partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo", () => {});
+  test("O texto do botão deve ser o nome do tipo, p. ex. Psychic.", () => {});
 });
