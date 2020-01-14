@@ -279,26 +279,55 @@ describe("Requisito 5, A Pokédex deve conter um botão para resetar o filtro", 
 });
 
 describe("A Pokédex deve gerar, dinamicamente, um botão de filtro para cada tipo de pokémon", () => {
-  test(
-    "Os botões de filtragem devem ser dinâmicos:", () => {
-      const { getByText } = render(
-        <MemoryRouter>
-          <Pokedex
-            pokemons={pokemons}
-            isPokemonFavoriteById={isPokemonFavoriteById}
-          />
-        </MemoryRouter>
-      );
+  test("Os botões de filtragem devem ser dinâmicos:", () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
 
-      const pokemonTypes = [...new Set(pokemons.map(pokemon => pokemon.type))];
-      const buttonAll = getByText('All');
-      let buttonAux = buttonAll;
-      const arrayOfTypes = [];
-      for(let i = 0; i < pokemonTypes.length; i += 1) {
-        arrayOfTypes.push(buttonAux.nextSibling.textContent);
-        buttonAux = buttonAux.nextSibling;
-      }  
-      expect(arrayOfTypes).toStrictEqual(pokemonTypes);
+    const pokemonTypes = [...new Set(pokemons.map(pokemon => pokemon.type))];
+    const buttonAll = getByText("All");
+    let buttonAux = buttonAll;
+    const arrayOfTypes = [];
+    for (let i = 0; i < pokemonTypes.length; i += 1) {
+      arrayOfTypes.push(buttonAux.nextSibling.textContent);
+      buttonAux = buttonAux.nextSibling;
     }
-  );
+    expect(arrayOfTypes).toStrictEqual(pokemonTypes);
+  });
+});
+
+describe("7 - O botão de Próximo pokémon deve ser desabilitado se a lista filtrada de pokémons tiver um só pokémon", () => {
+  test("testando se o botão está desabilitado", () => {
+    const { getByText, getAllByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+
+    const pokemonTypes = [...new Set(pokemons.map(pokemon => pokemon.type))];
+    const nextButton = getByText(/Próximo pokémon/);
+
+    pokemonTypes.forEach(type => {
+      const button = getAllByText(type)[1] || getByText(type);
+      fireEvent.click(button);
+      const actualName = getByText(/Average weight:/i).previousSibling
+        .previousSibling.textContent;
+      fireEvent.click(nextButton);
+      const nextName = getByText(/Average weight:/i).previousSibling
+        .previousSibling.textContent;
+      if (actualName === nextName) {
+        expect(nextButton.disabled).toBe(true);
+      } else {
+        expect(nextButton.disabled).toBe(false);
+      }
+    });
+  });
 });
