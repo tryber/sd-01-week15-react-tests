@@ -26,6 +26,9 @@ function renderWithRouter(
   };
 }
 
+const { debug } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`1`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+console.log(debug())        
+
 describe('Details Page', () => {
 
   describe('<p> testing <p>', () => {
@@ -53,6 +56,18 @@ describe('Details Page', () => {
         cleanup();
       })
     });
+    // Task 14-02 14-03
+    test('should have all the location(s) name(s)', () => {
+      pokemonsMock.forEach(({ id, foundAt }) => {
+        const { container } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const pHTMLall = Object.keys(container.getElementsByTagName('em')).map(key => container.getElementsByTagName('em')[key]);
+        const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
+
+        foundAt.forEach(object => expect(pContainer.includes(object.location)).toBeTruthy());
+
+        cleanup();
+      })
+    });
   })
 
   describe('<img /> testing', () => {
@@ -63,7 +78,27 @@ describe('Details Page', () => {
         const imgHTMLsrc = queryAllByRole('img').map(HTML => HTML.src);
         const imgHTMLalt = queryAllByRole('img').map(HTML => HTML.alt);
 
+        expect(imgHTMLalt.includes(`${name} sprite`)).toBeTruthy();
         expect(imgHTMLsrc[imgHTMLalt.indexOf(`${name} sprite`)]).toBe(image);
+        
+
+        cleanup();
+      });
+    });
+    // Test 14-03 14-04 14-05
+    test('should have all the location(s) images(s)', () => {
+      pokemonsMock.forEach(({ name, id, foundAt }) => {
+        const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const imgHTMLsrc = queryAllByRole('img').reduce((array, HTML) => {
+          if(HTML.alt === `${name} location`){
+            array.push(HTML.src);
+          }
+          return array;
+        }, []);
+        const imgHTMLalt = queryAllByRole('img').map(HTML => HTML.alt);
+
+        expect(imgHTMLalt.includes(`${name} location`)).toBeTruthy();
+        foundAt.forEach(object => expect(imgHTMLsrc.includes(object.map)).toBeTruthy());
 
         cleanup();
       });
@@ -78,6 +113,17 @@ describe('Details Page', () => {
         const headingHTMLall = queryAllByRole('heading').map(HTML => HTML.innerHTML);
 
         expect(headingHTMLall.includes(' Summary ')).toBeTruthy();
+
+        cleanup();
+      });
+    });
+    // Task 14-01
+    test('should have a pokemon game location heading', () => {
+      pokemonsMock.forEach(({ id, name }) => {
+        const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const headingHTMLall = queryAllByRole('heading').map(HTML => HTML.innerHTML);
+        
+        expect(headingHTMLall.includes(`Game Locations of ${name}`)).toBeTruthy();
 
         cleanup();
       });
