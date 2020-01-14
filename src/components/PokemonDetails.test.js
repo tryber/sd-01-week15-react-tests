@@ -27,7 +27,9 @@ function renderWithRouter(
 }
 
 describe('Details Page', () => {
+  // const { debug } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
+  // console.log(debug())
 
   // Task 11
   // test(`should have an average weight when render ${element.name}`, () => {
@@ -39,49 +41,49 @@ describe('Details Page', () => {
 
   // })
   // // Task 11
-  
+
   test('hould have a pokemon image', () => {
-    pokemonsMock.forEach((currentPokemon) => {
-    const { debug, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-    const achor = queryAllByRole('heading').map(HTML => HTML.innerHTML);
-    const pageImages = queryAllByRole('img').map(HTML => HTML.src);
-    // pageImages[achor[]]
-    
-    // console.log(achor.find(textCountent => textCountent === ))
-    
-    // console.log(debug())
-    // console.log(pageImages)
+    // pokemonsMock.forEach((currentPokemon) => {
+    // const { debug, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+    // const achor = queryAllByRole('heading').map(HTML => HTML.innerHTML);
+    // const pageImages = queryAllByRole('img').map(HTML => HTML.src);
+    // // pageImages[achor[]]
 
-    // expect(queryAllByRole('img')[0]).toBeInTheDocument();
-    // expect(queryAllByRole('img')[0].src).toBe(pokemonsMock[0].image);
-    // expect(queryAllByRole('img')[0].alt).toBe(pokemonsMock[0].name + ' sprite');
+    // // console.log(achor.find(textCountent => textCountent === ))
 
-    cleanup();
-    });
+    // // console.log(debug())
+    // // console.log(pageImages)
+
+    // // expect(queryAllByRole('img')[0]).toBeInTheDocument();
+    // // expect(queryAllByRole('img')[0].src).toBe(pokemonsMock[0].image);
+    // // expect(queryAllByRole('img')[0].alt).toBe(pokemonsMock[0].name + ' sprite');
+
+    // cleanup();
+    // });
   });
   // // Task 12
-  test(`link must not to be avaible when render ${element.name}`, () => {
-    pokemonsMock.forEach((currentPokemon) => {
-      const { queryByText } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+  // test(`link must not to be avaible when render ${element.name}`, () => {
+  //   pokemonsMock.forEach((currentPokemon) => {
+  //     const { queryByText } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
-      expect(queryByText(/More details/i)).toBeNull();
+  //     expect(queryByText(/More details/i)).toBeNull();
 
-      cleanup();
-    });
-  });
+  //     cleanup();
+  //   });
+  // });
   // Task 13
-  test('should have a summary', () => {
-    pokemonsMock.forEach((currentPokemon) => {
-      const { getByText, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-      const array = queryAllByRole('heading').map(HTML => HTML.innerHTML);
+  // test('should have a summary', () => {
+  //   pokemonsMock.forEach((currentPokemon) => {
+  //     const { getByText, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+  //     const array = queryAllByRole('heading').map(HTML => HTML.innerHTML);
 
-      expect(getByText(currentPokemon.summary)).toBeInTheDocument();
+  //     expect(getByText(currentPokemon.summary)).toBeInTheDocument();
 
-      cleanup();
+  //     cleanup();
 
-      expect(array.includes(' Summary ')).toBeTruthy();
-    });
-  });
+  //     expect(array.includes(' Summary ')).toBeTruthy();
+  //   });
+  // });
 
 
 
