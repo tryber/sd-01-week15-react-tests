@@ -484,3 +484,29 @@ describe('Pokedéx should display the name, type, average weight and image of th
     ex8(sameTypePokemonList, notFavoritePokemons);
   });
 });
+
+describe('the pokemon must contain a navigation link to view details', () => {
+  function ex9(pokemons, isPokemonFavoriteById) {
+    const { getByText, getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    pokemons.forEach((pokemon) => {
+      const navLink = getByText(/More details/i).href;
+      expect(navLink).toBe(`http://localhost/pokemons/${pokemon.id}`);
+      fireEvent.click(nextPokemon);
+    });
+  }
+
+  test('case 1', () => {
+    ex9(pokemonsList, allFavoritePokemons);
+  });
+  test('case 2', () => {
+    ex9(uniquePokemonList, uniqueFavoritePokemons);
+  });
+  test('case 3', () => {
+    ex9(sameTypePokemonList, notFavoritePokemons);
+  });
+});
