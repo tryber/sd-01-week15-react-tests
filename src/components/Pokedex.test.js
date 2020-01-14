@@ -219,27 +219,7 @@ const isPokemonFavoriteById = {
   9: false,
 };
 
-const {
-  Electric,
-  Fire,
-  Bug,
-  Poison,
-  Psychic,
-  Normal,
-  Dragon,
-} = [];
-
-const typeOfPokemon = [Electric, Fire, Bug, Poison, Psychic, Normal, Dragon];
-const stringTypeOfPokemon = ['Electric', 'Fire', 'Bug', 'Poison', 'Psychic', 'Normal', 'Dragon'];
-
-for (let i = 0; i < typeOfPokemon.length; i += 1) {
-  pokemonList.forEach((pokemon) => {
-    if (pokemon.type === stringTypeOfPokemon[i]) {
-      typeOfPokemon[i].push(pokemon);
-    }
-  });
-  console.log(typeOfPokemon);
-}
+const expectedTypes = pokemonList.map(({ type }) => type);
 
 describe('2.', () => {
   test('Shows just one pokemon', () => {
@@ -272,5 +252,18 @@ describe('3.', () => {
 
 describe('4.', () => {
   test('when select a type of pokemon, don`t have other type of', () => {
+    const { getAllByText, getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    expectedTypes.forEach((type) => {
+      const buttonType = getAllByText(type)[1] || getByText(type);
+      expect(buttonType).toBeInTheDocument();
+      fireEvent.click(buttonType);
+      expect(getAllByText(type).length).toBe(2);
+      fireEvent.click(getByText(/Próximo pokémon/i));
+      expect(getAllByText(type).length).toBe(2);
+    });
   });
 });
