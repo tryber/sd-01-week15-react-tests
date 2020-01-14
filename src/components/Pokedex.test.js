@@ -1,6 +1,6 @@
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { render, fireEvent, cleanup } from "@testing-library/react";
+import { render, fireEvent, cleanup, getByAltText } from "@testing-library/react";
 import Pokedex from "./Pokedex";
 
 const isPokemonFavoriteById = {
@@ -330,4 +330,42 @@ describe("7 - O botão de Próximo pokémon deve ser desabilitado se a lista fil
       }
     });
   });
+});
+
+describe("8 - A Pokedéx deve exibir o nome, tipo, peso médio e imagem do pokémon exibido", () => {
+  test(" peso médio do pokémon deve ser exibido com um texto no formato Average weight: <value> <measurementUnit>, onde <value> e <measurementUnit> são, respectivamente, o peso médio do pokémon e sua unidade de medida;", () => {
+    const { getByText, getAllByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    const nextButton = getByText('Próximo pokémon');
+    for (let i = 0; i < pokemons.length; i += 1) {
+      const moreDetails = getByText('More details').previousSibling.innerHTML;
+      const format = `Average weight: ${pokemons[i].averageWeight.value} ${pokemons[i].averageWeight.measurementUnit}`;
+      expect(moreDetails).toBe(format);
+      fireEvent.click(nextButton);
+    }
+  });
+
+  test('A imagem deve conter um atributo src com a URL da imagem do pokémon. A imagem deverá ter também um atributo alt com o nome do pokémon.', () => {
+    const { getByText, getByAltText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    const nextButton = getByText('Próximo pokémon');
+    for (let i = 0; i < pokemons.length; i += 1) {
+      const imgAlt = getByAltText(`${pokemons[i].name} sprite`);
+      expect(imgAlt.src).toBe(pokemons[i].image);
+      expect(imgAlt.alt).toBe(`${pokemons[i].name} sprite`);
+      fireEvent.click(nextButton);
+    }
+  })
 });
