@@ -1,6 +1,7 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import App from './App';
 import { Pokedex } from './components';
 
@@ -253,6 +254,23 @@ const uniqueFavoritePokemons = {
   1: true,
 };
 
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual('react-router-dom');
+  return {
+    ...originalModule,
+    BrowserRouter: ({ children }) => (<div> {children} </div>),
+  };
+});
+function renderWithRouter(
+  ui,
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history,
+  };
+}
+
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
     <MemoryRouter>
@@ -487,7 +505,7 @@ describe('Pokedéx should display the name, type, average weight and image of th
 
 describe('the pokemon must contain a navigation link to view details', () => {
   function ex9(pokemons, isPokemonFavoriteById) {
-    const { getByText, getByAltText } = render(
+    const { getByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
       </MemoryRouter>,
@@ -508,5 +526,26 @@ describe('the pokemon must contain a navigation link to view details', () => {
   });
   test('case 3', () => {
     ex9(sameTypePokemonList, notFavoritePokemons);
+  });
+});
+
+describe('app should be redirected to pokémon details page when clicks the link', () => {
+  function ex10(pokemons, isPokemonFavoriteById) {
+    const { getByText, history, getByRole } = renderWithRouter(
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
+    );
+    expect(history.location.pathname).toBe('/');
+    fireEvent.click(getByText(/More details/i));
+    expect(`http://localhost/pokemons${history.location.pathname}`).toBe(getByRole('link').href);
+  }
+
+  test('case 1', () => {
+    ex10(pokemonsList, allFavoritePokemons);
+  });
+  test('case 2', () => {
+    ex10(uniquePokemonList, uniqueFavoritePokemons);
+  });
+  test('case 3', () => {
+    ex10(sameTypePokemonList, notFavoritePokemons);
   });
 });
