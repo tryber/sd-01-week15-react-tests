@@ -220,6 +220,7 @@ const isPokemonFavoriteById = {
 };
 
 const expectedTypes = pokemonList.map(({ type }) => type);
+const expectedNames = pokemonList.map(({ name }) => name);
 
 describe('2.', () => {
   test('Shows just one pokemon', () => {
@@ -251,7 +252,7 @@ describe('3.', () => {
 });
 
 describe('4.', () => {
-  test('when select a type of pokemon, don`t have other type of', () => {
+  test('Pokedex have button filter for all types of pokemon', () => {
     const { getAllByText, getByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
@@ -264,6 +265,27 @@ describe('4.', () => {
       expect(getAllByText(type).length).toBe(2);
       fireEvent.click(getByText(/Próximo pokémon/i));
       expect(getAllByText(type).length).toBe(2);
+    });
+  });
+});
+
+describe('5', () => {
+  test('Pokedex need button to reset filters', () => {
+    const { queryByText, getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    expectedNames.forEach((name) => {
+      expect(getByText(name)).toBeInTheDocument();
+      fireEvent.click(queryByText(/Próximo pokémon/i));
+    });
+    const allButton = queryByText(/All/i);
+    expect(allButton).toBeInTheDocument();
+    fireEvent.click(allButton);
+    expectedNames.forEach((name) => {
+      expect(getByText(name)).toBeInTheDocument();
+      fireEvent.click(queryByText(/Próximo pokémon/i));
     });
   });
 });
