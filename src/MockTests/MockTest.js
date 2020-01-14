@@ -139,7 +139,7 @@ export const isPokemonFavoriteByIdMock = {
   3: false,
   4: false,
   5: true,
-  6: false,
+  6: true,
 };
 
 export const matchMock = jest.fn((id) => {

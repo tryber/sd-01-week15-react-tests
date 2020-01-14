@@ -27,7 +27,7 @@ function renderWithRouter(
 }
 
 const { debug } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`1`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-console.log(debug())        
+console.log(debug())
 
 describe('Details Page', () => {
 
@@ -80,7 +80,7 @@ describe('Details Page', () => {
 
         expect(imgHTMLalt.includes(`${name} sprite`)).toBeTruthy();
         expect(imgHTMLsrc[imgHTMLalt.indexOf(`${name} sprite`)]).toBe(image);
-        
+
 
         cleanup();
       });
@@ -90,7 +90,7 @@ describe('Details Page', () => {
       pokemonsMock.forEach(({ name, id, foundAt }) => {
         const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
         const imgHTMLsrc = queryAllByRole('img').reduce((array, HTML) => {
-          if(HTML.alt === `${name} location`){
+          if (HTML.alt === `${name} location`) {
             array.push(HTML.src);
           }
           return array;
@@ -122,13 +122,54 @@ describe('Details Page', () => {
       pokemonsMock.forEach(({ id, name }) => {
         const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
         const headingHTMLall = queryAllByRole('heading').map(HTML => HTML.innerHTML);
-        
+
         expect(headingHTMLall.includes(`Game Locations of ${name}`)).toBeTruthy();
 
         cleanup();
       });
     });
   })
+
+  describe('<input> testing <input/>', () => {
+    // Task 15-01 15-02
+    test('should have a pokemon favorite input', () => {
+      pokemonsMock.forEach(({ id }) => {
+        const { container } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const inputHTMLall = Object.keys(container.getElementsByTagName('input')).map(key => container.getElementsByTagName('input')[key]);
+        const labelHTMLall = Object.keys(container.getElementsByTagName('label')).map(key => container.getElementsByTagName('label')[key]);
+
+        inputHTMLall.forEach((input) => {
+          if (input.id === 'favorite') expect(input.type).toBe('checkbox');
+        })
+
+        labelHTMLall.forEach((label) => {
+          if (label.htmlFor === 'favorite') expect(label.textContent).toBe('Pokémon favoritado?');
+        })
+
+        cleanup();
+      })
+    });
+    // Task 16-01 16-02
+    test('favorite pokemons should have a star icon image', () => {
+      pokemonsMock.forEach(({ id, name }) => {
+        const { container, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const inputHTMLall = Object.keys(container.getElementsByTagName('input')).map(key => container.getElementsByTagName('input')[key]);
+
+        inputHTMLall.forEach((input) => {
+          if (input.id === 'favorite' && input.checked) {
+            const imgHTMLalt = queryAllByRole('img').map(HTML => HTML.alt);
+
+            expect(imgHTMLalt.includes(`${name} is marked as favorite`)).toBeTruthy();
+            queryAllByRole('img').forEach((image) => {
+              if (image.alt === `${name} is marked as favorite`) expect(image.src).toBe('http://localhost/star-icon.svg');
+            });
+          };
+        });
+
+        cleanup();
+      })
+    });
+  });
 
   describe('should not have', () => {
     test('a link to display pokemon page details', () => {
