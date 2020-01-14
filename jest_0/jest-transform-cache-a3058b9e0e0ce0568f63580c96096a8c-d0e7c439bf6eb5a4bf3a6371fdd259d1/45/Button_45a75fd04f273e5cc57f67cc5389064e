@@ -1,0 +1,49 @@
+3bb94250d2a305a8f334182267cc4146
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+require("./button.css");
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/components/Button.js";
+
+const Button = ({
+  className,
+  children,
+  disabled,
+  onClick
+}) => _react.default.createElement("button", {
+  onClick: onClick,
+  className: `button-text ${className}`,
+  disabled: disabled,
+  type: "button",
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 12
+  },
+  __self: void 0
+}, children);
+
+Button.propTypes = {
+  children: _propTypes.default.node,
+  className: _propTypes.default.string,
+  disabled: _propTypes.default.bool,
+  onClick: _propTypes.default.func.isRequired
+};
+Button.defaultProps = {
+  children: null,
+  className: '',
+  disabled: false
+};
+var _default = Button;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkJ1dHRvbi5qcyJdLCJuYW1lcyI6WyJCdXR0b24iLCJjbGFzc05hbWUiLCJjaGlsZHJlbiIsImRpc2FibGVkIiwib25DbGljayIsInByb3BUeXBlcyIsIlByb3BUeXBlcyIsIm5vZGUiLCJzdHJpbmciLCJib29sIiwiZnVuYyIsImlzUmVxdWlyZWQiLCJkZWZhdWx0UHJvcHMiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUFBOztBQUNBOztBQUVBOzs7O0FBRUEsTUFBTUEsTUFBTSxHQUFHLENBQUM7QUFDZEMsRUFBQUEsU0FEYztBQUVkQyxFQUFBQSxRQUZjO0FBR2RDLEVBQUFBLFFBSGM7QUFJZEMsRUFBQUE7QUFKYyxDQUFELEtBTWI7QUFDRSxFQUFBLE9BQU8sRUFBRUEsT0FEWDtBQUVFLEVBQUEsU0FBUyxFQUFHLGVBQWNILFNBQVUsRUFGdEM7QUFHRSxFQUFBLFFBQVEsRUFBRUUsUUFIWjtBQUlFLEVBQUEsSUFBSSxFQUFDLFFBSlA7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsR0FNR0QsUUFOSCxDQU5GOztBQWdCQUYsTUFBTSxDQUFDSyxTQUFQLEdBQW1CO0FBQ2pCSCxFQUFBQSxRQUFRLEVBQUVJLG1CQUFVQyxJQURIO0FBRWpCTixFQUFBQSxTQUFTLEVBQUVLLG1CQUFVRSxNQUZKO0FBR2pCTCxFQUFBQSxRQUFRLEVBQUVHLG1CQUFVRyxJQUhIO0FBSWpCTCxFQUFBQSxPQUFPLEVBQUVFLG1CQUFVSSxJQUFWLENBQWVDO0FBSlAsQ0FBbkI7QUFPQVgsTUFBTSxDQUFDWSxZQUFQLEdBQXNCO0FBQ3BCVixFQUFBQSxRQUFRLEVBQUUsSUFEVTtBQUVwQkQsRUFBQUEsU0FBUyxFQUFFLEVBRlM7QUFHcEJFLEVBQUFBLFFBQVEsRUFBRTtBQUhVLENBQXRCO2VBTWVILE0iLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuaW1wb3J0IFByb3BUeXBlcyBmcm9tICdwcm9wLXR5cGVzJztcblxuaW1wb3J0ICcuL2J1dHRvbi5jc3MnO1xuXG5jb25zdCBCdXR0b24gPSAoe1xuICBjbGFzc05hbWUsXG4gIGNoaWxkcmVuLFxuICBkaXNhYmxlZCxcbiAgb25DbGljayxcbn0pID0+IChcbiAgPGJ1dHRvblxuICAgIG9uQ2xpY2s9e29uQ2xpY2t9XG4gICAgY2xhc3NOYW1lPXtgYnV0dG9uLXRleHQgJHtjbGFzc05hbWV9YH1cbiAgICBkaXNhYmxlZD17ZGlzYWJsZWR9XG4gICAgdHlwZT1cImJ1dHRvblwiXG4gID5cbiAgICB7Y2hpbGRyZW59XG4gIDwvYnV0dG9uPlxuKTtcblxuQnV0dG9uLnByb3BUeXBlcyA9IHtcbiAgY2hpbGRyZW46IFByb3BUeXBlcy5ub2RlLFxuICBjbGFzc05hbWU6IFByb3BUeXBlcy5zdHJpbmcsXG4gIGRpc2FibGVkOiBQcm9wVHlwZXMuYm9vbCxcbiAgb25DbGljazogUHJvcFR5cGVzLmZ1bmMuaXNSZXF1aXJlZCxcbn07XG5cbkJ1dHRvbi5kZWZhdWx0UHJvcHMgPSB7XG4gIGNoaWxkcmVuOiBudWxsLFxuICBjbGFzc05hbWU6ICcnLFxuICBkaXNhYmxlZDogZmFsc2UsXG59O1xuXG5leHBvcnQgZGVmYXVsdCBCdXR0b247XG4iXX0=

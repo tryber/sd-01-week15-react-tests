@@ -1,0 +1,51 @@
+06714bc844144cd5bfd57ee6314c62ae
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./not-found.css");
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/components/NotFound.js";
+
+const NotFound = () => _react.default.createElement("div", {
+  className: "not-found",
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 5
+  },
+  __self: void 0
+}, _react.default.createElement("h2", {
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 6
+  },
+  __self: void 0
+}, "Page requested not found", _react.default.createElement("span", {
+  role: "img",
+  "aria-label": "Crying emoji",
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 8
+  },
+  __self: void 0
+}, " \uD83D\uDE2D ")), _react.default.createElement("img", {
+  className: "not-found-image",
+  src: "https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif",
+  alt: "Pikachu crying because the page requested was not found",
+  __source: {
+    fileName: _jsxFileName,
+    lineNumber: 10
+  },
+  __self: void 0
+}));
+
+var _default = NotFound;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIk5vdEZvdW5kLmpzIl0sIm5hbWVzIjpbIk5vdEZvdW5kIl0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7QUFBQTs7QUFDQTs7OztBQUVBLE1BQU1BLFFBQVEsR0FBRyxNQUNmO0FBQUssRUFBQSxTQUFTLEVBQUMsV0FBZjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxHQUNFO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLCtCQUVFO0FBQU0sRUFBQSxJQUFJLEVBQUMsS0FBWDtBQUFpQixnQkFBVyxjQUE1QjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxvQkFGRixDQURGLEVBS0U7QUFDRSxFQUFBLFNBQVMsRUFBQyxpQkFEWjtBQUVFLEVBQUEsR0FBRyxFQUFDLHVEQUZOO0FBR0UsRUFBQSxHQUFHLEVBQUMseURBSE47QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsRUFMRixDQURGOztlQWNlQSxRIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JztcbmltcG9ydCAnLi9ub3QtZm91bmQuY3NzJztcblxuY29uc3QgTm90Rm91bmQgPSAoKSA9PiAoXG4gIDxkaXYgY2xhc3NOYW1lPVwibm90LWZvdW5kXCI+XG4gICAgPGgyPlxuICAgICAgUGFnZSByZXF1ZXN0ZWQgbm90IGZvdW5kXG4gICAgICA8c3BhbiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIkNyeWluZyBlbW9qaVwiPiDwn5itIDwvc3Bhbj5cbiAgICA8L2gyPlxuICAgIDxpbWdcbiAgICAgIGNsYXNzTmFtZT1cIm5vdC1mb3VuZC1pbWFnZVwiXG4gICAgICBzcmM9XCJodHRwczovL21lZGlhLmdpcGh5LmNvbS9tZWRpYS9rTlNlVHMzMVhCWjNHL2dpcGh5LmdpZlwiXG4gICAgICBhbHQ9XCJQaWthY2h1IGNyeWluZyBiZWNhdXNlIHRoZSBwYWdlIHJlcXVlc3RlZCB3YXMgbm90IGZvdW5kXCJcbiAgICAvPlxuICA8L2Rpdj5cbik7XG5cbmV4cG9ydCBkZWZhdWx0IE5vdEZvdW5kO1xuIl19

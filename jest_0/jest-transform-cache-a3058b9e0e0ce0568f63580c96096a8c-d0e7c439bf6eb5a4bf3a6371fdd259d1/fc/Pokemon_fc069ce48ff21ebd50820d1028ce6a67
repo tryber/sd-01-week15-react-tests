@@ -1,0 +1,107 @@
+b1298f0a13cfba7acb86d9f6783d75fe
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _types = require("../types");
+
+require("./pokemon.css");
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/components/Pokemon.js";
+
+class Pokemon extends _react.default.Component {
+  render() {
+    const _this$props = this.props,
+          pokemon = _this$props.pokemon,
+          showDetailsLink = _this$props.showDetailsLink,
+          isFavorite = _this$props.isFavorite;
+    const averageWeight = pokemon.averageWeight,
+          id = pokemon.id,
+          image = pokemon.image,
+          name = pokemon.name,
+          type = pokemon.type;
+    const measurementUnit = averageWeight.measurementUnit,
+          value = averageWeight.value;
+    return _react.default.createElement("div", {
+      className: "pokemon",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 18
+      },
+      __self: this
+    }, _react.default.createElement("div", {
+      className: "pokemon-overview",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 19
+      },
+      __self: this
+    }, _react.default.createElement("p", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 20
+      },
+      __self: this
+    }, name), _react.default.createElement("p", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 21
+      },
+      __self: this
+    }, type), _react.default.createElement("p", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 22
+      },
+      __self: this
+    }, `Average weight: ${value} ${measurementUnit}`), showDetailsLink && _react.default.createElement(_reactRouterDom.Link, {
+      to: `pokemons/${id}`,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23
+      },
+      __self: this
+    }, "More details")), _react.default.createElement("img", {
+      src: image,
+      alt: `${name} sprite`,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 25
+      },
+      __self: this
+    }), isFavorite && _react.default.createElement("img", {
+      className: "favorite-icon",
+      src: "/star-icon.svg",
+      alt: `${name} is marked as favorite`,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 27
+      },
+      __self: this
+    }));
+  }
+
+}
+
+Pokemon.propTypes = {
+  isFavorite: _propTypes.default.bool.isRequired,
+  pokemon: _types.pokemonType.isRequired,
+  showDetailsLink: _propTypes.default.bool
+};
+Pokemon.defaultProps = {
+  showDetailsLink: true
+};
+var _default = Pokemon;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlBva2Vtb24uanMiXSwibmFtZXMiOlsiUG9rZW1vbiIsIlJlYWN0IiwiQ29tcG9uZW50IiwicmVuZGVyIiwicHJvcHMiLCJwb2tlbW9uIiwic2hvd0RldGFpbHNMaW5rIiwiaXNGYXZvcml0ZSIsImF2ZXJhZ2VXZWlnaHQiLCJpZCIsImltYWdlIiwibmFtZSIsInR5cGUiLCJtZWFzdXJlbWVudFVuaXQiLCJ2YWx1ZSIsInByb3BUeXBlcyIsIlByb3BUeXBlcyIsImJvb2wiLCJpc1JlcXVpcmVkIiwicG9rZW1vblR5cGUiLCJkZWZhdWx0UHJvcHMiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUFBOztBQUNBOztBQUNBOztBQUVBOztBQUVBOzs7O0FBRUEsTUFBTUEsT0FBTixTQUFzQkMsZUFBTUMsU0FBNUIsQ0FBc0M7QUFDcENDLEVBQUFBLE1BQU0sR0FBRztBQUFBLHdCQUMwQyxLQUFLQyxLQUQvQztBQUFBLFVBQ0NDLE9BREQsZUFDQ0EsT0FERDtBQUFBLFVBQ1VDLGVBRFYsZUFDVUEsZUFEVjtBQUFBLFVBQzJCQyxVQUQzQixlQUMyQkEsVUFEM0I7QUFBQSxVQUdMQyxhQUhLLEdBSUhILE9BSkcsQ0FHTEcsYUFISztBQUFBLFVBR1VDLEVBSFYsR0FJSEosT0FKRyxDQUdVSSxFQUhWO0FBQUEsVUFHY0MsS0FIZCxHQUlITCxPQUpHLENBR2NLLEtBSGQ7QUFBQSxVQUdxQkMsSUFIckIsR0FJSE4sT0FKRyxDQUdxQk0sSUFIckI7QUFBQSxVQUcyQkMsSUFIM0IsR0FJSFAsT0FKRyxDQUcyQk8sSUFIM0I7QUFBQSxVQUtDQyxlQUxELEdBSzRCTCxhQUw1QixDQUtDSyxlQUxEO0FBQUEsVUFLa0JDLEtBTGxCLEdBSzRCTixhQUw1QixDQUtrQk0sS0FMbEI7QUFPUCxXQUNFO0FBQUssTUFBQSxTQUFTLEVBQUMsU0FBZjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUNFO0FBQUssTUFBQSxTQUFTLEVBQUMsa0JBQWY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsT0FDRTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUFJSCxJQUFKLENBREYsRUFFRTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUFJQyxJQUFKLENBRkYsRUFHRTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUFLLG1CQUFrQkUsS0FBTSxJQUFHRCxlQUFnQixFQUFoRCxDQUhGLEVBSUdQLGVBQWUsSUFBSSw2QkFBQyxvQkFBRDtBQUFNLE1BQUEsRUFBRSxFQUFHLFlBQVdHLEVBQUcsRUFBekI7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsc0JBSnRCLENBREYsRUFPRTtBQUFLLE1BQUEsR0FBRyxFQUFFQyxLQUFWO0FBQWlCLE1BQUEsR0FBRyxFQUFHLEdBQUVDLElBQUssU0FBOUI7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsTUFQRixFQVFHSixVQUFVLElBQ1Q7QUFDRSxNQUFBLFNBQVMsRUFBQyxlQURaO0FBRUUsTUFBQSxHQUFHLEVBQUMsZ0JBRk47QUFHRSxNQUFBLEdBQUcsRUFBRyxHQUFFSSxJQUFLLHdCQUhmO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLE1BVEosQ0FERjtBQWtCRDs7QUExQm1DOztBQTZCdENYLE9BQU8sQ0FBQ2UsU0FBUixHQUFvQjtBQUNsQlIsRUFBQUEsVUFBVSxFQUFFUyxtQkFBVUMsSUFBVixDQUFlQyxVQURUO0FBRWxCYixFQUFBQSxPQUFPLEVBQUVjLG1CQUFZRCxVQUZIO0FBR2xCWixFQUFBQSxlQUFlLEVBQUVVLG1CQUFVQztBQUhULENBQXBCO0FBTUFqQixPQUFPLENBQUNvQixZQUFSLEdBQXVCO0FBQ3JCZCxFQUFBQSxlQUFlLEVBQUU7QUFESSxDQUF2QjtlQUllTixPIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JztcbmltcG9ydCBQcm9wVHlwZXMgZnJvbSAncHJvcC10eXBlcyc7XG5pbXBvcnQgeyBMaW5rIH0gZnJvbSAncmVhY3Qtcm91dGVyLWRvbSc7XG5cbmltcG9ydCB7IHBva2Vtb25UeXBlIH0gZnJvbSAnLi4vdHlwZXMnO1xuXG5pbXBvcnQgJy4vcG9rZW1vbi5jc3MnO1xuXG5jbGFzcyBQb2tlbW9uIGV4dGVuZHMgUmVhY3QuQ29tcG9uZW50IHtcbiAgcmVuZGVyKCkge1xuICAgIGNvbnN0IHsgcG9rZW1vbiwgc2hvd0RldGFpbHNMaW5rLCBpc0Zhdm9yaXRlIH0gPSB0aGlzLnByb3BzO1xuICAgIGNvbnN0IHtcbiAgICAgIGF2ZXJhZ2VXZWlnaHQsIGlkLCBpbWFnZSwgbmFtZSwgdHlwZSxcbiAgICB9ID0gcG9rZW1vbjtcbiAgICBjb25zdCB7IG1lYXN1cmVtZW50VW5pdCwgdmFsdWUgfSA9IGF2ZXJhZ2VXZWlnaHQ7XG5cbiAgICByZXR1cm4gKFxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJwb2tlbW9uXCI+XG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9rZW1vbi1vdmVydmlld1wiPlxuICAgICAgICAgIDxwPntuYW1lfTwvcD5cbiAgICAgICAgICA8cD57dHlwZX08L3A+XG4gICAgICAgICAgPHA+e2BBdmVyYWdlIHdlaWdodDogJHt2YWx1ZX0gJHttZWFzdXJlbWVudFVuaXR9YH08L3A+XG4gICAgICAgICAge3Nob3dEZXRhaWxzTGluayAmJiA8TGluayB0bz17YHBva2Vtb25zLyR7aWR9YH0+TW9yZSBkZXRhaWxzPC9MaW5rPn1cbiAgICAgICAgPC9kaXY+XG4gICAgICAgIDxpbWcgc3JjPXtpbWFnZX0gYWx0PXtgJHtuYW1lfSBzcHJpdGVgfSAvPlxuICAgICAgICB7aXNGYXZvcml0ZSAmJiAoXG4gICAgICAgICAgPGltZ1xuICAgICAgICAgICAgY2xhc3NOYW1lPVwiZmF2b3JpdGUtaWNvblwiXG4gICAgICAgICAgICBzcmM9XCIvc3Rhci1pY29uLnN2Z1wiXG4gICAgICAgICAgICBhbHQ9e2Ake25hbWV9IGlzIG1hcmtlZCBhcyBmYXZvcml0ZWB9XG4gICAgICAgICAgLz5cbiAgICAgICAgKX1cbiAgICAgIDwvZGl2PlxuICAgICk7XG4gIH1cbn1cblxuUG9rZW1vbi5wcm9wVHlwZXMgPSB7XG4gIGlzRmF2b3JpdGU6IFByb3BUeXBlcy5ib29sLmlzUmVxdWlyZWQsXG4gIHBva2Vtb246IHBva2Vtb25UeXBlLmlzUmVxdWlyZWQsXG4gIHNob3dEZXRhaWxzTGluazogUHJvcFR5cGVzLmJvb2wsXG59O1xuXG5Qb2tlbW9uLmRlZmF1bHRQcm9wcyA9IHtcbiAgc2hvd0RldGFpbHNMaW5rOiB0cnVlLFxufTtcblxuZXhwb3J0IGRlZmF1bHQgUG9rZW1vbjtcbiJdfQ==
