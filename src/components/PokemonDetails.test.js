@@ -27,68 +27,74 @@ function renderWithRouter(
 }
 
 describe('Details Page', () => {
-  // const { debug } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
-  // console.log(debug())
+  describe('<p> testing <p>', () => {
+    // Task 11-01
+    test('should have an average weight', () => {
+      pokemonsMock.forEach(({ id, averageWeight: { value, measurementUnit } }) => {
+        const { container } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const pHTMLall = Object.keys(container.querySelectorAll('p')).map(key => container.querySelectorAll('p')[key]);
+        const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
 
-  // Task 11
-  // test(`should have an average weight when render ${element.name}`, () => {
-  //   pokemonsMock.forEach((currentPokemon) => {
-  //     const { getByText } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        expect(pContainer.includes(`Average weight: ${value} ${measurementUnit}`)).toBeTruthy();
 
-  //     expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
-  //   });
+        cleanup();
+      })
+    });
+    // Task 13-02
+    test('should have a brief resume', () => {
+      pokemonsMock.forEach(({ id, summary }) => {
+        const { container } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const pHTMLall = Object.keys(container.querySelectorAll('p')).map(key => container.querySelectorAll('p')[key]);
+        const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
 
-  // })
-  // // Task 11
+        expect(pContainer.includes(summary)).toBeTruthy();
 
-  test('hould have a pokemon image', () => {
-    // pokemonsMock.forEach((currentPokemon) => {
-    // const { debug, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-    // const achor = queryAllByRole('heading').map(HTML => HTML.innerHTML);
-    // const pageImages = queryAllByRole('img').map(HTML => HTML.src);
-    // // pageImages[achor[]]
+        cleanup();
+      })
+    });
+  })
 
-    // // console.log(achor.find(textCountent => textCountent === ))
+  describe('<img /> testing', () => {
+    // Test 11-02
+    test('should have a pokemon img', () => {
+      pokemonsMock.forEach(({ name, id, image }) => {
+        const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const imgHTMLsrc = queryAllByRole('img').map(HTML => HTML.src);
+        const imgHTMLalt = queryAllByRole('img').map(HTML => HTML.alt);
 
-    // // console.log(debug())
-    // // console.log(pageImages)
+        expect(imgHTMLsrc[imgHTMLalt.indexOf(`${name} sprite`)]).toBe(image);
 
-    // // expect(queryAllByRole('img')[0]).toBeInTheDocument();
-    // // expect(queryAllByRole('img')[0].src).toBe(pokemonsMock[0].image);
-    // // expect(queryAllByRole('img')[0].alt).toBe(pokemonsMock[0].name + ' sprite');
+        cleanup();
+      });
+    });
+  })
 
-    // cleanup();
-    // });
-  });
-  // // Task 12
-  // test(`link must not to be avaible when render ${element.name}`, () => {
-  //   pokemonsMock.forEach((currentPokemon) => {
-  //     const { queryByText } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+  describe('<h?> testing <h?/>', () => {
+    // Task 13-01
+    test('should have a summary heading', () => {
+      pokemonsMock.forEach(({ id }) => {
+        const { queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+        const headingHTMLall = queryAllByRole('heading').map(HTML => HTML.innerHTML);
 
-  //     expect(queryByText(/More details/i)).toBeNull();
+        expect(headingHTMLall.includes(' Summary ')).toBeTruthy();
 
-  //     cleanup();
-  //   });
-  // });
-  // Task 13
-  // test('should have a summary', () => {
-  //   pokemonsMock.forEach((currentPokemon) => {
-  //     const { getByText, queryAllByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${currentPokemon.id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-  //     const array = queryAllByRole('heading').map(HTML => HTML.innerHTML);
+        cleanup();
+      });
+    });
+  })
 
-  //     expect(getByText(currentPokemon.summary)).toBeInTheDocument();
+  describe('should not have', () => {
+    test('a link to display pokemon page details', () => {
+      // Task 12
+      pokemonsMock.forEach(({ id }) => {
+        const { queryByRole } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
 
-  //     cleanup();
+        expect(queryByRole('link')).toBeNull();
 
-  //     expect(array.includes(' Summary ')).toBeTruthy();
-  //   });
-  // });
+        cleanup();
+      })
+    });
+  })
 
-
-
-
-  // Task 14
-
-})
-
+});
