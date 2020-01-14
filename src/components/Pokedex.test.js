@@ -369,3 +369,23 @@ describe("8 - A Pokedéx deve exibir o nome, tipo, peso médio e imagem do poké
     }
   })
 });
+
+describe('9 - O pokémon exibido na Pokedéx deve conter um link de navegação para exibir detalhes deste pokémon', () => {
+  test('O link deve possuir a URL /pokemons/<id>, onde <id> é o id do pokémon exibido.', () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+
+    const nextButton = getByText('Próximo pokémon');
+    for (let i = 0; i < pokemons.length; i += 1) {
+      const moreDetails = getByText('More details').href;
+      expect(moreDetails).toBe(`http://localhost/pokemons/${pokemons[i].id}`);
+      fireEvent.click(nextButton);
+    }
+  })
+})
