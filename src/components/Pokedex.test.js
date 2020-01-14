@@ -195,15 +195,44 @@ describe("Requisito 3, Ao apertar o botão de próximo, a página deve exibir o 
 });
 
 describe("Requisito 4, A Pokédex deve conter botões de filtro", () => {
-  // const { getByText } = render(
-  //   <MemoryRouter>
-  //     <Pokedex
-  //       pokemons={pokemons}
-  //       isPokemonFavoriteById={isPokemonFavoriteById}
-  //     />
-  //   </MemoryRouter>
-  // );
+  afterEach(cleanup);
+  test("A partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo", () => {
+    const { getByText, getAllByText } = render(
+      <MemoryRouter>
+        <Pokedex
+          pokemons={pokemons}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+        />
+      </MemoryRouter>
+    );
+    const allPokemonTypes = [...new Set(pokemons.map(pokemon => pokemon.type))];
+    const nextPokemon = getByText('Próximo pokémon');
+    const details = getByText('More details');
+  
+    for(let i = 0; i < allPokemonTypes.length; i += 1) {
+      const actualType = getAllByText(allPokemonTypes[i])[1] || getByText(allPokemonTypes[i])
+      expect(actualType).toBeInTheDocument();
+      fireEvent.click(actualType);
+      fireEvent.click(nextPokemon);
+      expect(details.previousSibling.previousSibling.innerHTML).toBe(actualType.innerHTML);
+    }
+  });
 
-  test("A partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo", () => {});
-  test("O texto do botão deve ser o nome do tipo, p. ex. Psychic.", () => {});
+  // test("O texto do botão deve ser o nome do tipo, p. ex. Psychic.", () => {
+  //   const { getByText } = render(
+  //     <MemoryRouter>
+  //       <Pokedex
+  //         pokemons={pokemons}
+  //         isPokemonFavoriteById={isPokemonFavoriteById}
+  //       />
+  //     </MemoryRouter>
+  //   );
+  //   const allPokemonTypes = [...new Set(pokemons.map(pokemon => pokemon.type))];
+  //   const buttonAll = getByText(/All/);
+  //   let auxLet = buttonAll;
+  //   for(let i = 0; i < allPokemonTypes.length; i += 1) {
+  //     let actualButton = auxLet.nextSibling.innerHTML;
+  //     expect(actualButton).toStrictEqual(allPokemonTypes[i]);
+  //   }
+  // });
 });
