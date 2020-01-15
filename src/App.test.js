@@ -3,7 +3,7 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import { Pokedex } from './components';
+import { Pokedex, PokemonDetails } from './components';
 
 const pokemonsList = [
   {
@@ -482,7 +482,7 @@ describe('Pokedéx should display the name, type, average weight and image of th
     );
     const nextPokemon = getByText(/Próximo pokémon/i);
     pokemons.forEach((pokemon) => {
-      const averageWeight = getByText(/More details/i).previousSibling.textContent;
+      const averageWeight = getByText(/Average weight:/i).textContent;
       const pokemonWeight = `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`;
       const pokemonImage = getByAltText(`${pokemon.name} sprite`);
       expect(averageWeight).toBe(pokemonWeight);
@@ -547,5 +547,47 @@ describe('app should be redirected to pokémon details page when clicks the link
   });
   test('case 3', () => {
     ex10(sameTypePokemonList, notFavoritePokemons);
+  });
+});
+
+const func = jest.fn();
+describe('pokémon details page should display the name, type, average weight and image of the displayed pokemon', () => {
+  function ex11(pokemons, isPokemonFavoriteById, pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const { getByText, getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const pokemonWeight = getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`);
+    const pokemonImage = getByAltText(`${pokemon.name} sprite`);
+    expect(pokemonWeight).toBeInTheDocument();
+    expect(pokemonImage.src).toBe(pokemon.image);
+    expect(pokemonImage.alt).toBe(`${pokemon.name} sprite`);
+  }
+
+  test('case 1', () => {
+    pokemonsList.forEach((pokemon) => (
+      ex11(pokemonsList, allFavoritePokemons, pokemon)
+    ));
+  });
+  test('case 2', () => {
+    uniquePokemonList.forEach((pokemon) => (
+      ex11(uniquePokemonList, uniqueFavoritePokemons, pokemon)
+    ));
+  });
+  test('case 3', () => {
+    sameTypePokemonList.forEach((pokemon) => (
+      ex11(sameTypePokemonList, notFavoritePokemons, pokemon)
+    ));
   });
 });
