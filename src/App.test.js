@@ -628,3 +628,44 @@ describe('pokemon details page must not contain a navigation link to view detail
     ));
   });
 });
+
+describe('pokemon details page must display a summary section', () => {
+  function ex13(pokemons, isPokemonFavoriteById, pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const pokemonSummary = getByText(/Summary/i);
+    expect(pokemonSummary).toBeInTheDocument();
+    expect((pokemonSummary).tagName).toBe('H2');
+    expect(pokemonSummary.nextSibling.tagName).toBe('P');
+    expect(pokemonSummary.nextSibling.textContent).toBe(pokemon.summary);
+  }
+
+  pokemonsList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex13(pokemonsList, allFavoritePokemons, pokemon);
+    })
+  ));
+  uniquePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex13(uniquePokemonList, uniqueFavoritePokemons, pokemon);
+    })
+  ));
+  sameTypePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex13(sameTypePokemonList, notFavoritePokemons, pokemon);
+    })
+  ));
+});
