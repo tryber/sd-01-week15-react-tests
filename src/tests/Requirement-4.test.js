@@ -1,7 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent, cleanup } from '@testing-library/react';
-import App from '../App';
 import { Pokedex } from '../components';
 
 afterEach(cleanup);
@@ -24,8 +23,7 @@ const pokemons = [
       },
       {
         location: 'Kanto Power Plant',
-        map:
-          'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
       },
     ],
     summary:
@@ -40,8 +38,7 @@ const pokemons = [
       measurementUnit: 'kg',
     },
     image: 'https://cdn.bulbagarden.net/upload/0/0a/Spr_5b_004.png',
-    moreInfo:
-      'https://bulbapedia.bulbagarden.net/wiki/Charmander_(Pok%C3%A9mon)',
+    moreInfo: 'https://bulbapedia.bulbagarden.net/wiki/Charmander_(Pok%C3%A9mon)',
     foundAt: [
       {
         location: 'Alola Route 3',
@@ -57,8 +54,7 @@ const pokemons = [
       },
       {
         location: 'Kanto Rock Tunnel',
-        map:
-          'https://cdn.bulbagarden.net/upload/6/6f/Kanto_Rock_Tunnel_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/6/6f/Kanto_Rock_Tunnel_Map.png',
       },
     ],
     summary:
@@ -85,13 +81,11 @@ const pokemons = [
       },
       {
         location: 'Ilex Forest',
-        map:
-          'https://cdn.bulbagarden.net/upload/a/ae/Johto_Ilex_Forest_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/a/ae/Johto_Ilex_Forest_Map.png',
       },
       {
         location: 'Johto National Park',
-        map:
-          'https://cdn.bulbagarden.net/upload/4/4e/Johto_National_Park_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/4/4e/Johto_National_Park_Map.png',
       },
     ],
     summary:
@@ -110,8 +104,7 @@ const pokemons = [
     foundAt: [
       {
         location: 'Goldenrod Game Corner',
-        map:
-          'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
       },
     ],
     summary:
@@ -126,58 +119,25 @@ const isPokemonFavoriteById = {
   4: false,
 };
 
-test('2 - A Pokédex deve exibir apenas um pokémon por vez', () => {
-  const { queryAllByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <App />
-    </MemoryRouter>,
-  );
-  const pokemon = queryAllByText(/Average weight:/i);
-
-  expect(pokemon.length).toBe(1);
-});
-test('3 - Ao apertar o botão de próximo, a página deve exibir o próximo pokémon da lista.', () => {
-  const { getByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <Pokedex
-        pokemons={pokemons}
-        isPokemonFavoriteById={isPokemonFavoriteById}
-      />
-    </MemoryRouter>,
-  );
-  const btnNextPokemon = getByText(/Próximo pokémon/i);
-  expect(btnNextPokemon).toBeInTheDocument();
-
-  for (let i = 0; i < pokemons.length; i += 1) {
-    expect(getByText(pokemons[i].name)).toBeInTheDocument();
-    fireEvent.click(btnNextPokemon);
-  }
-  expect(getByText(pokemons[0].name)).toBeInTheDocument();
-});
-test(' 4 - A Pokédex deve conter botões de filtro', () => {
-  const { queryAllByText, getByText, getAllByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <Pokedex
-        pokemons={pokemons}
-        isPokemonFavoriteById={isPokemonFavoriteById}
-      />
-    </MemoryRouter>,
-  );
-
-  const listaPokemon = [
-    ...new Set(pokemons.map((tiposPokemons) => tiposPokemons.type)),
-  ];
-  const buttonAll = getByText(/All/i);
-  let auxiliar = buttonAll;
-  for (let i = 0; i < listaPokemon.length; i += 1) {
-    expect(auxiliar.nextSibling.textContent).toBe(listaPokemon[i]);
-    auxiliar = auxiliar.nextSibling;
-    const buttonType = getAllByText(listaPokemon[i])[1] || getByText(listaPokemon[i]);
-    fireEvent.click(buttonType);
-    expect(queryAllByText(listaPokemon[i]).length).toBe(2);
-    fireEvent.click(getByText(/Próximo pokémon/i));
-    expect(getByText(/Average weight:/i).previousSibling.textContent).toBe(
-      listaPokemon[i],
+describe('Exigência → 4', () => {
+  test(' 4 - A Pokédex deve conter botões de filtro', () => {
+    const { queryAllByText, getByText, getAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
     );
-  }
+
+    const listaPokemon = [...new Set(pokemons.map((tiposPokemons) => tiposPokemons.type))];
+    const buttonAll = getByText(/All/i);
+    let auxiliar = buttonAll;
+    for (let i = 0; i < listaPokemon.length; i += 1) {
+      expect(auxiliar.nextSibling.textContent).toBe(listaPokemon[i]);
+      auxiliar = auxiliar.nextSibling;
+      const buttonType = getAllByText(listaPokemon[i])[1] || getByText(listaPokemon[i]);
+      fireEvent.click(buttonType);
+      expect(queryAllByText(listaPokemon[i]).length).toBe(2);
+      fireEvent.click(getByText(/Próximo pokémon/i));
+      expect(getByText(/Average weight:/i).previousSibling.textContent).toBe(listaPokemon[i]);
+    }
+  });
 });
