@@ -1,0 +1,37 @@
+a16e1c54a61210045e7274002436c9a9
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _react2 = require("@testing-library/react");
+
+var _App = _interopRequireDefault(require("../App"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/Requirement-1.test.js";
+afterEach(_react2.cleanup);
+describe('Exigência → 1', () => {
+  test('shows the Pokedéx when the route is `/`', () => {
+    const _render = (0, _react2.render)(_react.default.createElement(_reactRouterDom.MemoryRouter, {
+      initialEntries: ['/'],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 11
+      },
+      __self: void 0
+    }, _react.default.createElement(_App.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 12
+      },
+      __self: void 0
+    }))),
+          getByText = _render.getByText;
+
+    expect(getByText('Encountered pokémons')).toBeInTheDocument();
+  });
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlJlcXVpcmVtZW50LTEudGVzdC5qcyJdLCJuYW1lcyI6WyJhZnRlckVhY2giLCJjbGVhbnVwIiwiZGVzY3JpYmUiLCJ0ZXN0IiwiZ2V0QnlUZXh0IiwiZXhwZWN0IiwidG9CZUluVGhlRG9jdW1lbnQiXSwibWFwcGluZ3MiOiI7Ozs7QUFBQTs7QUFDQTs7QUFDQTs7QUFDQTs7O0FBRUFBLFNBQVMsQ0FBQ0MsZUFBRCxDQUFUO0FBRUFDLFFBQVEsQ0FBQyxlQUFELEVBQWtCLE1BQU07QUFDOUJDLEVBQUFBLElBQUksQ0FBQyx5Q0FBRCxFQUE0QyxNQUFNO0FBQUEsb0JBQzlCLG9CQUNwQiw2QkFBQyw0QkFBRDtBQUFjLE1BQUEsY0FBYyxFQUFFLENBQUMsR0FBRCxDQUE5QjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUNFLDZCQUFDLFlBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsTUFERixDQURvQixDQUQ4QjtBQUFBLFVBQzVDQyxTQUQ0QyxXQUM1Q0EsU0FENEM7O0FBTXBEQyxJQUFBQSxNQUFNLENBQUNELFNBQVMsQ0FBQyxzQkFBRCxDQUFWLENBQU4sQ0FBMENFLGlCQUExQztBQUNELEdBUEcsQ0FBSjtBQVFELENBVE8sQ0FBUiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyBNZW1vcnlSb3V0ZXIgfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJztcbmltcG9ydCB7IHJlbmRlciwgY2xlYW51cCB9IGZyb20gJ0B0ZXN0aW5nLWxpYnJhcnkvcmVhY3QnO1xuaW1wb3J0IEFwcCBmcm9tICcuLi9BcHAnO1xuXG5hZnRlckVhY2goY2xlYW51cCk7XG5cbmRlc2NyaWJlKCdFeGlnw6puY2lhIOKGkiAxJywgKCkgPT4ge1xuICB0ZXN0KCdzaG93cyB0aGUgUG9rZWTDqXggd2hlbiB0aGUgcm91dGUgaXMgYC9gJywgKCkgPT4ge1xuICAgIGNvbnN0IHsgZ2V0QnlUZXh0IH0gPSByZW5kZXIoXG4gICAgICA8TWVtb3J5Um91dGVyIGluaXRpYWxFbnRyaWVzPXtbJy8nXX0+XG4gICAgICAgIDxBcHAgLz5cbiAgICAgIDwvTWVtb3J5Um91dGVyPixcbiAgICApO1xuICAgIGV4cGVjdChnZXRCeVRleHQoJ0VuY291bnRlcmVkIHBva8OpbW9ucycpKS50b0JlSW5UaGVEb2N1bWVudCgpO1xuICB9KTtcbn0pO1xuIl19
