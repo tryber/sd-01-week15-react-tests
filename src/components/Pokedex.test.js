@@ -219,7 +219,7 @@ const isPokemonFavoriteById = {
   9: false,
 };
 
-const expectedTypes = pokemonList.map(({ type }) => type);
+const expectedTypes = [...new Set(pokemonList.map(({ type }) => type))];
 const expectedNames = pokemonList.map(({ name }) => name);
 
 describe('2.', () => {
@@ -286,6 +286,46 @@ describe('5', () => {
     expectedNames.forEach((name) => {
       expect(getByText(name)).toBeInTheDocument();
       fireEvent.click(queryByText(/Próximo pokémon/i));
+    });
+  });
+});
+
+describe('6', () => {
+  test('Testing the existence of a button for each type of pokemon', () => {
+    const { getAllByText, queryByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    expectedTypes.forEach((type) => {
+      const haveFilterButton = getAllByText(type)[1] || queryByText(type);
+      expect(haveFilterButton.tagName).toBe('BUTTON');
+      expect(haveFilterButton).toBeInTheDocument();
+      expect(queryByText(/All/i)).toBeInTheDocument();
+    });
+  });
+});
+
+describe('7', () => {
+  test('if Pokemon list haves just one type of pokemon, the button was disabled', () => {
+    const { getAllByText, getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    const nextButton = getByText(/Próximo pokémon/i);
+    expectedTypes.forEach((type) => {
+      const typeButton = getAllByText(type)[1] || getByText(type);
+      fireEvent.click(typeButton);
+      const details = getByText(/More details/i);
+      const previousPokemon = details.previousSibling.previousSibling.previousSibling.textContent;
+      fireEvent.click(nextButton);
+      const actualPokemon = details.previousSibling.previousSibling.previousSibling.textContent;
+      if (actualPokemon === previousPokemon) {
+        expect(nextButton.disabled).toBeTruthy();
+      } else {
+        expect(nextButton.disabled).toBeFalsy();
+      }
     });
   });
 });
