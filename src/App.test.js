@@ -531,12 +531,14 @@ describe('the pokemon must contain a navigation link to view details', () => {
 
 describe('app should be redirected to pokémon details page when clicks the link', () => {
   function ex10(pokemons, isPokemonFavoriteById) {
-    const { getByText, history, getByRole } = renderWithRouter(
+    const { getByText, history } = renderWithRouter(
       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
     );
     expect(history.location.pathname).toBe('/');
-    fireEvent.click(getByText(/More details/i));
-    expect(`http://localhost/pokemons${history.location.pathname}`).toBe(getByRole('link').href);
+    const detailsButton = getByText(/More details/i);
+    const detailsLink = detailsButton.href;
+    fireEvent.click(detailsButton);
+    expect(`http://localhost${history.location.pathname}`).toBe(detailsLink);
   }
 
   test('case 1', () => {
