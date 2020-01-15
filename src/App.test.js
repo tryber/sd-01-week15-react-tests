@@ -669,3 +669,50 @@ describe('pokemon details page must display a summary section', () => {
     })
   ));
 });
+
+describe('the details page should display a section with the maps of the pokémons locations', () => {
+  function ex14(pokemons, isPokemonFavoriteById, pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const { getByText, queryAllByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const pokemonLocation = getByText(/Game Locations/i);
+    expect(pokemonLocation.textContent).toStrictEqual(`Game Locations of ${pokemon.name}`);
+    expect((pokemonLocation).tagName).toBe('H2');
+    expect(pokemonLocation.nextSibling.childNodes.length).toBe(pokemon.foundAt.length);
+    pokemon.foundAt.forEach((location, index) => {
+      expect(getByText(location.location)).toBeInTheDocument();
+      const locationAlt = `${pokemon.name} location`;
+      const locationImages = queryAllByAltText(locationAlt);
+      expect(locationImages[index].src).toBe(location.map);
+      expect(locationImages[index].alt).toBe(locationAlt);
+    });
+  }
+
+  pokemonsList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex14(pokemonsList, allFavoritePokemons, pokemon);
+    })
+  ));
+  uniquePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex14(uniquePokemonList, uniqueFavoritePokemons, pokemon);
+    })
+  ));
+  sameTypePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex14(sameTypePokemonList, notFavoritePokemons, pokemon);
+    })
+  ));
+});
