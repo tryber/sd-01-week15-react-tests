@@ -591,3 +591,40 @@ describe('pokémon details page should display the name, type, average weight an
     ));
   });
 });
+
+describe('pokemon details page must not contain a navigation link to view details', () => {
+  function ex12(pokemons, isPokemonFavoriteById, pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const { queryByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    expect(queryByText(/More details/i)).toBeNull();
+  }
+
+  test('case 1', () => {
+    pokemonsList.forEach((pokemon) => (
+      ex12(pokemonsList, allFavoritePokemons, pokemon)
+    ));
+  });
+  test('case 2', () => {
+    uniquePokemonList.forEach((pokemon) => (
+      ex12(uniquePokemonList, uniqueFavoritePokemons, pokemon)
+    ));
+  });
+  test('case 3', () => {
+    sameTypePokemonList.forEach((pokemon) => (
+      ex12(sameTypePokemonList, notFavoritePokemons, pokemon)
+    ));
+  });
+});
