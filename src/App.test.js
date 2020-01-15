@@ -2,7 +2,7 @@ import React from 'react';
 import App from './App'
 import { MemoryRouter, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, fireEvent, cleanup } from '@testing-library/react';
+import { render, fireEvent, cleanup, queryByText } from '@testing-library/react';
 import Pokedex from './components/Pokedex';
 
 function renderWithRouter(
@@ -158,17 +158,6 @@ test('shows the Pokedéx when the route is `/`', () => {
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
 });
 
-test('Pokédex should only display one Pokémon at a time.', () => {
-  const { getByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-    </MemoryRouter>,
-  );
-
-  const pokemoncont = getByText('More details');
-  expect(pokemoncont).toBeInTheDocument();
-});
-
 test('No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
   const { getByText } = render(
     <MemoryRouter initialEntries={['/']}>
@@ -211,5 +200,25 @@ describe('Rotas', () => {
 
     const favorite = getByText('No favorite pokemon found');
     expect(favorite).toBeInTheDocument();
+  });
+
+  test('Testando função update Favoritos', () => {
+    const { getByText, getByLabelText, getAllByRole, queryByText } = renderWithRouter(<App />);
+
+    fireEvent.click(getByText('More details'));
+    expect(getByText('Pikachu Details')).toBeInTheDocument();
+    expect(getByLabelText('Pokémon favoritado?').checked).toBe(false)
+    fireEvent.click(getByLabelText('Pokémon favoritado?'));
+    expect(getByLabelText('Pokémon favoritado?').checked).toBe(true)
+    fireEvent.click(getAllByRole('link')[2]);
+    expect(getByText('Pikachu')).toBeInTheDocument();
+
+    fireEvent.click(getByText('More details'));
+    expect(getByText('Pikachu Details')).toBeInTheDocument();
+    expect(getByLabelText('Pokémon favoritado?').checked).toBe(true)
+    fireEvent.click(getByLabelText('Pokémon favoritado?'));
+    expect(getByLabelText('Pokémon favoritado?').checked).toBe(false)
+    fireEvent.click(getAllByRole('link')[2]);
+    expect(queryByText('Pikachu')).not.toBeInTheDocument();
   });
 });

@@ -305,14 +305,17 @@ const pokemonsAllOneType = [
 
 
 test('Pokédex should only display one Pokémon at a time.', () => {
-  const { getAllByText } = render(
+  const { getAllByText, getByText } = render(
     <MemoryRouter initialEntries={['/']}>
       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
     </MemoryRouter>,
   );
 
-  const pokemoncont = getAllByText(/More details/i).length;
-  expect(pokemoncont).toBe(1);
+  pokemons.forEach(() => {
+    fireEvent.click(getByText('Próximo pokémon'));
+    const pokemoncont = getAllByText('More details').length;
+    expect(pokemoncont).toBe(1);
+  });
 });
 
 test('3.1 - Testando proximo botão, se ao ser clicado ele passa para o proximo pokemon', () => {
@@ -605,10 +608,9 @@ describe('10', () => {
     expect(getByRole('link')).toBeInTheDocument();
 
     expect(history.location.pathname).toBe('/');
-
+    const idPokemon = pokemons[0].id;
     fireEvent.click(getByRole('link'));
-    expect(history.location.pathname).toBe(`/pokemons/${pokemons[0].id}`);
-    console.log(history)
+    expect(history.location.pathname).toBe(`/pokemons/${idPokemon}`);
   });
 });
 
