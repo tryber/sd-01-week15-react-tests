@@ -3,7 +3,7 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import { Pokedex, PokemonDetails } from './components';
+import { Pokedex, PokemonDetails, About } from './components';
 
 const pokemonsList = [
   {
@@ -853,4 +853,19 @@ test('by clicking on the `Favorite Pokémons` link, the app should be redirected
   const favoriteLink = favoriteButton.href;
   fireEvent.click(favoriteButton);
   expect(`http://localhost${history.location.pathname}`).toBe(favoriteLink);
+});
+
+test('`About` page should display pokédex info', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <About />
+    </MemoryRouter>,
+  );
+  const aboutTitle = getByText(/About Pokédex/i);
+  expect(aboutTitle).toBeInTheDocument();
+  expect(aboutTitle.tagName).toBe('H2');
+  const aboutSection = aboutTitle.nextSibling.childNodes;
+  expect(aboutSection[0].tagName).toBe('P');
+  expect(aboutSection[1].tagName).toBe('P');
+  expect(aboutSection[2].src).toBe('https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png');
 });
