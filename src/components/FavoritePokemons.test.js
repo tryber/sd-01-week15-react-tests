@@ -1,28 +1,14 @@
 import React from "react";
-import App from "./App";
+import FavoritePokemons from "./FavoritePokemons";
 import { MemoryRouter, Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import { render, fireEvent, cleanup } from "@testing-library/react";
-// import Pokedex from './components/Pokedex';
-
-function renderWithRouter(
-  ui,
-  {
-    route = "/",
-    history = createMemoryHistory({ initialEntries: [route] })
-  } = {}
-) {
-  return {
-    ...render(<Router history={history}>{ui}</Router>),
-    history
-  };
-}
-const isPokemonFavoriteById = {
-  4: false,
-  10: true,
-  23: false,
-  78: true
-};
+import {
+  render,
+  fireEvent,
+  cleanup,
+  getByAltText,
+  getAllByText
+} from "@testing-library/react";
 
 const pokemons = [
   {
@@ -134,76 +120,37 @@ const pokemons = [
   }
 ];
 
-test("renders a reading with the text `Pokédex`", () => {
-  const { getByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>
-  );
-  const heading = getByText(/Pokédex/i);
-  expect(heading).toBeInTheDocument();
-});
-test("shows the Pokedéx when the route is `/`", () => {
-  const { getByText } = render(
-    <MemoryRouter initialEntries={["/"]}>
-      <App />
-    </MemoryRouter>
-  );
+const isPokemonFavoriteById = {
+  4: true,
+  10: false,
+  23: true,
+  78: false
+};
 
-  expect(getByText("Encountered pokémons")).toBeInTheDocument();
-});
+const favoritePokemons = pokemons.filter(({ id }) => isPokemonFavoriteById[id]);
 
-describe("17 - No topo da aplicação, deve haver um conjunto fixo de links de navegação", () => {
-  test("verificando os nomes e rotas dos links", () => {
-    const { getByText } = render(
-      <MemoryRouter initialEntries={["/"]}>
-        <App />
+describe("22 - A página de pokémon favoritos deve exibir os pokémons favoritos", () => {
+  test("A página deve exibir todos os pokémons favoritados;", () => {
+    const { getByText, getByAltText, getAllByText } = render(
+      <MemoryRouter>
+        <FavoritePokemons pokemons={favoritePokemons} />
       </MemoryRouter>
     );
-    expect(getByText("Home").innerHTML).toBe("Home");
-    expect(getByText("Home").href).toBe("http://localhost/");
 
-    expect(getByText("About").innerHTML).toBe("About");
-    expect(getByText("About").href).toBe("http://localhost/about");
+    if (favoritePokemons.length === 0) {
+      expect(getByText("No favorite pokemon found")).toBeInTheDocument();
+    } else {
+      favoritePokemons.forEach(pokemon => {
+        expect(getByText(pokemon.name)).toBeInTheDocument();
+        expect(
+          getByText(
+            `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`
+          )
+        ).toBeInTheDocument();
+        expect(getByAltText(`${pokemon.name} sprite`).src).toBe(pokemon.image);
+      });
+    }
+  });
 
-    expect(getByText("Favorite Pokémons").innerHTML).toBe("Favorite Pokémons");
-    expect(getByText("Favorite Pokémons").href).toBe(
-      "http://localhost/favorites"
-    );
-  });
-});
-
-describe('18 - Ao clicar no link "Home" na barra de navegação, a aplicação deve ser redirecionada para a página inicial, na URL "/"', () => {
-  test("verificando link e direcionamento", () => {
-    const { getByText, history } = renderWithRouter(<App />);
-    expect(history.location.pathname).toBe("/");
-    const linkHome = getByText("Home");
-    fireEvent.click(linkHome);
-    expect(`http://localhost${history.location.pathname}`).toBe(
-      "http://localhost/"
-    );
-  });
-});
-
-describe('19 - Ao clicar no link "About" na barra de navegação, a aplicação deve ser redirecionada para a página de `About`, na URL "/about"', () => {
-  test("verificando link e direcionamento", () => {
-    const { getByText, history } = renderWithRouter(<App />);
-    expect(history.location.pathname).toBe("/");
-    const linkAbout = getByText("About");
-    fireEvent.click(linkAbout);
-    expect(`http://localhost${history.location.pathname}`).toBe(
-      "http://localhost/about"
-    );
-  });
-});
-describe('20 - Ao clicar no link "Favorite Pokémons" na barra de navegação, a aplicação deve ser redirecionada para a página de pokémons favoritados, na URL "/favorites"', () => {
-  test("verificando link e direcionamento", () => {
-    const { getByText, history } = renderWithRouter(<App />);
-    expect(history.location.pathname).toBe("/");
-    const linkFavorite = getByText("Favorite Pokémons");
-    fireEvent.click(linkFavorite);
-    expect(`http://localhost${history.location.pathname}`).toBe(
-      "http://localhost/favorites"
-    );
-  });
+  test("A página não deve exibir nenhum pokémon não favoritado.", () => {});
 });
