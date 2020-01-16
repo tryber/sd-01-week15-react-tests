@@ -718,3 +718,49 @@ describe('the details page should display a section with the maps of the pokémo
     })
   ));
 });
+
+describe('the details page should allow you to favor an pokemon', () => {
+  function ex15(pokemons, isPokemonFavoriteById, pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+
+    const updateFavoritePokemons = jest.fn((array, id) => {
+      array[id] = !array[id];
+    });
+
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={() => updateFavoritePokemons(isPokemonFavoriteById, pokemon.id)}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const checkbox = getByLabelText(/Pokémon favoritado?/i);
+    expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
+    const isChecked = isPokemonFavoriteById[pokemon.id];
+    fireEvent.click(checkbox);
+    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+  }
+
+  pokemonsList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex15(pokemonsList, allFavoritePokemons, pokemon);
+    })
+  ));
+  uniquePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex15(uniquePokemonList, uniqueFavoritePokemons, pokemon);
+    })
+  ));
+  sameTypePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex15(sameTypePokemonList, notFavoritePokemons, pokemon);
+    })
+  ));
+});
