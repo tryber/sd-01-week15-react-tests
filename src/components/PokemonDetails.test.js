@@ -332,4 +332,5 @@ describe('16 - Pokémons favoritados devem exibir um ícone de uma estrela', () 
       ex16(pokemon);
     })
   ));
-})
+});
+

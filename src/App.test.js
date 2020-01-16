@@ -143,3 +143,21 @@ test('shows the Pokedéx when the route is `/`', () => {
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
 });
 
+describe('17 - No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
+  test('verificando os nomes e rotas dos links', () => {
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>,
+    );
+    expect(getByText('Home').innerHTML).toBe('Home');
+    expect(getByText('Home').href).toBe('http://localhost/');
+    
+    expect(getByText('About').innerHTML).toBe('About');
+    expect(getByText('About').href).toBe('http://localhost/about');
+  
+    expect(getByText('Favorite Pokémons').innerHTML).toBe('Favorite Pokémons');
+    expect(getByText('Favorite Pokémons').href).toBe('http://localhost/favorites');
+  });
+})
+
