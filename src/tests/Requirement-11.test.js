@@ -148,8 +148,6 @@ const testPossiblePoker = (poker, isPokemonId, pokemon) => {
 describe('Exigência → 10', () => {
   test(`A página de detalhes de pokémon deve exibir o nome, 
   tipo, peso médio e imagem do pokémon exibido`, () => {
-    for (const i of pokemons) {
-      testPossiblePoker(pokemons, isPokemonFavoriteById, i);
-    }
+    pokemons.forEach((pokemon) => testPossiblePoker(pokemons, isPokemonFavoriteById, pokemon));
   });
 });
