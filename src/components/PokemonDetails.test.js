@@ -1,10 +1,9 @@
 import React from 'react';
-import { render, cleanup, fireEvent, getAllByText, getByText, waitForDomChange } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory } from 'history';;
 import PokemonDetails from './PokemonDetails';
 import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock, matchMock, onUpdateFavoritePokemonsMock } from '../MockTests/MockTest';
-import { element } from 'prop-types';
 
 afterEach(cleanup);
 
@@ -26,8 +25,8 @@ function renderWithRouter(
   };
 }
 
-const { debug } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`1`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
-console.log(debug())
+// const { debug } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`1`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
+// console.log(debug())
 
 describe('Details Page', () => {
 
@@ -137,6 +136,7 @@ describe('Details Page', () => {
         const { container } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
         const inputHTMLall = Object.keys(container.getElementsByTagName('input')).map(key => container.getElementsByTagName('input')[key]);
         const labelHTMLall = Object.keys(container.getElementsByTagName('label')).map(key => container.getElementsByTagName('label')[key]);
+        ;
 
         inputHTMLall.forEach((input) => {
           if (input.id === 'favorite') expect(input.type).toBe('checkbox');
@@ -183,5 +183,4 @@ describe('Details Page', () => {
       })
     });
   })
-
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup, fireEvent, getByRole } from '@testing-library/react';
 import { Router, MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
 import Pokedex from './Pokedex';
@@ -29,120 +29,144 @@ function renderWithRouter(
   };
 }
 
+// const { debug } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
+// console.log(debug())
+
 describe('Pokedex', () => {
-  describe('Current Pokémon', () => {
+  describe('Pokemon Display', () => {
     // Task 02
     test('should shows only one pokémon at the time', () => {
-      const { queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+      const { container } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
+      const pHTMLall = Object.keys(container.querySelectorAll('p')).map(key => container.querySelectorAll('p')[key]);
+      const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
+      const displayedContent = [];
+      const displayedContentNot = [];
 
-      pokeName.forEach(pokemon => {
-        pokemon === pokeName[0] ? expect(queryAllByText(pokemon).length).toBe(1)
-          : expect(queryAllByText(pokemon).length).toBe(0);
+      pokemonsMock.forEach(({ name }) => {
+        pContainer.includes(name) ? displayedContent.push(name)
+          : displayedContentNot.push(name);
+
       });
-    });
-    // Task 08
+
+      expect(displayedContent.length).toBe(1);
+      expect(displayedContentNot.length).toBe(pokemonsMock.length - 1);
+    })
+    // Task 08-01
     test('should have an average weight', () => {
-      const { getByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+      const { getByText } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
 
-      expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
+      for (let crossnFn = 0; crossnFn <= pokemonsMock.length; crossnFn += 1) {
+        if (crossnFn === pokemonsMock.length) {
+          expect(getByText(`Average weight: ${pokemonsMock[0].averageWeight.value} ${pokemonsMock[0].averageWeight.measurementUnit}`)).toBeInTheDocument();
+        } else {
+          expect(getByText(`Average weight: ${pokemonsMock[crossnFn].averageWeight.value} ${pokemonsMock[crossnFn].averageWeight.measurementUnit}`)).toBeInTheDocument();
+        };
+
+        fireEvent.click(getByText(/Próximo pokémon/i));
+      };
     });
-    // Task 08
-    test('should have an image', () => {
-      const { getByRole } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
 
-      expect(getByRole('img')).toBeInTheDocument();
-      expect(getByRole('img').src).toBe(pokemonsMock[0].image);
-      expect(getByRole('img').alt).toBe(pokemonsMock[0].name + ' sprite');
+    // Task 08-02
+    test('should have a image', () => {
+      const { getByText, getAllByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
+
+      for (let crossnFn = 0; crossnFn <= pokemonsMock.length; crossnFn += 1) {
+
+        if (crossnFn === pokemonsMock.length) {
+          const pokemonImage = getAllByRole('img').find(imgHTML => imgHTML.src === pokemonsMock[0].image);
+
+          expect(pokemonImage).toBeInTheDocument();
+          expect(pokemonImage.src).toBe(pokemonsMock[0].image);
+          expect(pokemonImage.alt).toBe(pokemonsMock[0].name + ' sprite');
+        } else {
+          const pokemonImage = getAllByRole('img').find(imgHTML => imgHTML.src === pokemonsMock[crossnFn].image);
+
+          expect(pokemonImage).toBeInTheDocument();
+          expect(pokemonImage.src).toBe(pokemonsMock[crossnFn].image);
+          expect(pokemonImage.alt).toBe(pokemonsMock[crossnFn].name + ' sprite');
+        };
+
+        fireEvent.click(getByText(/Próximo pokémon/i));
+      };
     });
-    // Tesk 09
-    test('should have a link', () => {
-      const { getByRole } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
 
-      expect(getByRole('link')).toBeInTheDocument();
-      expect(getByRole('link')).toHaveTextContent(/More Details/i);
-      expect(getByRole('link').href).toBe(`http://localhost/pokemons/${pokemonsMock[0].id}`);
+    // Task 09
+    test('should have a link to details', () => {
+      const { getByText, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
+
+      for (let crossnFn = 0; crossnFn <= pokemonsMock.length; crossnFn += 1) {
+
+        if (crossnFn === pokemonsMock.length) {
+          expect(getByRole('link')).toBeInTheDocument();
+          expect(getByRole('link')).toHaveTextContent(/More Details/i);
+          expect(getByRole('link').href).toBe(`http://localhost/pokemons/${pokemonsMock[0].id}`);
+        } else {
+          expect(getByRole('link')).toBeInTheDocument();
+          expect(getByRole('link')).toHaveTextContent(/More Details/i);
+          expect(getByRole('link').href).toBe(`http://localhost/pokemons/${pokemonsMock[crossnFn].id}`);
+        };
+
+        fireEvent.click(getByText(/Próximo pokémon/i));
+      };
     });
 
     // Task 10
     test('when clicked, the link must direct to page details', () => {
-      const { history, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />)
 
-      expect(getByRole('link')).toBeInTheDocument();
 
-      expect(history.location.pathname).toBe('/');
 
-      fireEvent.click(getByRole('link'));
 
-      expect(history.location.pathname).toBe(`/pokemons/${pokemonsMock[0].id}`);
+      for (let crossnFn = 0; crossnFn <= pokemonsMock.length; crossnFn += 1) {
+        const { history, getByText, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
+        
+        expect(history.location.pathname).toBe('/');
+        
+        for (let pressButton = 0; pressButton < crossnFn; pressButton += 1) {
+          fireEvent.click(getByText(/Próximo pokémon/i));
+        };
+        
+        if (crossnFn === pokemonsMock.length) {
+          fireEvent.click(getByRole('link'));
+          expect(history.location.pathname).toBe(`/pokemons/${pokemonsMock[0].id}`);
+
+        } else {
+          fireEvent.click(getByRole('link'));
+          expect(history.location.pathname).toBe(`/pokemons/${pokemonsMock[crossnFn].id}`);
+        };
+        
+        cleanup();
+      };
     });
   })
 
   describe('Next Pokémon Button', () => {
-    // Task 03
+    // Task 03-01
     test('label must be "Próximo pokémon"', () => {
-      const { getByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+      const { getByText } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
 
       expect(getByText(/Próximo pokémon/i)).toHaveTextContent('Próximo pokémon');
     });
-    // Task 03
-    test('when clicked, must display the others pokémons', () => {
-      const { getByText, queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+    // Task 03-02 03-03
+    test('when clicked, must display the others pokémons and after gets in the last pokémon, when clicked again, must show the first pokémon', () => {
+      const { getByText, container } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
 
-      pokeName.forEach((pokemon, index) => {
-        pokemon === pokeName[index] ? expect(queryAllByText(pokemon).length).toBe(1)
-          : expect(queryAllByText(pokemon).length).toBe(0);
+      for (let crossnFn = 0; crossnFn <= pokemonsMock.length; crossnFn += 1) {
+        const pHTMLall = Object.keys(container.querySelectorAll('p')).map(key => container.querySelectorAll('p')[key]);
+        const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
 
-        fireEvent.click(getByText(/Próximo pokémon/i));
-      });
+        if (crossnFn === pokemonsMock.length) {
+          expect(pContainer.includes(pokemonsMock[0].name)).toBeTruthy();
+        } else {
+          expect(pContainer.includes(pokemonsMock[crossnFn].name)).toBeTruthy();
+
+          fireEvent.click(getByText(/Próximo pokémon/i));
+        };
+      };
     });
-    // Task 03
-    test('after gets in the last pokémon, when clicked again, must show the first pokémon', () => {
-      const { getByText, queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
 
-      pokeName.forEach(() => {
-        fireEvent.click(getByText(/Próximo pokémon/i));
-      });
-
-      pokeName.forEach(pokemon => {
-        pokemon === pokeName[0] ? expect(queryAllByText(pokemon).length).toBe(1)
-          : expect(queryAllByText(pokemon).length).toBe(0);
-      });
-    });
     // Task 07
     test('when the list have one pokémon the button must be disable', () => {
-      const { getByText, getAllByRole, queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+      const { queryAllByText, getAllByRole, getByText } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
       const justOnePokémonOfTheType = pokeTypeFilter.filter(type => {
         const typePokemons = pokemonsMock.filter(pokemon => pokemon.type === type).map(pokemon => pokemon.name);
         if (typePokemons.length === 1) return true;
@@ -154,7 +178,6 @@ describe('Pokedex', () => {
             return true;
           } return false;
         });
-
       expect(getByText(/Próximo pokémon/i).disabled).toBeFalsy();
 
       fireEvent.click(typeButton);
@@ -164,82 +187,103 @@ describe('Pokedex', () => {
   })
 
   describe('Filter Type Button', () => {
-    // Task 04
+    // Task 04-01 04-02
     test('when clicked only pokémons that type must appear', () => {
-      const { getByText, getAllByRole, queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+      const { getByText, queryAllByRole, container } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
+      const arrayButtonDataBased = [];
 
-      pokeTypeFilter.forEach(type => {
-        const typeButton = queryAllByText(type)
-          .find(elm => {
-            if (getAllByRole('button').find(button => button === elm) !== undefined) {
-              return true
-            } return false
-          });
+      pokemonsMock.forEach(({ type }) => {
+        arrayButtonDataBased.push(queryAllByRole('button').find(button => button.innerHTML === type));
+      });
 
-        const typePokemons = pokemonsMock.filter(pokemon => pokemon.type === type).map(pokemon => pokemon.name);
+      const typeButton = arrayButtonDataBased.filter((HTML, index) => arrayButtonDataBased.indexOf(HTML) === index);
 
-        fireEvent.click(typeButton);
+      typeButton.forEach((buttonHTML, index) => {
+        fireEvent.click(buttonHTML);
 
-        typePokemons.forEach((pokemon, index) => {
-          pokemon === typePokemons[index] ? expect(queryAllByText(pokemon).length).toBe(1)
-            : expect(queryAllByText(pokemon).length).toBe(0);
+        const typePokemons = pokemonsMock.filter((pokemon) => pokemon.type === buttonHTML.innerHTML).map(({ name }) => name);
+        // 04-02 e 06
+        expect(buttonHTML.innerHTML).toBe(pokeTypeFilter[index]);
+
+        for (let crossnFn = 0; crossnFn <= typePokemons.length; crossnFn += 1) {
+          const pHTMLall = Object.keys(container.querySelectorAll('p')).map(key => container.querySelectorAll('p')[key]);
+          const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
 
           fireEvent.click(getByText(/Próximo pokémon/i));
-        });
-      });
-    });
 
-    // Task 06 and Task 04
-    test('must have all the type buttons and the label must be the type name', () => {
-      const { getAllByRole, queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
-      pokeTypeFilter.forEach(type => {
-        const typeButton = queryAllByText(type)
-          .find(elm => {
-            if (getAllByRole('button').find(button => button === elm) !== undefined) {
-              return true
-            } return false
-          });
-
-        expect(typeButton).toHaveTextContent(type);
+          // 04-01
+          if (crossnFn === typePokemons.length) {
+            expect(pContainer.includes(typePokemons[0])).toBeTruthy();
+          } else {
+            expect(pContainer.includes(typePokemons[crossnFn])).toBeTruthy();
+          };
+        };
       });
     })
   })
-  
-  describe('Type All Button', () => {
-    // Task 05
-    test('the label must be "all"', () => {
-      const { getByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
 
+
+
+  describe('Type All Button', () => {
+    // Task 05-01 05-03
+    test('the label must be "all"', () => {
+      const { getByText } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
       expect(getByText(/all/i)).toHaveTextContent(/all/i);
     });
-    // Task 05
+    // Task 05 - 02
     test('when clicked must show all pokémons', () => {
-      const { getByText, queryAllByText } = render(
-        <MemoryRouter initialEntries={['/']}>
-          <Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />
-        </MemoryRouter>
-      );
+      const { getByText, container } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />);
 
       fireEvent.click(getByText(/all/i));
 
-      pokeName.forEach((pokemon, index) => {
-        pokemon === pokeName[index] ? expect(queryAllByText(pokemon).length).toBe(1)
-          : expect(queryAllByText(pokemon).length).toBe(0);
+      for (let crossnFn = 0; crossnFn <= pokemonsMock.length; crossnFn += 1) {
+        const pHTMLall = Object.keys(container.querySelectorAll('p')).map(key => container.querySelectorAll('p')[key]);
+        const pContainer = pHTMLall.map(pHTMLeach => pHTMLeach.innerHTML);
 
         fireEvent.click(getByText(/Próximo pokémon/i));
-      });
+
+        if (crossnFn === pokemonsMock.length) {
+          expect(pContainer.includes(pokeName[0])).toBeTruthy();
+        } else {
+          expect(pContainer.includes(pokeName[crossnFn])).toBeTruthy();
+        };
+      };
     });
   })
+
+
+
 })
+
+
+
+
+
+//   //   });
+
+//   //   // Task 10
+//   //   test('', () => {
+//   //     const { debug, container, history, getByRole } = renderWithRouter(<Pokedex pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} />)
+
+//   //     expect(getByRole('link')).toBeInTheDocument();
+
+//   //     // console.log(getByRole('link'));
+
+
+
+
+
+
+
+
+
+
+//   //   });
+//   // })
+
+
+
+
+
+
+
