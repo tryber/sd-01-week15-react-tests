@@ -1,0 +1,40 @@
+8d1c81030b3324f97ecff55d4f64dd68
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _react2 = require("@testing-library/react");
+
+var _App = _interopRequireDefault(require("../App"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/Requirement-19.test.js";
+describe('Exigência → 19', () => {
+  test(`Ao clicar no link "About" na barra de navegação, a aplicação
+   deve ser redirecionada para a página de About, na URL "/about"`, () => {
+    const _render = (0, _react2.render)(_react.default.createElement(_reactRouterDom.MemoryRouter, {
+      initialEntries: ['/'],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: void 0
+    }, _react.default.createElement(_App.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 11
+      },
+      __self: void 0
+    }))),
+          getByText = _render.getByText;
+
+    _react2.fireEvent.click(getByText('About'));
+
+    const sobre = getByText('About Pokédex');
+    expect(sobre).toBeInTheDocument();
+  });
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlJlcXVpcmVtZW50LTE5LnRlc3QuanMiXSwibmFtZXMiOlsiZGVzY3JpYmUiLCJ0ZXN0IiwiZ2V0QnlUZXh0IiwiZmlyZUV2ZW50IiwiY2xpY2siLCJzb2JyZSIsImV4cGVjdCIsInRvQmVJblRoZURvY3VtZW50Il0sIm1hcHBpbmdzIjoiOzs7O0FBQUE7O0FBQ0E7O0FBQ0E7O0FBQ0E7OztBQUVBQSxRQUFRLENBQUMsZ0JBQUQsRUFBbUIsTUFBTTtBQUMvQkMsRUFBQUEsSUFBSSxDQUFFO2tFQUFGLEVBQzhELE1BQU07QUFBQSxvQkFDaEQsb0JBQ3BCLDZCQUFDLDRCQUFEO0FBQWMsTUFBQSxjQUFjLEVBQUUsQ0FBQyxHQUFELENBQTlCO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLE9BQ0UsNkJBQUMsWUFBRDtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxNQURGLENBRG9CLENBRGdEO0FBQUEsVUFDOURDLFNBRDhELFdBQzlEQSxTQUQ4RDs7QUFNdEVDLHNCQUFVQyxLQUFWLENBQWdCRixTQUFTLENBQUMsT0FBRCxDQUF6Qjs7QUFDQSxVQUFNRyxLQUFLLEdBQUdILFNBQVMsQ0FBQyxlQUFELENBQXZCO0FBQ0FJLElBQUFBLE1BQU0sQ0FBQ0QsS0FBRCxDQUFOLENBQWNFLGlCQUFkO0FBQ0QsR0FWRyxDQUFKO0FBV0QsQ0FaTyxDQUFSIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IE1lbW9yeVJvdXRlciB9IGZyb20gJ3JlYWN0LXJvdXRlci1kb20nO1xuaW1wb3J0IHsgcmVuZGVyLCBmaXJlRXZlbnQgfSBmcm9tICdAdGVzdGluZy1saWJyYXJ5L3JlYWN0JztcbmltcG9ydCBBcHAgZnJvbSAnLi4vQXBwJztcblxuZGVzY3JpYmUoJ0V4aWfDqm5jaWEg4oaSIDE5JywgKCkgPT4ge1xuICB0ZXN0KGBBbyBjbGljYXIgbm8gbGluayBcIkFib3V0XCIgbmEgYmFycmEgZGUgbmF2ZWdhw6fDo28sIGEgYXBsaWNhw6fDo29cbiAgIGRldmUgc2VyIHJlZGlyZWNpb25hZGEgcGFyYSBhIHDDoWdpbmEgZGUgQWJvdXQsIG5hIFVSTCBcIi9hYm91dFwiYCwgKCkgPT4ge1xuICAgIGNvbnN0IHsgZ2V0QnlUZXh0IH0gPSByZW5kZXIoXG4gICAgICA8TWVtb3J5Um91dGVyIGluaXRpYWxFbnRyaWVzPXtbJy8nXX0+XG4gICAgICAgIDxBcHAgLz5cbiAgICAgIDwvTWVtb3J5Um91dGVyPixcbiAgICApO1xuICAgIGZpcmVFdmVudC5jbGljayhnZXRCeVRleHQoJ0Fib3V0JykpO1xuICAgIGNvbnN0IHNvYnJlID0gZ2V0QnlUZXh0KCdBYm91dCBQb2vDqWRleCcpO1xuICAgIGV4cGVjdChzb2JyZSkudG9CZUluVGhlRG9jdW1lbnQoKTtcbiAgfSk7XG59KTtcbiJdfQ==

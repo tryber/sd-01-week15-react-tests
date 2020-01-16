@@ -1,0 +1,41 @@
+066d9323f70f707efe111a7912649913
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _react2 = require("@testing-library/react");
+
+var _App = _interopRequireDefault(require("../App"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/Requirement-17.test.js";
+describe('Exigência → 17', () => {
+  test('No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
+    const _render = (0, _react2.render)(_react.default.createElement(_reactRouterDom.MemoryRouter, {
+      initialEntries: ['/'],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 9
+      },
+      __self: void 0
+    }, _react.default.createElement(_App.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: void 0
+    }))),
+          getByText = _render.getByText;
+
+    expect(getByText('Home')).toBeInTheDocument();
+    expect(getByText('Home').href).toBe('http://localhost/' || '/');
+    expect(getByText('About')).toBeInTheDocument();
+    expect(getByText('About').href).toBe('http://localhost/about' || '/about');
+    expect(getByText('Favorite Pokémons')).toBeInTheDocument();
+    expect(getByText('Favorite Pokémons').href).toBe('http://localhost/favorites' || '/favorites');
+  });
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlJlcXVpcmVtZW50LTE3LnRlc3QuanMiXSwibmFtZXMiOlsiZGVzY3JpYmUiLCJ0ZXN0IiwiZ2V0QnlUZXh0IiwiZXhwZWN0IiwidG9CZUluVGhlRG9jdW1lbnQiLCJocmVmIiwidG9CZSJdLCJtYXBwaW5ncyI6Ijs7OztBQUFBOztBQUNBOztBQUNBOztBQUNBOzs7QUFFQUEsUUFBUSxDQUFDLGdCQUFELEVBQW1CLE1BQU07QUFDL0JDLEVBQUFBLElBQUksQ0FBQyx5RUFBRCxFQUE0RSxNQUFNO0FBQUEsb0JBQzlELG9CQUNwQiw2QkFBQyw0QkFBRDtBQUFjLE1BQUEsY0FBYyxFQUFFLENBQUMsR0FBRCxDQUE5QjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUNFLDZCQUFDLFlBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsTUFERixDQURvQixDQUQ4RDtBQUFBLFVBQzVFQyxTQUQ0RSxXQUM1RUEsU0FENEU7O0FBTXBGQyxJQUFBQSxNQUFNLENBQUNELFNBQVMsQ0FBQyxNQUFELENBQVYsQ0FBTixDQUEwQkUsaUJBQTFCO0FBQ0FELElBQUFBLE1BQU0sQ0FBQ0QsU0FBUyxDQUFDLE1BQUQsQ0FBVCxDQUFrQkcsSUFBbkIsQ0FBTixDQUErQkMsSUFBL0IsQ0FBb0MsdUJBQXVCLEdBQTNEO0FBQ0FILElBQUFBLE1BQU0sQ0FBQ0QsU0FBUyxDQUFDLE9BQUQsQ0FBVixDQUFOLENBQTJCRSxpQkFBM0I7QUFDQUQsSUFBQUEsTUFBTSxDQUFDRCxTQUFTLENBQUMsT0FBRCxDQUFULENBQW1CRyxJQUFwQixDQUFOLENBQWdDQyxJQUFoQyxDQUFxQyw0QkFBNEIsUUFBakU7QUFDQUgsSUFBQUEsTUFBTSxDQUFDRCxTQUFTLENBQUMsbUJBQUQsQ0FBVixDQUFOLENBQXVDRSxpQkFBdkM7QUFDQUQsSUFBQUEsTUFBTSxDQUFDRCxTQUFTLENBQUMsbUJBQUQsQ0FBVCxDQUErQkcsSUFBaEMsQ0FBTixDQUE0Q0MsSUFBNUMsQ0FBaUQsZ0NBQWdDLFlBQWpGO0FBQ0QsR0FaRyxDQUFKO0FBYUQsQ0FkTyxDQUFSIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IE1lbW9yeVJvdXRlciB9IGZyb20gJ3JlYWN0LXJvdXRlci1kb20nO1xuaW1wb3J0IHsgcmVuZGVyIH0gZnJvbSAnQHRlc3RpbmctbGlicmFyeS9yZWFjdCc7XG5pbXBvcnQgQXBwIGZyb20gJy4uL0FwcCc7XG5cbmRlc2NyaWJlKCdFeGlnw6puY2lhIOKGkiAxNycsICgpID0+IHtcbiAgdGVzdCgnTm8gdG9wbyBkYSBhcGxpY2HDp8OjbywgZGV2ZSBoYXZlciB1bSBjb25qdW50byBmaXhvIGRlIGxpbmtzIGRlIG5hdmVnYcOnw6NvJywgKCkgPT4ge1xuICAgIGNvbnN0IHsgZ2V0QnlUZXh0IH0gPSByZW5kZXIoXG4gICAgICA8TWVtb3J5Um91dGVyIGluaXRpYWxFbnRyaWVzPXtbJy8nXX0+XG4gICAgICAgIDxBcHAgLz5cbiAgICAgIDwvTWVtb3J5Um91dGVyPixcbiAgICApO1xuICAgIGV4cGVjdChnZXRCeVRleHQoJ0hvbWUnKSkudG9CZUluVGhlRG9jdW1lbnQoKTtcbiAgICBleHBlY3QoZ2V0QnlUZXh0KCdIb21lJykuaHJlZikudG9CZSgnaHR0cDovL2xvY2FsaG9zdC8nIHx8ICcvJyk7XG4gICAgZXhwZWN0KGdldEJ5VGV4dCgnQWJvdXQnKSkudG9CZUluVGhlRG9jdW1lbnQoKTtcbiAgICBleHBlY3QoZ2V0QnlUZXh0KCdBYm91dCcpLmhyZWYpLnRvQmUoJ2h0dHA6Ly9sb2NhbGhvc3QvYWJvdXQnIHx8ICcvYWJvdXQnKTtcbiAgICBleHBlY3QoZ2V0QnlUZXh0KCdGYXZvcml0ZSBQb2vDqW1vbnMnKSkudG9CZUluVGhlRG9jdW1lbnQoKTtcbiAgICBleHBlY3QoZ2V0QnlUZXh0KCdGYXZvcml0ZSBQb2vDqW1vbnMnKS5ocmVmKS50b0JlKCdodHRwOi8vbG9jYWxob3N0L2Zhdm9yaXRlcycgfHwgJy9mYXZvcml0ZXMnKTtcbiAgfSk7XG59KTtcbiJdfQ==

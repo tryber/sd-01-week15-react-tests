@@ -1,0 +1,58 @@
+ad5c322f486f8f2079a7e260acb8fefa
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _objectSpread2 = _interopRequireDefault(require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/objectSpread2"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _react2 = require("@testing-library/react");
+
+var _history = require("history");
+
+var _reactRouterDom = require("react-router-dom");
+
+var _NotFound = _interopRequireDefault(require("../components/NotFound"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/Requirement-23.test.js";
+
+function renderWithRouter(ui, {
+  route = '/',
+  history = (0, _history.createMemoryHistory)({
+    initialEntries: [route]
+  })
+} = {}) {
+  return (0, _objectSpread2.default)({}, (0, _react2.render)(_react.default.createElement(_reactRouterDom.Router, {
+    history: history,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12
+    },
+    __self: this
+  }, ui)), {
+    history
+  });
+} // essa função quebra maior galho.
+// Tava pensando em colocar essas funções que usamos muito em um novo arquivo... deixa para depois.
+
+
+test('23 - Entrar em uma URL desconhecida exibe a página Not Found', () => {
+  const _renderWithRouter = renderWithRouter(_react.default.createElement(_NotFound.default, {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 22
+    },
+    __self: void 0
+  }), {
+    route: '/dougfunny'
+  }),
+        getByText = _renderWithRouter.getByText,
+        getByAltText = _renderWithRouter.getByAltText;
+
+  expect(getByText('Page requested not found')).toBeInTheDocument();
+  expect(getByText('Page requested not found').tagName).toBe('H2');
+  const imgError = getByAltText('Pikachu crying because the page requested was not found');
+  expect(imgError).toBeInTheDocument();
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlJlcXVpcmVtZW50LTIzLnRlc3QuanMiXSwibmFtZXMiOlsicmVuZGVyV2l0aFJvdXRlciIsInVpIiwicm91dGUiLCJoaXN0b3J5IiwiaW5pdGlhbEVudHJpZXMiLCJ0ZXN0IiwiZ2V0QnlUZXh0IiwiZ2V0QnlBbHRUZXh0IiwiZXhwZWN0IiwidG9CZUluVGhlRG9jdW1lbnQiLCJ0YWdOYW1lIiwidG9CZSIsImltZ0Vycm9yIl0sIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQTs7OztBQUVBLFNBQVNBLGdCQUFULENBQ0VDLEVBREYsRUFFRTtBQUFFQyxFQUFBQSxLQUFLLEdBQUcsR0FBVjtBQUFlQyxFQUFBQSxPQUFPLEdBQUcsa0NBQW9CO0FBQUVDLElBQUFBLGNBQWMsRUFBRSxDQUFDRixLQUFEO0FBQWxCLEdBQXBCO0FBQXpCLElBQThFLEVBRmhGLEVBR0U7QUFDQSx5Q0FDSyxvQkFBTyw2QkFBQyxzQkFBRDtBQUFRLElBQUEsT0FBTyxFQUFFQyxPQUFqQjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxLQUEyQkYsRUFBM0IsQ0FBUCxDQURMO0FBRUVFLElBQUFBO0FBRkY7QUFJRCxDLENBRUQ7QUFFQTs7O0FBRUFFLElBQUksQ0FBQyw4REFBRCxFQUFpRSxNQUFNO0FBQUEsNEJBQ3JDTCxnQkFBZ0IsQ0FBQyw2QkFBQyxpQkFBRDtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxJQUFELEVBQWU7QUFBRUUsSUFBQUEsS0FBSyxFQUFFO0FBQVQsR0FBZixDQURxQjtBQUFBLFFBQ2pFSSxTQURpRSxxQkFDakVBLFNBRGlFO0FBQUEsUUFDdERDLFlBRHNELHFCQUN0REEsWUFEc0Q7O0FBRXpFQyxFQUFBQSxNQUFNLENBQUNGLFNBQVMsQ0FBQywwQkFBRCxDQUFWLENBQU4sQ0FBOENHLGlCQUE5QztBQUNBRCxFQUFBQSxNQUFNLENBQUNGLFNBQVMsQ0FBQywwQkFBRCxDQUFULENBQXNDSSxPQUF2QyxDQUFOLENBQXNEQyxJQUF0RCxDQUEyRCxJQUEzRDtBQUNBLFFBQU1DLFFBQVEsR0FBR0wsWUFBWSxDQUFDLHlEQUFELENBQTdCO0FBQ0FDLEVBQUFBLE1BQU0sQ0FBQ0ksUUFBRCxDQUFOLENBQWlCSCxpQkFBakI7QUFDRCxDQU5HLENBQUoiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuaW1wb3J0IHsgcmVuZGVyIH0gZnJvbSAnQHRlc3RpbmctbGlicmFyeS9yZWFjdCc7XG5pbXBvcnQgeyBjcmVhdGVNZW1vcnlIaXN0b3J5IH0gZnJvbSAnaGlzdG9yeSc7XG5pbXBvcnQgeyBSb3V0ZXIgfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJztcbmltcG9ydCBOb3RGb3VuZCBmcm9tICcuLi9jb21wb25lbnRzL05vdEZvdW5kJztcblxuZnVuY3Rpb24gcmVuZGVyV2l0aFJvdXRlcihcbiAgdWksXG4gIHsgcm91dGUgPSAnLycsIGhpc3RvcnkgPSBjcmVhdGVNZW1vcnlIaXN0b3J5KHsgaW5pdGlhbEVudHJpZXM6IFtyb3V0ZV0gfSkgfSA9IHt9LFxuKSB7XG4gIHJldHVybiB7XG4gICAgLi4ucmVuZGVyKDxSb3V0ZXIgaGlzdG9yeT17aGlzdG9yeX0+e3VpfTwvUm91dGVyPiksXG4gICAgaGlzdG9yeSxcbiAgfTtcbn1cblxuLy8gZXNzYSBmdW7Dp8OjbyBxdWVicmEgbWFpb3IgZ2FsaG8uXG5cbi8vIFRhdmEgcGVuc2FuZG8gZW0gY29sb2NhciBlc3NhcyBmdW7Dp8O1ZXMgcXVlIHVzYW1vcyBtdWl0byBlbSB1bSBub3ZvIGFycXVpdm8uLi4gZGVpeGEgcGFyYSBkZXBvaXMuXG5cbnRlc3QoJzIzIC0gRW50cmFyIGVtIHVtYSBVUkwgZGVzY29uaGVjaWRhIGV4aWJlIGEgcMOhZ2luYSBOb3QgRm91bmQnLCAoKSA9PiB7XG4gIGNvbnN0IHsgZ2V0QnlUZXh0LCBnZXRCeUFsdFRleHQgfSA9IHJlbmRlcldpdGhSb3V0ZXIoPE5vdEZvdW5kIC8+LCB7IHJvdXRlOiAnL2RvdWdmdW5ueScgfSk7XG4gIGV4cGVjdChnZXRCeVRleHQoJ1BhZ2UgcmVxdWVzdGVkIG5vdCBmb3VuZCcpKS50b0JlSW5UaGVEb2N1bWVudCgpO1xuICBleHBlY3QoZ2V0QnlUZXh0KCdQYWdlIHJlcXVlc3RlZCBub3QgZm91bmQnKS50YWdOYW1lKS50b0JlKCdIMicpO1xuICBjb25zdCBpbWdFcnJvciA9IGdldEJ5QWx0VGV4dCgnUGlrYWNodSBjcnlpbmcgYmVjYXVzZSB0aGUgcGFnZSByZXF1ZXN0ZWQgd2FzIG5vdCBmb3VuZCcpO1xuICBleHBlY3QoaW1nRXJyb3IpLnRvQmVJblRoZURvY3VtZW50KCk7XG59KTtcbiJdfQ==
