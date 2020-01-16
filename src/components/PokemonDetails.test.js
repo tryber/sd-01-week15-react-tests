@@ -10,13 +10,16 @@ import {
 import PokemonDetails from "./PokemonDetails";
 
 function renderWithRouter(
-    ui,
-    { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
-  ) {
-    return {
-      ...render(<Router history={history}>{ui}</Router>),
-      history,
-    };
+  ui,
+  {
+    route = "/",
+    history = createMemoryHistory({ initialEntries: [route] })
+  } = {}
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history
+  };
 }
 
 const pokemons = [
@@ -175,16 +178,158 @@ describe("12 - O pokémon exibido na página de detalhes não deve conter um lin
           id: `${pokemon.id}`
         }
       };
-      const { queryByRole, debug } = renderWithRouter(
-          <PokemonDetails
-            pokemons={pokemons}
-            onUpdateFavoritePokemons={func}
-            isPokemonFavoriteById={isPokemonFavoriteById}
-            match={match}
-          />
+      const { queryByRole } = renderWithRouter(
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
       );
-    //  debug();
-     expect(queryByRole('link')).toBeNull();
+      expect(queryByRole("link")).toBeNull();
     });
   });
 });
+
+describe("13 - A página de detalhes deve exibir uma seção com um resumo do pokémon", () => {
+  function ex13(pokemon) {
+    const func = jest.fn();
+    const match = {
+      params: {
+        id: `${pokemon.id}`
+      }
+    };
+    const { getByText } = render(
+      <MemoryRouter initialEntries={["/"]}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>
+    );
+    const summaryText = getByText("Summary");
+    const summaryParagraph = getByText(pokemon.summary);
+    expect(summaryText).toBeInTheDocument();
+    expect(summaryText.tagName).toBe("H2");
+    expect(summaryParagraph).toBeInTheDocument();
+    expect(summaryParagraph.tagName).toBe("P");
+  }
+  test("A seção de detalhes deve conter um heading `h2` com o texto `Summary` e o conteúdo do parágrafo com o resumo específico, testando o primeiro pokemon", () => {
+    ex13(pokemons[0]);
+  });
+  test("A seção de detalhes deve conter um heading `h2` com o texto `Summary` e o conteúdo do parágrafo com o resumo específico, testando o segundo pokemon", () => {
+    ex13(pokemons[1]);
+  });
+  test("A seção de detalhes deve conter um heading `h2` com o texto `Summary` e o conteúdo do parágrafo com o resumo específico, testando o terceiro pokemon", () => {
+    ex13(pokemons[2]);
+  });
+  test("A seção de detalhes deve conter um heading `h2` com o texto `Summary` e o conteúdo do parágrafo com o resumo específico, testando o quarto pokemon", () => {
+    ex13(pokemons[3]);
+  });
+});
+
+describe("14 - A página de detalhes deve exibir uma seção com os mapas com as localizações do pokémon", () => {
+  function ex14(pokemon) {
+    const func = jest.fn();
+    const match = {
+      params: {
+        id: `${pokemon.id}`
+      }
+    };
+    const { getByText, queryAllByAltText } = render(
+      <MemoryRouter initialEntries={["/"]}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>
+    );
+    const headingText = getByText(`Game Locations of ${pokemon.name}`);
+    expect(headingText).toBeInTheDocument();
+    expect(headingText.tagName).toBe("H2");
+    expect(headingText.nextSibling.childNodes.length).toBe(
+      pokemon.foundAt.length
+    );
+
+    pokemon.foundAt.forEach((location, index) => {
+      expect(getByText(location.location)).toBeInTheDocument();
+      const allImages = queryAllByAltText(`${pokemon.name} location`);
+      expect(allImages[index].src).toBe(location.map);
+      expect(allImages[index].alt).toBe(`${pokemon.name} location`);
+    });
+  }
+
+  test("testando lista de pokemons", () => {
+    pokemons.forEach(pokemon => ex14(pokemon));
+  });
+});
+
+describe("15 - A página de detalhes deve permitir favoritar um pokémon", () => {
+  function ex15(pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const updateFavoritePokemons = jest.fn((array, id) => {
+      array[id] = !array[id];
+    });
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={() => updateFavoritePokemons(isPokemonFavoriteById, pokemon.id)}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const checkbox = getByLabelText(/Pokémon favoritado?/i);
+    expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
+    const isChecked = isPokemonFavoriteById[pokemon.id];
+    fireEvent.click(checkbox);
+    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+  }
+
+  pokemons.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex15(pokemon);
+    })
+  ));
+});
+
+describe('16 - Pokémons favoritados devem exibir um ícone de uma estrela', () => {
+  function ex16(pokemon) {
+    const func = jest.fn();
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const { getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    if (isPokemonFavoriteById[pokemon.id]) {
+      const starIcon = getByAltText(`${pokemon.name} is marked as favorite`);
+      expect(starIcon).toBeInTheDocument();
+      expect(starIcon.alt).toBe(`${pokemon.name} is marked as favorite`);
+      expect(starIcon.src).toBe('http://localhost/star-icon.svg');
+    }
+  }
+  pokemons.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex16(pokemon);
+    })
+  ));
+})
