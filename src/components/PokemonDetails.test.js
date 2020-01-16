@@ -3,7 +3,13 @@ import { render, cleanup, fireEvent } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';;
 import PokemonDetails from './PokemonDetails';
-import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock, matchMock, onUpdateFavoritePokemonsMock } from '../MockTests/MockTest';
+import MockTest, { pokemonsMock, isPokemonFavoriteByIdMock, matchMock } from '../MockTests/MockTest';
+
+const onUpdateFavoritePokemonsMock = jest.fn((isPokemon, id) => {
+  const value = isPokemon[id];
+  isPokemon[id] = !value;
+});
+
 
 afterEach(cleanup);
 
