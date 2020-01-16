@@ -1,6 +1,5 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { MemoryRouter } from 'react-router-dom';
 import { render, cleanup } from '@testing-library/react';
 import { PokemonDetails } from '../components';
 
@@ -24,8 +23,7 @@ const pokemons = [
       },
       {
         location: 'Kanto Power Plant',
-        map:
-          'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
       },
     ],
     summary:
@@ -40,8 +38,7 @@ const pokemons = [
       measurementUnit: 'kg',
     },
     image: 'https://cdn.bulbagarden.net/upload/0/0a/Spr_5b_004.png',
-    moreInfo:
-      'https://bulbapedia.bulbagarden.net/wiki/Charmander_(Pok%C3%A9mon)',
+    moreInfo: 'https://bulbapedia.bulbagarden.net/wiki/Charmander_(Pok%C3%A9mon)',
     foundAt: [
       {
         location: 'Alola Route 3',
@@ -57,8 +54,7 @@ const pokemons = [
       },
       {
         location: 'Kanto Rock Tunnel',
-        map:
-          'https://cdn.bulbagarden.net/upload/6/6f/Kanto_Rock_Tunnel_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/6/6f/Kanto_Rock_Tunnel_Map.png',
       },
     ],
     summary:
@@ -85,13 +81,11 @@ const pokemons = [
       },
       {
         location: 'Ilex Forest',
-        map:
-          'https://cdn.bulbagarden.net/upload/a/ae/Johto_Ilex_Forest_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/a/ae/Johto_Ilex_Forest_Map.png',
       },
       {
         location: 'Johto National Park',
-        map:
-          'https://cdn.bulbagarden.net/upload/4/4e/Johto_National_Park_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/4/4e/Johto_National_Park_Map.png',
       },
     ],
     summary:
@@ -110,8 +104,7 @@ const pokemons = [
     foundAt: [
       {
         location: 'Goldenrod Game Corner',
-        map:
-          'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
       },
     ],
     summary:
@@ -125,35 +118,38 @@ const isPokemonFavoriteById = {
   4: false,
 };
 
-function renderWithRouter(
-  ui,
-  {
-    route = '/',
-    history = createMemoryHistory({ initialEntries: [route] }),
-  } = {},
-) {
-  return {
-    ...render(<Router history={history}>{ui}</Router>),
-    history,
-  };
-}
-
 const func = jest.fn();
-const match = jest.fn((pokemon) => {
-  return { 'params': { id: pokemon.id } };
-});
+
+const testPossiblePoker = (poker, isPokemonId, pokemon) => {
+  const match = {
+    params: {
+      id: `${pokemon.id}`,
+    },
+  };
+  const { getByText, getByAltText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <PokemonDetails
+        pokemons={poker}
+        onUpdateFavoritePokemons={func}
+        isPokemonFavoriteById={isPokemonId}
+        match={match}
+      />
+    </MemoryRouter>,
+  );
+  const pokemonWeight = getByText(
+    `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`,
+  );
+  const pokemonImage = getByAltText(`${pokemon.name} sprite`);
+  expect(pokemonWeight).toBeInTheDocument();
+  expect(pokemonImage.src).toBe(pokemon.image);
+  expect(pokemonImage.alt).toBe(`${pokemon.name} sprite`);
+};
 
 describe('Exigência → 10', () => {
   test(`A página de detalhes de pokémon deve exibir o nome, 
   tipo, peso médio e imagem do pokémon exibido`, () => {
-    const { debug } = renderWithRouter(
-      <PokemonDetails
-        isPokemonFavoriteById={isPokemonFavoriteById}
-        match={match(pokemons.forEach(pokemon => pokemon))}
-        pokemons={pokemons}
-        onUpdateFavoritePokemons={func}
-      />,
-    );
-    debug()
+    for (const i of pokemons) {
+      testPossiblePoker(pokemons, isPokemonFavoriteById, i);
+    }
   });
 });
