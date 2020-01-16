@@ -3,7 +3,7 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import { Pokedex, PokemonDetails, About, FavoritePokemons } from './components';
+import { Pokedex, PokemonDetails, About, FavoritePokemons, NotFound } from './components';
 
 const pokemonsList = [
   {
@@ -897,5 +897,29 @@ describe('the favorite pokemon page should display your favorite pokemons', () =
   });
   test('case 3', () => {
     ex22(sameTypePokemonList, notFavoritePokemons);
+  });
+});
+
+describe('entering an unknown URL displays `Not Found` page', () => {
+  function ex23(route) {
+    const { getByText, getByAltText } = renderWithRouter(
+      <NotFound />, { route: `/${route}` },
+    );
+    const notFound = getByText(/Page requested not found/i);
+    expect(notFound).toBeInTheDocument();
+    expect(notFound.tagName).toBe('H2');
+    const imgError = getByAltText(/Pikachu crying because the page requested was not found/i);
+    expect(imgError).toBeInTheDocument();
+    expect(imgError.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
+  }
+
+  test('case 1', () => {
+    ex23('aleatorio');
+  });
+  test('case 2', () => {
+    ex23('xablau');
+  });
+  test('case 3', () => {
+    ex23('ololo');
   });
 });
