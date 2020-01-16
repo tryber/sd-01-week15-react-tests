@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
-import NotFound from './NotFound';
+import NotFound from '../components/NotFound';
 
 function renderWithRouter(
   ui,

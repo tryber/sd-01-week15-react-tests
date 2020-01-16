@@ -3,6 +3,8 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
+import pokemonsMock from './components/MockTest';
+import Pokedex from './components/Pokedex';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
@@ -53,6 +55,8 @@ describe('Render the pokedex with the pokemon', () => {
 
 describe('3 Next pokemon', () => {
   afterEach(cleanup);
+  const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
+    'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
 
   test('3.1, 3.2 click on the button, appear next pokemon', () => {
     const { getByText } = renderWithRouter(<App />);
@@ -60,8 +64,6 @@ describe('3 Next pokemon', () => {
     const nextPokemon = getByText(/Próximo pokémon/i);
     expect(nextPokemon).toBeInTheDocument();
 
-    const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
-      'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
 
     for (let index = 0; index < namePokemon.length; index += 1) {
       expect(getByText(namePokemon[index])).toBeInTheDocument();
@@ -74,15 +76,26 @@ describe('3 Next pokemon', () => {
 
     const nextPokemon = getByText(/Próximo pokémon/i);
 
-    const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
-      'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
-
     for (let index = 0; index < namePokemon.length; index += 1) {
       fireEvent.click(nextPokemon);
     }
     expect(getByText(/Pikachu/i)).toBeInTheDocument();
   });
 });
+
+// describe('4 The Pokédexx must have filter buttons', () => {
+//   afterEach(cleanup);
+
+//   test('4.1 ThePokedex filter the pokemons and show them', () => {
+//     const {
+//       getByText, queryAllByText, getAllByText,
+//     } = render(
+//       <MemoryRouter>
+//         <Pokedex />
+//       </MemoryRouter>,
+//     );
+//   });
+// });
 
 describe('5 reset filter', () => {
   afterEach(cleanup);
@@ -182,19 +195,6 @@ describe('9 navigation links, page of details', () => {
 //       // const pokemon = getByText(averageWeightValue[index]);
 //       // expect(pokemon).toBeInTheDocument();
 //     }
-//   });
-// });
-
-// describe('12 No details', () => {
-//   afterEach(cleanup);
-
-//   test('12.1 Without link of details about pokemon at details page', () => {
-//     const { getByText } = renderWithRouter(<App />);
-
-//     const moreDetails = getByText(/More details/i);
-
-//     fireEvent.click(moreDetails);
-
 //   });
 // });
 

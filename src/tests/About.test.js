@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
-import About from './About';
+import About from '../components/About';
 
 function renderWithRouter(
   ui,
