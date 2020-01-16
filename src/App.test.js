@@ -821,3 +821,14 @@ test('at the top of the application should be a fixed set of navigation links', 
   expect(linkAbout.href).toBe('http://localhost/about');
   expect(linkFavorite.href).toBe('http://localhost/favorites');
 });
+
+test('by clicking on the `Home` link, the app should be redirected to the URL `/`', () => {
+  const { getByText, history } = renderWithRouter(
+    <App />,
+  );
+  expect(history.location.pathname).toBe('/');
+  const homeButton = getByText(/Home/i);
+  const homeLink = homeButton.href;
+  fireEvent.click(homeButton);
+  expect(`http://localhost${history.location.pathname}`).toBe(homeLink);
+});
