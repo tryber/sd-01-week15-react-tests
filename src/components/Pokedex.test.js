@@ -329,3 +329,32 @@ describe('7', () => {
     });
   });
 });
+
+describe('8', () => {
+  test('pokedex shows a name, type, average weight and image of pokemon', () => {
+    const { getByText, getByAltText, getAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+    pokemonList.forEach((pokemon) => {
+      const {
+        name,
+        type,
+        averageWeight,
+      } = pokemon;
+      const {
+        value,
+        measurementUnit,
+      } = averageWeight;
+      const weight = `Average weight: ${value} ${measurementUnit}`;
+      const alt = `${name} sprite`;
+      const typeOfPokemon = getAllByText(type)[0];
+      expect(getByText(name)).toBeInTheDocument();
+      expect(typeOfPokemon).toBeInTheDocument();
+      expect(getByText(weight)).toBeInTheDocument();
+      expect(getByAltText(alt)).toBeInTheDocument();
+      fireEvent.click(getByText(/Próximo pokémon/i));
+    });
+  });
+});
