@@ -843,3 +843,14 @@ test('by clicking on the `About` link, the app should be redirected to the URL `
   fireEvent.click(aboutButton);
   expect(`http://localhost${history.location.pathname}`).toBe(aboutLink);
 });
+
+test('by clicking on the `Favorite Pokémons` link, the app should be redirected to the URL `/favorites`', () => {
+  const { getByText, history } = renderWithRouter(
+    <App />,
+  );
+  expect(history.location.pathname).toBe('/');
+  const favoriteButton = getByText(/Favorite Pokémons/i);
+  const favoriteLink = favoriteButton.href;
+  fireEvent.click(favoriteButton);
+  expect(`http://localhost${history.location.pathname}`).toBe(favoriteLink);
+});
