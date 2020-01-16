@@ -14,7 +14,6 @@ class FavoritePokemons extends React.Component {
       </div>
     );
   }
-
   static renderFavoritePokemon(pokemon) {
     return (
       <div key={pokemon.id} className="favorite-pokemon">
@@ -38,7 +37,6 @@ class FavoritePokemons extends React.Component {
     const { notFound } = FavoritePokemons;
     const { pokemons } = this.props;
     const isEmpty = pokemons.length === 0;
-
     return (
       <div>
         <h2> Favorite pokémons </h2>

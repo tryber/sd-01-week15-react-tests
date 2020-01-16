@@ -31,7 +31,9 @@ describe('21 - A página "About" deve exibir informações sobre a Pokédex', ()
         <About />
       </MemoryRouter>
     );
-    const aboutImage = getByText('About Pokédex').nextSibling.childNodes[2];
-    expect(aboutImage.src).toBe('https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png');
+    const aboutImage = getByText("About Pokédex").nextSibling.childNodes[2];
+    expect(aboutImage.src).toBe(
+      "https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png"
+    );
   });
 });
