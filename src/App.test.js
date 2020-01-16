@@ -764,3 +764,45 @@ describe('the details page should allow you to favor an pokemon', () => {
     })
   ));
 });
+
+describe('favorite pokemons should display a star icon', () => {
+  function ex16(pokemons, isPokemonFavoriteById, pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const { getByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    if (isPokemonFavoriteById[pokemon.id]) {
+      const starIcon = getByAltText(`${pokemon.name} is marked as favorite`);
+      expect(starIcon).toBeInTheDocument();
+      expect(starIcon.alt).toBe(`${pokemon.name} is marked as favorite`);
+      expect(starIcon.src).toBe('http://localhost/star-icon.svg');
+    }
+  }
+
+  pokemonsList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex16(pokemonsList, allFavoritePokemons, pokemon);
+    })
+  ));
+  uniquePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex16(uniquePokemonList, uniqueFavoritePokemons, pokemon);
+    })
+  ));
+  sameTypePokemonList.forEach((pokemon) => (
+    test(`case ${pokemon.name}`, () => {
+      ex16(sameTypePokemonList, notFavoritePokemons, pokemon);
+    })
+  ));
+});
