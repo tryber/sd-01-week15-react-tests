@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';;
 import PokemonDetails from './PokemonDetails';
@@ -136,10 +136,12 @@ describe('Details Page', () => {
         const { container } = renderWithRouter(<PokemonDetails pokemons={pokemonsMock} isPokemonFavoriteById={isPokemonFavoriteByIdMock} match={matchMock(`${id}`)} onUpdateFavoritePokemons={onUpdateFavoritePokemonsMock} />);
         const inputHTMLall = Object.keys(container.getElementsByTagName('input')).map(key => container.getElementsByTagName('input')[key]);
         const labelHTMLall = Object.keys(container.getElementsByTagName('label')).map(key => container.getElementsByTagName('label')[key]);
-        ;
+        
+
 
         inputHTMLall.forEach((input) => {
           if (input.id === 'favorite') expect(input.type).toBe('checkbox');
+  
         })
 
         labelHTMLall.forEach((label) => {
