@@ -531,11 +531,12 @@ describe('the pokemon must contain a navigation link to view details', () => {
 
 describe('app should be redirected to pokémon details page when clicks the link', () => {
   function ex10(pokemons, isPokemonFavoriteById) {
-    const { getByText, history } = renderWithRouter(
+    const { getByText, queryByText, history } = renderWithRouter(
       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
     );
     expect(history.location.pathname).toBe('/');
     const detailsButton = getByText(/More details/i);
+    expect(detailsButton).toBeInTheDocument();
     const detailsLink = detailsButton.href;
     fireEvent.click(detailsButton);
     expect(`http://localhost${history.location.pathname}`).toBe(detailsLink);
@@ -745,7 +746,9 @@ describe('the details page should allow you to favor an pokemon', () => {
     expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
     const isChecked = isPokemonFavoriteById[pokemon.id];
     fireEvent.click(checkbox);
-    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+    expect(isPokemonFavoriteById[pokemon.id]).not.toBe(isChecked);
+    fireEvent.click(checkbox);
+    expect(isPokemonFavoriteById[pokemon.id]).toBe(isChecked);
   }
 
   pokemonsList.forEach((pokemon) => (
@@ -873,16 +876,15 @@ test('`About` page should display pokédex info', () => {
 describe('the favorite pokemon page should display your favorite pokemons', () => {
   function ex22(pokemons, isPokemonFavoriteById) {
     const favoritePokemons = pokemons.filter(({ id }) => isPokemonFavoriteById[id]);
-    const { getByAltText, getByText, getAllByText } = render(
+    const { getByAltText, getByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <FavoritePokemons pokemons={favoritePokemons} />
       </MemoryRouter>,
     );
     if (favoritePokemons.length === 0) expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument();
     else {
-      favoritePokemons.forEach((pokemon, i) => {
+      favoritePokemons.forEach((pokemon) => {
         expect(getByText(pokemon.name)).toBeInTheDocument();
-        expect(getAllByText(pokemon.type)[i]).toBeInTheDocument();
         expect(getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`)).toBeInTheDocument();
         expect(getByAltText(`${pokemon.name} sprite`).src).toBe(pokemon.image);
       });
