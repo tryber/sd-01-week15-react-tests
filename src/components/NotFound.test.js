@@ -16,7 +16,7 @@ function renderWithRouter(
 
 test('23 - Entrar em uma URL desconhecida exibe a página Not Found', () => {
   const { getByText, getByAltText } = renderWithRouter(
-    <NotFound />, { route: '/coruja' }
+    <NotFound />, { route: '/xablau' }
   );
   expect(getByText('Page requested not found')).toBeInTheDocument();
   expect(getByText('Page requested not found').tagName).toBe('H2');
