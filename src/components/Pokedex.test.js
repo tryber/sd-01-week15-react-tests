@@ -1,23 +1,26 @@
 import React from "react";
 import { MemoryRouter, Router } from "react-router-dom";
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory } from "history";
 import { render, fireEvent, cleanup } from "@testing-library/react";
 import Pokedex from "./Pokedex";
 
-jest.mock('react-router-dom', () => {
-  const originalModule = jest.requireActual('react-router-dom')
+jest.mock("react-router-dom", () => {
+  const originalModule = jest.requireActual("react-router-dom");
   return {
     ...originalModule,
-    BrowserRouter: ({ children }) => (<div> {children} </div>),
-  }
+    BrowserRouter: ({ children }) => <div> {children} </div>
+  };
 });
 function renderWithRouter(
   ui,
-  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+  {
+    route = "/",
+    history = createMemoryHistory({ initialEntries: [route] })
+  } = {}
 ) {
   return {
     ...render(<Router history={history}>{ui}</Router>),
-    history,
+    history
   };
 }
 
@@ -360,16 +363,16 @@ describe("8 - A Pokedéx deve exibir o nome, tipo, peso médio e imagem do poké
         />
       </MemoryRouter>
     );
-    const nextButton = getByText('Próximo pokémon');
+    const nextButton = getByText("Próximo pokémon");
     for (let i = 0; i < pokemons.length; i += 1) {
-      const moreDetails = getByText('More details').previousSibling.innerHTML;
+      const moreDetails = getByText("More details").previousSibling.innerHTML;
       const format = `Average weight: ${pokemons[i].averageWeight.value} ${pokemons[i].averageWeight.measurementUnit}`;
       expect(moreDetails).toBe(format);
       fireEvent.click(nextButton);
     }
   });
 
-  test('A imagem deve conter um atributo src com a URL da imagem do pokémon. A imagem deverá ter também um atributo alt com o nome do pokémon.', () => {
+  test("A imagem deve conter um atributo src com a URL da imagem do pokémon. A imagem deverá ter também um atributo alt com o nome do pokémon.", () => {
     const { getByText, getByAltText } = render(
       <MemoryRouter>
         <Pokedex
@@ -378,18 +381,18 @@ describe("8 - A Pokedéx deve exibir o nome, tipo, peso médio e imagem do poké
         />
       </MemoryRouter>
     );
-    const nextButton = getByText('Próximo pokémon');
+    const nextButton = getByText("Próximo pokémon");
     for (let i = 0; i < pokemons.length; i += 1) {
       const imgAlt = getByAltText(`${pokemons[i].name} sprite`);
       expect(imgAlt.src).toBe(pokemons[i].image);
       expect(imgAlt.alt).toBe(`${pokemons[i].name} sprite`);
       fireEvent.click(nextButton);
     }
-  })
+  });
 });
 
-describe('9 - O pokémon exibido na Pokedéx deve conter um link de navegação para exibir detalhes deste pokémon', () => {
-  test('O link deve possuir a URL /pokemons/<id>, onde <id> é o id do pokémon exibido.', () => {
+describe("9 - O pokémon exibido na Pokedéx deve conter um link de navegação para exibir detalhes deste pokémon", () => {
+  test("O link deve possuir a URL /pokemons/<id>, onde <id> é o id do pokémon exibido.", () => {
     const { getByText } = render(
       <MemoryRouter>
         <Pokedex
@@ -399,25 +402,29 @@ describe('9 - O pokémon exibido na Pokedéx deve conter um link de navegação 
       </MemoryRouter>
     );
 
-    const nextButton = getByText('Próximo pokémon');
+    const nextButton = getByText("Próximo pokémon");
     for (let i = 0; i < pokemons.length; i += 1) {
-      const moreDetails = getByText('More details').href;
+      const moreDetails = getByText("More details").href;
       expect(moreDetails).toBe(`http://localhost/pokemons/${pokemons[i].id}`);
       fireEvent.click(nextButton);
     }
-  })
-})
-
-describe('10,  Ao clicar no link de navegação do pokémon, a aplicação deve ser redirecionada para a página de detalhes de pokémon', () => {
-  test('A URL exibida no navegador deve mudar para /pokemon/<id>, onde <id> é o id do pokémon cujos detalhes se deseja ver.', () => {
-    const { history, getByRole, getByText } = renderWithRouter(
-      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-    );
-    
-    expect(history.location.pathname).toBe('/');
-      const link = getByRole('link');
-      fireEvent.click(link);
-      expect(`http://localhost/pokemons${history.location.pathname}`).toBe(link.href);
   });
 });
 
+describe("10,  Ao clicar no link de navegação do pokémon, a aplicação deve ser redirecionada para a página de detalhes de pokémon", () => {
+  test("A URL exibida no navegador deve mudar para /pokemon/<id>, onde <id> é o id do pokémon cujos detalhes se deseja ver.", () => {
+    const { history, getByRole, getByText } = renderWithRouter(
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    );
+
+    expect(history.location.pathname).toBe("/");
+    const link = getByRole("link");
+    fireEvent.click(link);
+    expect(`http://localhost/pokemons${history.location.pathname}`).toBe(
+      link.href
+    );
+  });
+});

@@ -2,7 +2,13 @@ import React from "react";
 import FavoritePokemons from "./FavoritePokemons";
 import { MemoryRouter, Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import { render, fireEvent, cleanup, getByAltText } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  cleanup,
+  getByAltText,
+  getAllByText
+} from "@testing-library/react";
 
 const pokemons = [
   {
@@ -115,33 +121,35 @@ const pokemons = [
 ];
 
 const isPokemonFavoriteById = {
-  4: false,
-  10: true,
-  23: false,
-  78: true
+  4: true,
+  10: false,
+  23: true,
+  78: false
 };
 
 const favoritePokemons = pokemons.filter(({ id }) => isPokemonFavoriteById[id]);
 
-
 describe("22 - A página de pokémon favoritos deve exibir os pokémons favoritos", () => {
   test("A página deve exibir todos os pokémons favoritados;", () => {
-      const {getByText, getByAltText} = render (
-          <MemoryRouter >
-              <FavoritePokemons pokemons={favoritePokemons} />
-          </MemoryRouter>
-      );
-      
-      if(favoritePokemons.length === 0) {
-          expect(getByText('No favorite pokemon found')).toBeInTheDocument();
-      } else {
-        favoritePokemons.forEach(pokemon => {
-              expect(getByText(pokemon.name)).toBeInTheDocument();
-              expect(getByText(pokemon.type)).toBeInTheDocument();
-              expect(getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`)).toBeInTheDocument();
-              expect(getByAltText(`${pokemon.name} sprite`).src).toBe(pokemon.image);
-          })
-      }
+    const { getByText, getByAltText, getAllByText } = render(
+      <MemoryRouter>
+        <FavoritePokemons pokemons={favoritePokemons} />
+      </MemoryRouter>
+    );
+
+    if (favoritePokemons.length === 0) {
+      expect(getByText("No favorite pokemon found")).toBeInTheDocument();
+    } else {
+      favoritePokemons.forEach(pokemon => {
+        expect(getByText(pokemon.name)).toBeInTheDocument();
+        expect(
+          getByText(
+            `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`
+          )
+        ).toBeInTheDocument();
+        expect(getByAltText(`${pokemon.name} sprite`).src).toBe(pokemon.image);
+      });
+    }
   });
 
   test("A página não deve exibir nenhum pokémon não favoritado.", () => {});

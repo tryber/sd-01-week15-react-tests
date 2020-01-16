@@ -272,21 +272,23 @@ describe("15 - A página de detalhes deve permitir favoritar um pokémon", () =>
   function ex15(pokemon) {
     const match = {
       params: {
-        id: `${pokemon.id}`,
-      },
+        id: `${pokemon.id}`
+      }
     };
     const updateFavoritePokemons = jest.fn((array, id) => {
       array[id] = !array[id];
     });
     const { getByLabelText } = render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={["/"]}>
         <PokemonDetails
           pokemons={pokemons}
-          onUpdateFavoritePokemons={() => updateFavoritePokemons(isPokemonFavoriteById, pokemon.id)}
+          onUpdateFavoritePokemons={() =>
+            updateFavoritePokemons(isPokemonFavoriteById, pokemon.id)
+          }
           isPokemonFavoriteById={isPokemonFavoriteById}
           match={match}
         />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
     const checkbox = getByLabelText(/Pokémon favoritado?/i);
     expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
@@ -295,42 +297,41 @@ describe("15 - A página de detalhes deve permitir favoritar um pokémon", () =>
     expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
   }
 
-  pokemons.forEach((pokemon) => (
+  pokemons.forEach(pokemon =>
     test(`case ${pokemon.name}`, () => {
       ex15(pokemon);
     })
-  ));
+  );
 });
 
-describe('16 - Pokémons favoritados devem exibir um ícone de uma estrela', () => {
+describe("16 - Pokémons favoritados devem exibir um ícone de uma estrela", () => {
   function ex16(pokemon) {
     const func = jest.fn();
     const match = {
       params: {
-        id: `${pokemon.id}`,
-      },
+        id: `${pokemon.id}`
+      }
     };
     const { getByAltText } = render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={["/"]}>
         <PokemonDetails
           pokemons={pokemons}
           onUpdateFavoritePokemons={func}
           isPokemonFavoriteById={isPokemonFavoriteById}
           match={match}
         />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
     if (isPokemonFavoriteById[pokemon.id]) {
       const starIcon = getByAltText(`${pokemon.name} is marked as favorite`);
       expect(starIcon).toBeInTheDocument();
       expect(starIcon.alt).toBe(`${pokemon.name} is marked as favorite`);
-      expect(starIcon.src).toBe('http://localhost/star-icon.svg');
+      expect(starIcon.src).toBe("http://localhost/star-icon.svg");
     }
   }
-  pokemons.forEach((pokemon) => (
+  pokemons.forEach(pokemon =>
     test(`case ${pokemon.name}`, () => {
       ex16(pokemon);
     })
-  ));
+  );
 });
-
