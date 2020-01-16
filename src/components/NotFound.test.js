@@ -22,5 +22,5 @@ test('23 - Entrar em uma URL desconhecida exibe a página Not Found', () => {
   expect(getByText('Page requested not found').tagName).toBe('H2');
   const imgError = getByAltText('Pikachu crying because the page requested was not found');
   expect(imgError).toBeInTheDocument();
-  // expect(imgError.src).toBe('https://testing-library.com/');
+  expect(imgError.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
 });
