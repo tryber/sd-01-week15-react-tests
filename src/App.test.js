@@ -806,3 +806,18 @@ describe('favorite pokemons should display a star icon', () => {
     })
   ));
 });
+
+test('at the top of the application should be a fixed set of navigation links', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>,
+  );
+  const linkHome = getByText('Home');
+  const linkAbout = getByText('About');
+  const linkFavorite = getByText('Favorite Pokémons');
+  expect(linkHome && linkAbout && linkFavorite).toBeInTheDocument();
+  expect(linkHome.href).toBe('http://localhost/');
+  expect(linkAbout.href).toBe('http://localhost/about');
+  expect(linkFavorite.href).toBe('http://localhost/favorites');
+});
