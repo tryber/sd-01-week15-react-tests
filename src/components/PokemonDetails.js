@@ -15,7 +15,9 @@ class PokemonDetails extends React.Component {
           {foundAt.map(({ location, map }) => (
             <div key={location}>
               <img src={map} alt={`${name} location`} />
-              <p><em>{location}</em></p>
+              <p>
+                <em>{location}</em>
+              </p>
             </div>
           ))}
         </div>
@@ -27,9 +29,7 @@ class PokemonDetails extends React.Component {
     return (
       <section>
         <h2> Summary </h2>
-        <p>
-          {summary}
-        </p>
+        <p>{summary}</p>
       </section>
     );
   }
@@ -63,12 +63,13 @@ class PokemonDetails extends React.Component {
     );
   }
 
-
   render() {
     const { renderHabitat, renderSummary } = PokemonDetails;
     const { renderFavoriteInput } = this;
     const {
-      match: { params: { id } },
+      match: {
+        params: { id },
+      },
       isPokemonFavoriteById,
     } = this.props;
 
@@ -78,11 +79,7 @@ class PokemonDetails extends React.Component {
     return (
       <section className="pokemon-details">
         <h2>{`${pokemon.name} Details`}</h2>
-        <Pokemon
-          pokemon={pokemon}
-          showDetailsLink={false}
-          isFavorite={isFavorite}
-        />
+        <Pokemon pokemon={pokemon} showDetailsLink={false} isFavorite={isFavorite} />
         {renderSummary(pokemon)}
         {renderHabitat(pokemon)}
         {renderFavoriteInput(pokemon.id, isFavorite)}
