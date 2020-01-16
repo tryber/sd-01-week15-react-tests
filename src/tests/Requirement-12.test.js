@@ -120,32 +120,26 @@ const isPokemonFavoriteById = {
 
 const func = jest.fn();
 
-const testPossiblePoker = (poker, isPokemonId, pokemon) => {
+const testPossiblePoker = (poker, pokerId, pokemon) => {
   const match = {
     params: {
       id: `${pokemon.id}`,
     },
   };
-  const { getByText, getByAltText } = render(
+  const { queryByText } = render(
     <MemoryRouter initialEntries={['/']}>
       <PokemonDetails
         pokemons={poker}
         onUpdateFavoritePokemons={func}
-        isPokemonFavoriteById={isPokemonId}
+        isPokemonFavoriteById={pokerId}
         match={match}
       />
     </MemoryRouter>,
   );
-  const pokemonWeight = getByText(
-    `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`,
-  );
-  const pokemonImage = getByAltText(`${pokemon.name} sprite`);
-  expect(pokemonWeight).toBeInTheDocument();
-  expect(pokemonImage.src).toBe(pokemon.image);
-  expect(pokemonImage.alt).toBe(`${pokemon.name} sprite`);
+  expect(queryByText(/More details/i)).toBeNull();
 };
 
-describe('Exigência → 11', () => {
+describe('Exigência → 12', () => {
   test(`A página de detalhes de pokémon deve exibir o nome, 
   tipo, peso médio e imagem do pokémon exibido`, () => {
     pokemons.forEach((select) => testPossiblePoker(pokemons, isPokemonFavoriteById, select));
