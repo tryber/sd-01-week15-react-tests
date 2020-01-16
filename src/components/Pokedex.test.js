@@ -349,7 +349,7 @@ describe('8', () => {
       } = averageWeight;
       const weight = `Average weight: ${value} ${measurementUnit}`;
       const alt = `${name} sprite`;
-      const typeOfPokemon = getAllByText(type)[0];
+      const typeOfPokemon = getAllByText(type)[0] || getByText(type);
       expect(getByText(name)).toBeInTheDocument();
       expect(typeOfPokemon).toBeInTheDocument();
       expect(getByText(weight)).toBeInTheDocument();
