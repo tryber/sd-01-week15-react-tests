@@ -1,7 +1,7 @@
 import React from "react";
 import { MemoryRouter, Router } from "react-router-dom";
 import { createMemoryHistory } from 'history';
-import { render, fireEvent, cleanup, getByAltText } from "@testing-library/react";
+import { render, fireEvent, cleanup } from "@testing-library/react";
 import Pokedex from "./Pokedex";
 
 jest.mock('react-router-dom', () => {
@@ -420,3 +420,4 @@ describe('10,  Ao clicar no link de navegação do pokémon, a aplicação deve 
       expect(`http://localhost/pokemons${history.location.pathname}`).toBe(link.href);
   });
 });
+
