@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup, fireEvent, getByText } from '@testing-library/react';
 import App from './App';
 
 afterEach(cleanup);
@@ -76,4 +76,26 @@ describe('Render Routes', () => {
       expect(history.location.pathname).toBe('/favorites');
     });
   })
+
+  test('testing all props change', () => {
+    const { debug, getByText, queryAllByRole, queryByText, container } = renderWithRouter(<App />);
+
+    expect(getByText(/More Details/i)).toBeInTheDocument();
+
+    fireEvent.click(getByText(/More Details/i));
+
+    expect(queryByText(/More Details/i)).toBeNull();
+
+    const inputHTMLall = Object.keys(container.getElementsByTagName('input')).map(key => container.getElementsByTagName('input')[key]);
+
+    inputHTMLall.forEach((input) => {
+      if (input.id === 'favorite') {
+        expect(input.checked).toBeFalsy();
+        fireEvent.click(input)
+        expect(input.checked).toBeTruthy();
+        fireEvent.click(input)
+        expect(input.checked).toBeFalsy();
+      }
+    })
+  });
 })
