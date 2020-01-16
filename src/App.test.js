@@ -3,7 +3,7 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import { Pokedex, PokemonDetails, About } from './components';
+import { Pokedex, PokemonDetails, About, FavoritePokemons } from './components';
 
 const pokemonsList = [
   {
@@ -868,4 +868,34 @@ test('`About` page should display pokédex info', () => {
   expect(aboutSection[0].tagName).toBe('P');
   expect(aboutSection[1].tagName).toBe('P');
   expect(aboutSection[2].src).toBe('https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png');
+});
+
+describe('the favorite pokemon page should display your favorite pokemons', () => {
+  function ex22(pokemons, isPokemonFavoriteById) {
+    const favoritePokemons = pokemons.filter(({ id }) => isPokemonFavoriteById[id]);
+    const { getByAltText, getByText, getAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <FavoritePokemons pokemons={favoritePokemons} />
+      </MemoryRouter>,
+    );
+    if (favoritePokemons.length === 0) expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument();
+    else {
+      favoritePokemons.forEach((pokemon, i) => {
+        expect(getByText(pokemon.name)).toBeInTheDocument();
+        expect(getAllByText(pokemon.type)[i]).toBeInTheDocument();
+        expect(getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`)).toBeInTheDocument();
+        expect(getByAltText(`${pokemon.name} sprite`).src).toBe(pokemon.image);
+      });
+    }
+  }
+
+  test('case 1', () => {
+    ex22(pokemonsList, allFavoritePokemons);
+  });
+  test('case 2', () => {
+    ex22(uniquePokemonList, uniqueFavoritePokemons);
+  });
+  test('case 3', () => {
+    ex22(sameTypePokemonList, notFavoritePokemons);
+  });
 });
