@@ -126,7 +126,7 @@ const testPossiblePoker = (poker, pokerId, pokemon) => {
       id: `${pokemon.id}`,
     },
   };
-  const { queryByText } = render(
+  const { getByText } = render(
     <MemoryRouter initialEntries={['/']}>
       <PokemonDetails
         pokemons={poker}
@@ -136,12 +136,17 @@ const testPossiblePoker = (poker, pokerId, pokemon) => {
       />
     </MemoryRouter>,
   );
-  expect(queryByText(/More details/i)).toBeNull();
+  const summaryPokemon = getByText(/Summary/i);
+
+  expect(summaryPokemon).toBeInTheDocument();
+  expect(summaryPokemon.tagName).toBe('H2');
+  expect(summaryPokemon.nextSibling.tagName).toBe('P');
+  expect(summaryPokemon.nextSibling.textContent).toBe(pokemon.summary);
 };
 
-describe('Exigência → 12', () => {
-  test(`O pokémon exibido na página de detalhes não deve conter
-   um link de navegação para exibir detalhes deste pokémon`, () => {
-    pokemons.forEach((select) => testPossiblePoker(pokemons, isPokemonFavoriteById, select));
-  });
+describe('Exigência → 13', () => {
+  pokemons.forEach((select) => test(`A página de detalhes deve exibir uma secção
+  com um resumo do pokémon`, () => {
+    testPossiblePoker(pokemons, isPokemonFavoriteById, select);
+  }));
 });

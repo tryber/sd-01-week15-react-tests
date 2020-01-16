@@ -126,7 +126,7 @@ const testPossiblePoker = (poker, pokerId, pokemon) => {
       id: `${pokemon.id}`,
     },
   };
-  const { queryByText } = render(
+  const { getByText, queryAllByAltText } = render(
     <MemoryRouter initialEntries={['/']}>
       <PokemonDetails
         pokemons={poker}
@@ -136,12 +136,22 @@ const testPossiblePoker = (poker, pokerId, pokemon) => {
       />
     </MemoryRouter>,
   );
-  expect(queryByText(/More details/i)).toBeNull();
+  const gameLocation = getByText(/Game Locations/i);
+  expect(gameLocation.textContent).toStrictEqual(`Game Locations of ${pokemon.name}`);
+  expect(gameLocation.tagName).toBe('H2');
+  expect(gameLocation.nextSibling.childNodes.length).toBe(pokemon.foundAt.length);
+  pokemon.foundAt.forEach((location, i) => {
+    expect(getByText(location.location)).toBeInTheDocument();
+    const altForImage = `${pokemon.name} location`;
+    const imgAlt = queryAllByAltText(altForImage);
+    expect(imgAlt[i].src).toBe(location.map);
+    expect(imgAlt[i].alt).toBe(altForImage);
+  });
 };
 
-describe('Exigência → 12', () => {
-  test(`O pokémon exibido na página de detalhes não deve conter
-   um link de navegação para exibir detalhes deste pokémon`, () => {
-    pokemons.forEach((select) => testPossiblePoker(pokemons, isPokemonFavoriteById, select));
-  });
+describe('Exigência → 14', () => {
+  pokemons.forEach((select) => test(`A página de detalhes deve exibir uma secção
+  com os mapas com as localizações do pokémon`, () => {
+    testPossiblePoker(pokemons, isPokemonFavoriteById, select);
+  }));
 });
