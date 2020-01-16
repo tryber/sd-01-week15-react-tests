@@ -3,8 +3,6 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import pokemonsMock from './components/MockTest';
-import Pokedex from './components/Pokedex';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
