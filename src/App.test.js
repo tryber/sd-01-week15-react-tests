@@ -832,3 +832,14 @@ test('by clicking on the `Home` link, the app should be redirected to the URL `/
   fireEvent.click(homeButton);
   expect(`http://localhost${history.location.pathname}`).toBe(homeLink);
 });
+
+test('by clicking on the `About` link, the app should be redirected to the URL `/about`', () => {
+  const { getByText, history } = renderWithRouter(
+    <App />,
+  );
+  expect(history.location.pathname).toBe('/');
+  const aboutButton = getByText(/About/i);
+  const aboutLink = aboutButton.href;
+  fireEvent.click(aboutButton);
+  expect(`http://localhost${history.location.pathname}`).toBe(aboutLink);
+});
