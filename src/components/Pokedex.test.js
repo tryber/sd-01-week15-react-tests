@@ -361,11 +361,15 @@ describe('8', () => {
 
 describe('9', () => {
   test('Pokedex renders text when clicked redirects to that pokemon`s page', () => {
-    const { getByText, getByAltText, getAllByText } = render(
+    const { getByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
       </MemoryRouter>,
     );
-
+    pokemonList.forEach((pokemon) => {
+      const details = getByText(/More details/i).href;
+      expect(details).toBe(`http://localhost/pokemons/${pokemon.id}`);
+      fireEvent.click(getByText(/Próximo pokémon/i));
+    });
   });
 });
