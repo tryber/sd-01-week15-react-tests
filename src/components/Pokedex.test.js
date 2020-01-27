@@ -8,7 +8,7 @@ afterEach(cleanup);
 
 const pokemonList = [
   {
-    id: 1,
+    id: 25,
     name: 'Pikachu',
     type: 'Electric',
     averageWeight: {
@@ -30,7 +30,7 @@ const pokemonList = [
     summary: 'This intelligent Pokémon roasts hard berries with electricity to make them tender enough to eat.',
   },
   {
-    id: 2,
+    id: 4,
     name: 'Charmander',
     type: 'Fire',
     averageWeight: {
@@ -60,7 +60,7 @@ const pokemonList = [
     summary: 'The flame on its tail shows the strength of its life force. If it is weak, the flame also burns weakly.',
   },
   {
-    id: 3,
+    id: 10,
     name: 'Caterpie',
     type: 'Bug',
     averageWeight: {
@@ -90,7 +90,7 @@ const pokemonList = [
     summary: 'For protection, it releases a horrible stench from the antennae on its head to drive away enemies.',
   },
   {
-    id: 4,
+    id: 23,
     name: 'Ekans',
     type: 'Poison',
     averageWeight: {
@@ -108,7 +108,7 @@ const pokemonList = [
     summary: 'It can freely detach its jaw to swallow large prey whole. It can become too heavy to move, however.',
   },
   {
-    id: 5,
+    id: 65,
     name: 'Alakazam',
     type: 'Psychic',
     averageWeight: {
@@ -126,7 +126,7 @@ const pokemonList = [
     summary: 'Closing both its eyes heightens all its other senses. This enables it to use its abilities to their extremes.',
   },
   {
-    id: 6,
+    id: 151,
     name: 'Mew',
     type: 'Psychic',
     averageWeight: {
@@ -144,7 +144,7 @@ const pokemonList = [
     summary: 'Apparently, it appears only to those people who are pure of heart and have a strong desire to see it.',
   },
   {
-    id: 7,
+    id: 78,
     name: 'Rapidash',
     type: 'Fire',
     averageWeight: {
@@ -166,7 +166,7 @@ const pokemonList = [
     summary: 'At full gallop, its four hooves barely touch the ground because it moves so incredibly fast.',
   },
   {
-    id: 8,
+    id: 143,
     name: 'Snorlax',
     type: 'Normal',
     averageWeight: {
@@ -184,7 +184,7 @@ const pokemonList = [
     summary: 'What sounds like its cry may actually be its snores or the rumblings of its hungry belly.',
   },
   {
-    id: 9,
+    id: 148,
     name: 'Dragonair',
     type: 'Dragon',
     averageWeight: {
@@ -208,15 +208,15 @@ const pokemonList = [
 ];
 
 const isPokemonFavoriteById = {
-  1: true,
-  2: false,
-  3: false,
+  25: true,
   4: false,
-  5: false,
-  6: true,
-  7: false,
-  8: false,
-  9: false,
+  10: false,
+  23: false,
+  65: false,
+  151: true,
+  78: false,
+  143: false,
+  148: false,
 };
 
 const expectedTypes = [...new Set(pokemonList.map(({ type }) => type))];
@@ -356,5 +356,16 @@ describe('8', () => {
       expect(getByAltText(alt)).toBeInTheDocument();
       fireEvent.click(getByText(/Próximo pokémon/i));
     });
+  });
+});
+
+describe('9', () => {
+  test('Pokedex renders text when clicked redirects to that pokemon`s page', () => {
+    const { getByText, getByAltText, getAllByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Pokedex pokemons={pokemonList} isPokemonFavoriteById={isPokemonFavoriteById} />
+      </MemoryRouter>,
+    );
+
   });
 });
