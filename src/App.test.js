@@ -340,4 +340,50 @@ describe('App component test suite', () => {
 
     pokemon.foundAt.forEach((item) => expect(getByText(`${item.location}`)).toBeInTheDocument);
   });
+
+  it('15 - check if favorite button is correctly labeled and works appropriately', () => {
+    const { getByText, getByLabelText, getByAltText, container } = render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>,
+    );
+    const url = getByText(/^More details$/g);
+    fireEvent.click(url);
+    const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
+      selector: 'input',
+    });
+    if (favoriteLabel.checked === false) {
+      console.log(favoriteLabel.checked);
+      fireEvent.click(favoriteLabel);
+    }
+    expect(localStorage.getItem('favoritePokemonIds')).toBe(`[${pokemon.id}]`);
+    if (favoriteLabel.checked === true) {
+      console.log(favoriteLabel.checked);
+      fireEvent.click(favoriteLabel);
+    }
+    expect(localStorage.getItem('favoritePokemonIds')).not.toBe(`[${pokemon.id}]`);
+  });
+
+  it('16 - favorited pokemons displays an image icon besides them', () => {
+    const { getByText, getByLabelText, getByAltText } = render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>,
+    );
+    const url = getByText(/^More details$/g);
+    fireEvent.click(url);
+    const container = document.body;
+    const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
+      selector: 'input',
+    });
+    if (favoriteLabel.checked === false) {
+      console.log(favoriteLabel.checked);
+      fireEvent.click(favoriteLabel);
+    }
+    const markedFavorite = getByAltText(/.* is marked as favorite/i, {
+      selector: 'img',
+    });
+    // console.log(markedFavorite);
+    expect(markedFavorite).toHaveProperty('src', 'http://localhost/star-icon.svg');
+  });
 });
