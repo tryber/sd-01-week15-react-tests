@@ -1,8 +1,10 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, cleanup, fireEvent } from '@testing-library/react';
+
 import App from '../App';
 import Pokedex from './Pokedex';
+import PokemonDetails from './PokemonDetails';
 
 afterEach(cleanup);
 
@@ -370,6 +372,37 @@ describe('9', () => {
       const details = getByText(/More details/i).href;
       expect(details).toBe(`http://localhost/pokemons/${pokemon.id}`);
       fireEvent.click(getByText(/Próximo pokémon/i));
+    });
+  });
+});
+
+describe('11', () => {
+  test('More Details shows a name, type, average weight and image of pokemon', () => {
+    const func = jest.fn();
+    pokemonList.forEach(pokemon => {
+      const match = {
+        params: {
+          id: `${pokemon.id}`,
+        },
+      };
+      const { getByText, getByAltText } = render(
+        <MemoryRouter>
+          <PokemonDetails
+            pokemons={pokemonList}
+            onUpdateFavoritePokemons={func}
+            isPokemonFavoriteById={isPokemonFavoriteById}
+            match={match}
+          />
+        </MemoryRouter>,
+      );
+      const {
+        value,
+        measurementUnit,
+      } = pokemon.averageWeight;
+      const pokemonAverageWeight = getByText(`Average weight: ${value} ${measurementUnit}`);
+      expect(pokemonAverageWeight).toBeInTheDocument();
+      const altImage = getByAltText(`${pokemon.name} sprite`);
+      expect(altImage.src).toBe(pokemon.image);
     });
   });
 });
