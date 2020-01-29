@@ -1,7 +1,26 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { render, getByText, fireEvent, container } from '@testing-library/react';
+import { Router, MemoryRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { render, fireEvent, cleanup, waitForElement } from '@testing-library/react';
 import App from './App';
+
+jest.mock('react-router-dom', () => {
+  const originalModule = jest.requireActual('react-router-dom');
+  return {
+    ...originalModule,
+    BrowserRouter: ({ children }) => (<div> {children} </div>),
+  };
+});
+
+function renderWithRouter(
+  ui,
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
+) {
+  return {
+    ...render(<Router history={history}>{ui}</Router>),
+    history,
+  };
+}
 
 const pokemon = {
   id: 25,
@@ -358,7 +377,6 @@ describe('App component test suite', () => {
     }
     expect(localStorage.getItem('favoritePokemonIds')).toBe(`[${pokemon.id}]`);
     if (favoriteLabel.checked === true) {
-      console.log(favoriteLabel.checked);
       fireEvent.click(favoriteLabel);
     }
     expect(localStorage.getItem('favoritePokemonIds')).not.toBe(`[${pokemon.id}]`);
@@ -377,13 +395,49 @@ describe('App component test suite', () => {
       selector: 'input',
     });
     if (favoriteLabel.checked === false) {
-      console.log(favoriteLabel.checked);
       fireEvent.click(favoriteLabel);
     }
     const markedFavorite = getByAltText(/.* is marked as favorite/i, {
       selector: 'img',
     });
-    // console.log(markedFavorite);
     expect(markedFavorite).toHaveProperty('src', 'http://localhost/star-icon.svg');
+  });
+  it('17 - check nav bar links', () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>,
+    );
+    const homeLink = getByText(/Home/i);
+    const aboutLink = getByText(/About/i);
+    const favoritesLink = getByText(/Favorite Pokémons/i);
+    expect(homeLink).toHaveProperty('href', 'http://localhost/');
+    expect(aboutLink).toHaveProperty('href', 'http://localhost/about');
+    expect(favoritesLink).toHaveProperty('href', 'http://localhost/favorites');
+  });
+  it('18 - check if linking is working for Home', () => {
+    const { getByText } = renderWithRouter(
+      <App />,
+    );
+    const homeLink = getByText(/Home/i);
+    fireEvent.click(homeLink);
+    expect(window.location.pathname).toBe('/');
+  });
+  it('19 - check if linking is working for About', async () => {
+    const { history, getByText } = renderWithRouter(
+      <App />,
+    );
+    const aboutLink = getByText(/About/i);
+    fireEvent.click(aboutLink);
+    expect(history.location.pathname).toBe('/about');
+    console.log(history.location.pathname);
+  });
+  it('20 - check if linking is working for Favorite Pokemons', async () => {
+    const { history, getByText } = renderWithRouter(
+      <App />,
+    );
+    const favoritesLink = getByText(/Favorite Pokémons/i);
+    fireEvent.click(favoritesLink);
+    expect(history.location.pathname).toBe('/favorites');
   });
 });
