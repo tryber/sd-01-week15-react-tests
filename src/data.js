@@ -7,15 +7,18 @@ const pokemons = [
       value: '6.0',
       measurementUnit: 'kg',
     },
+
     image: 'https://cdn.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png',
     moreInfo: 'https://bulbapedia.bulbagarden.net/wiki/Pikachu_(Pok%C3%A9mon)',
     foundAt: [
       {
         location: 'Kanto Viridian Forest',
-        map: 'https://cdn.bulbagarden.net/upload/0/08/Kanto_Route_2_Map.png',
+
+        map: 'https://cdn.bulbagarden.npokemon/ditto/et/upload/0/08/Kanto_Route_2_Map.png',
       },
       {
         location: 'Kanto Power Plant',
+
         map: 'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
       },
     ],
@@ -34,10 +37,12 @@ const pokemons = [
     foundAt: [
       {
         location: 'Alola Route 3',
+
         map: 'https://cdn.bulbagarden.net/upload/9/93/Alola_Route_3_Map.png',
       },
       {
         location: 'Kanto Route 3',
+
         map: 'https://cdn.bulbagarden.net/upload/4/4a/Kanto_Route_3_Map.png',
       },
       {
