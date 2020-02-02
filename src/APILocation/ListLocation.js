@@ -4,10 +4,10 @@ import Location from './Location';
 
 class ListLocation extends React.Component {
   render() {
-    const { poker } = this.props;
+    const { location } = this.props;
     return (
       <div>
-        {poker.map((pokemon) => <Location location={pokemon} key={pokemon.name} />)}
+        {location.map((pokemon) => <Location location={pokemon} key={pokemon.name} />)}
       </div>
     );
   }
@@ -16,5 +16,5 @@ class ListLocation extends React.Component {
 export default ListLocation;
 
 ListLocation.propTypes = {
-  poker: PropTypes.arrayOf(PropTypes.object).isRequired,
+  location: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

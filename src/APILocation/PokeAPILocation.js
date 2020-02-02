@@ -22,11 +22,14 @@ class PokeAPILocation extends Component {
 
   render() {
     const { poke, loading } = this.state;
-    if (loading) return <div>Carregando...</div>
+    if (loading) {
+      return <div>Carregando...</div>;
+    }
+
     return (
       <div>
         <h2>Locations Pokémons</h2>
-        <ListLocation poker={poke} />
+        <ListLocation location={poke} />
       </div>
     );
   }

@@ -16,6 +16,7 @@ import {
 
 import pokemons from './data';
 import PokeAPILocation from './APILocation/PokeAPILocation';
+import PokeAPIGeneration from './APIGeneration/PokeAPIGeneration';
 
 import './App.css';
 
@@ -85,7 +86,7 @@ class App extends Component {
         <Route path="/favorites" render={() => <FavoritePokemons pokemons={favoritePokemons} />} />
         <Route path="/about" component={About} />
         <Route path="/locations" component={PokeAPILocation} />
-        <Route path="/generations" />
+        <Route path="/generations" component={PokeAPIGeneration} />
         <Route component={NotFound} />
       </Switch>
     );
