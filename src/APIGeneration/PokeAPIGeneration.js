@@ -5,7 +5,7 @@ class PokeAPIGeneration extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      poke: [],
+      listGeneration: [],
       loading: true,
     };
   }
@@ -15,13 +15,13 @@ class PokeAPIGeneration extends Component {
     const response = await fetch(POKE_API);
     const data = await response.json();
     this.setState({
-      poke: data.results,
+      listGeneration: data.results,
       loading: false,
     });
   }
 
   render() {
-    const { poke, loading } = this.state;
+    const { listGeneration, loading } = this.state;
     if (loading) {
       return <div>Carregando...</div>;
     }
@@ -29,7 +29,7 @@ class PokeAPIGeneration extends Component {
     return (
       <div>
         <h2>Generations Pokémons</h2>
-        <ListGeneration generation={poke} />
+        <ListGeneration generation={listGeneration} />
       </div>
     );
   }

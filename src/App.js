@@ -86,7 +86,8 @@ class App extends Component {
         <Route path="/favorites" render={() => <FavoritePokemons pokemons={favoritePokemons} />} />
         <Route path="/about" component={About} />
         <Route path="/locations" component={PokeAPILocation} />
-        <Route path="/generations" component={PokeAPIGeneration} />
+        <Route exact path="/generations" component={PokeAPIGeneration} />
+        <Route path="/generations/:id" />
         <Route component={NotFound} />
       </Switch>
     );
