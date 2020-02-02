@@ -99,8 +99,8 @@ class App extends Component {
           <Link className="link" to="/">Home</Link>
           <Link className="link" to="/about">About</Link>
           <Link className="link" to="/favorites">Favorite Pokémons</Link>
-          <Link className="link" to="/locations">Localizações</Link>
-          <Link className="link" to="/generations">Gerações</Link>
+          <Link className="link" to="/locations">Locations</Link>
+          <Link className="link" to="/generations">Generations</Link>
         </nav>
         {this.renderRoutes()}
       </div>

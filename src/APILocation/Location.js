@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class Poke extends Component {
+class Location extends Component {
   render() {
     const { name } = this.props.location;
     return (
@@ -12,8 +12,8 @@ class Poke extends Component {
   }
 }
 
-export default Poke;
+export default Location;
 
-Poke.propTypes = {
+Location.propTypes = {
   location: PropTypes.objectOf(PropTypes.string).isRequired,
 };

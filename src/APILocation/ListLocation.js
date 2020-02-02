@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Poke from './Poke';
+import Location from './Location';
 
-class Pokete extends React.Component {
+class ListLocation extends React.Component {
   render() {
     const { poker } = this.props;
     return (
       <div>
-        {poker.map((pokemon) => <Poke location={pokemon} key={pokemon.name} />)}
+        {poker.map((pokemon) => <Location location={pokemon} key={pokemon.name} />)}
       </div>
     );
   }
 }
 
-export default Pokete;
+export default ListLocation;
 
-Pokete.propTypes = {
+ListLocation.propTypes = {
   poker: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
