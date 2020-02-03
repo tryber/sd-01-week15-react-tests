@@ -8,17 +8,17 @@ class PokeAPILocation extends Component {
       poke: [],
       loading: true,
       next: 0,
+      count: 0,
     };
-    console.log(this.state.next)
     this.nextList = this.nextList.bind(this);
     this.previousList = this.previousList.bind(this);
   }
 
   async componentDidMount() {
-    const POKE_API = 'https://pokeapi.co/api/v2/location/?offset=0&limit=10';
+    const POKE_API = 'https://pokeapi.co/api/v2/location/?offset=0&limit=100';
     const response = await fetch(POKE_API);
     const data = await response.json();
-    console.log(data)
+    console.log(data);
     this.setState({
       poke: data.results,
       loading: false,
@@ -26,11 +26,12 @@ class PokeAPILocation extends Component {
   }
 
   nextList() {
-    const { next } = this.state;
+    const { next, count } = this.state;
     this.setState({
-      next: next + 10,
+      next: next + 100,
+      count: count + 1,
     });
-    const POKE_API = `https://pokeapi.co/api/v2/location/?offset=${next}&limit=10`;
+    const POKE_API = `https://pokeapi.co/api/v2/location/?offset=${next}&limit=100`;
     fetch(POKE_API)
       .then((response) => response.json())
       .then((data) => {
@@ -42,11 +43,12 @@ class PokeAPILocation extends Component {
   }
 
   async previousList() {
-    const { next } = this.state;
+    const { next, count } = this.state;
     this.setState({
-      next: next - 10,
+      next: next - 100,
+      count: count - 1,
     });
-    const POKE_API = `https://pokeapi.co/api/v2/location/?offset=${next}&limit=10`;
+    const POKE_API = `https://pokeapi.co/api/v2/location/?offset=${next}&limit=100`;
     const response = await fetch(POKE_API);
     const data = await response.json();
     this.setState({
@@ -56,19 +58,31 @@ class PokeAPILocation extends Component {
   }
 
   render() {
-    const { poke, loading } = this.state;
+    const {
+      poke, loading, next, count,
+    } = this.state;
     if (loading) {
       return <h2>Loading...</h2>;
     }
 
     return (
       <div>
-        <div>
-          <h2>Locations Pokémons</h2>
-          <ListLocation location={poke} />
-        </div>
-        <button type="button" onClick={() => this.previousList()}>Previous</button>
-        <button type="button" onClick={() => this.nextList()}>Next</button>
+        <h2>Locations Pokémons</h2>
+        <button
+          type="button"
+          disabled={next === 0}
+          onClick={() => this.previousList()}
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          disabled={count === 7}
+          onClick={() => this.nextList()}
+        >
+          Next
+        </button>
+        <ListLocation location={poke} />
       </div>
     );
   }
