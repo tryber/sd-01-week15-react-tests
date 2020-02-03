@@ -2,6 +2,19 @@
   text-align: center;
 }
 
+.div-generations {
+  background-color: rgb(129, 197, 129);
+  flex-direction: column;
+  height: 100px;
+  margin-bottom: 20px;
+  width: 200px;
+}
+
+.generation {
+  display: flex;
+  justify-content: center;
+}
+
 .link {
   margin-left: 20px;
   margin-right: 20px;

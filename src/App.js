@@ -17,6 +17,7 @@ import {
 import pokemons from './data';
 import PokeAPILocation from './APILocation/PokeAPILocation';
 import PokeAPIGeneration from './APIGeneration/PokeAPIGeneration';
+import APIAboutOneGeneration from './APIGeneration/APIAboutOneGeneration';
 
 import './App.css';
 
@@ -87,7 +88,8 @@ class App extends Component {
         <Route path="/about" component={About} />
         <Route path="/locations" component={PokeAPILocation} />
         <Route exact path="/generations" component={PokeAPIGeneration} />
-        <Route path="/generations/:id" />
+        <Route exact path="/generations/:id" component={APIAboutOneGeneration} />
+        <Route path="/generatios/details/:id" />
         <Route component={NotFound} />
       </Switch>
     );

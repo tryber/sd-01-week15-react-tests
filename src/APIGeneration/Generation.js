@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-
 class Generation extends Component {
   render() {
     let { url } = this.props.generation;
@@ -10,9 +9,14 @@ class Generation extends Component {
     url = url.substr(-2, 1);
 
     return (
-      <Link to={`/generations/${url}`}>
-        <p>{name}</p>
-      </Link>
+      <div className="generation">
+        <div className="div-generations"> 
+          <Link to={`/generations/${url}`}>
+            <p>{name}</p>
+          </Link>
+          <Link to={`/generatios/details/${name}`}>More Details</Link>
+        </div>
+      </div>
     );
   }
 }

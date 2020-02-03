@@ -23,7 +23,7 @@ class PokeAPIGeneration extends Component {
   render() {
     const { listGeneration, loading } = this.state;
     if (loading) {
-      return <div>Carregando...</div>;
+      return <h2>Loading...</h2>;
     }
 
     return (
