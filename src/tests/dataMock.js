@@ -154,3 +154,12 @@ export const isPokemonFavoriteById = {
   151: true,
   178: true,
 };
+
+export const APILocation = () => (
+  fetch('https://pokeapi.co/api/v2/location/?offset=0&limit=100')
+    .then((response) => (
+      response
+        .json()
+        .then((json) => (response.ok ? Promise.resolve(json) : Promise.reject(json)))
+    ))
+);

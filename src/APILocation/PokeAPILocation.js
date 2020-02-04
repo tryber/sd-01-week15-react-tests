@@ -18,7 +18,6 @@ class PokeAPILocation extends Component {
     const POKE_API = 'https://pokeapi.co/api/v2/location/?offset=0&limit=100';
     const response = await fetch(POKE_API);
     const data = await response.json();
-    console.log(data);
     this.setState({
       poke: data.results,
       loading: false,
