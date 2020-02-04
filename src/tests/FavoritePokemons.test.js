@@ -30,6 +30,7 @@ describe('22 Page shows favorites pokemons', () => {
       expect(getByText(`Average weight: ${favorite.averageWeight.value} ${favorite.averageWeight.measurementUnit}`)).toBeInTheDocument();
       expect(getByAltText(`${favorite.name} sprite`).src).toBe(favorite.image);
     });
+    expect(getByText(/Favorite pokémons/i)).toBeInTheDocument();
   });
 
   test('22.2 page shows only favorites pokemons', () => {
@@ -38,5 +39,6 @@ describe('22 Page shows favorites pokemons', () => {
       <FavoritePokemons pokemons={noFavoritePokemons} />,
     );
     expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument();
+    expect(getByText(/Favorite pokémons/i)).toBeInTheDocument();
   });
 });
