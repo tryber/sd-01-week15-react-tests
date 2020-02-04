@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ListAboutOneGeneration from './ListAboutOneGeneration';
 
 class APIAboutOneGeneration extends Component {
@@ -39,3 +40,7 @@ class APIAboutOneGeneration extends Component {
 }
 
 export default APIAboutOneGeneration;
+
+APIAboutOneGeneration.propTypes = {
+  location: PropTypes.string.isRequired,
+};

@@ -2,7 +2,9 @@ import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import Pokedex from './components/Pokedex';
 import App from './App';
+import { pokemons, isPokemonFavoriteById } from './tests/dataMock';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
@@ -81,19 +83,24 @@ describe('3 Next pokemon', () => {
   });
 });
 
-// describe('4 The Pokédexx must have filter buttons', () => {
-//   afterEach(cleanup);
+describe('4 The Pokédexx must have filter buttons', () => {
+  afterEach(cleanup);
+  const { getByAllText, debug, getAllByRole, getByRole } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+    </MemoryRouter>,
+  );
+  // debug();
 
 //   test('4.1 ThePokedex filter the pokemons and show them', () => {
-//     const {
-//       getByText, queryAllByText, getAllByText,
-//     } = render(
-//       <MemoryRouter>
-//         <Pokedex />
-//       </MemoryRouter>,
-//     );
+//     // let buttonAll = getByAllText(/All/i);
+//     const role = getAllByRole('button');
+//     console.log(role)
+//     const pokemonType = pokemons.map(({ type }) => type);
+//     expect(pokemonType.length).toBe(6);
+//     expect(pokemonType).toBe(['pikachu']);
 //   });
-// });
+});
 
 describe('5 reset filter', () => {
   afterEach(cleanup);
@@ -139,6 +146,38 @@ describe('5 reset filter', () => {
   });
 });
 
+describe('6 Dinamic filter', () => {
+  afterEach(cleanup);
+  const { getAllByText, getByText, debug } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+    </MemoryRouter>,
+  );
+
+  test('the pokedex genre a dinamic filter to each type pokemon', () => {
+    debug()
+    pokemons.forEach(({ type }) => {
+      const buttonType = getAllByText(type)[1] || getByText(type);
+      expect(buttonType).toBeInTheDocument();
+      expect(getByText(/All/i)).toBeInTheDocument();
+    });
+  });
+});
+
+// describe('7 disable the button', () => {
+//   afterEach(cleanup);
+
+//   const { getAllByText, getByText, debug } = render(
+//     <MemoryRouter initialEntries={['/']}>
+//       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+//     </MemoryRouter>,
+//   );
+
+//   test('7.1 If the pokemons list has one pokemon, the button (proximo pokemon) must be disable', () => {
+
+//   });
+// });
+
 describe('9 navigation links, page of details', () => {
   afterEach(cleanup);
 
@@ -164,37 +203,34 @@ describe('9 navigation links, page of details', () => {
 //   afterEach(cleanup);
 
 //   test('10.1 The URL must change for pokemon/id details', () => {
-//     const { getByText } = renderWithRouter(<App />);
+//     for (let index = 0; index <= pokemons.length; index += 1) {
+//       const { getByRole, history, getByText } = render(
+//         <MemoryRouter initialEntries={['/']}>
+//           <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
+//         </MemoryRouter>,
+//       );
 
-//     const moreDetails = getByText(/More details/i);
-//     expect(moreDetails).toBeInTheDocument();
+//       expect(history.location.pathname).toBe('/');
 
-//     const nextPokemon = getByText(/Próximo pokémon/i);
-//     expect(nextPokemon).toBeInTheDocument();
+//       for (let nextButton = 0; nextButton < index ; nextButton += 1) {
+//         fireEvent.click(getByText(/Próximo pokémon/i));
+//       }
 
-//     const home = getByText(/Home/i);
-//     expect(home).toBeInTheDocument();
+//       const link = fireEvent.click(getByRole('link'));
 
-//     const idArray = [25, 4, 10, 23, 65, 151, 78, 143, 148];
-//     // const averageWeightValue = [6.0, 8.5, 2.9, 6.9, 48.0, 4.0, 95.0, 460.0, 16.5];
-//     // const namePokemon = ['Pikachu Details', 'Charmander Details', 'Caterpie Details', 'Ekans Details',
-//     //   'Alakazam Details', 'Mew Details', 'Rapidash Details', 'Snorlax Details', 'Dragonair Details'];
-//     // fireEvent.click(moreDetails);
-//     // expect(moreDetails.href).toBe('http://localhost/pokemons/25');
+//       if (index === pokemons.length) {
+//         expect(history.location.pathname).toBe(`/pokemons/${pokemons[0].id]}`)
+//       }
 
-//     fireEvent.click(home);
+//       else {
 
-//     for (let index = 0; index < idArray.length; index += 1) {
-//       // for (let cont = 1; cont <= index; cont += 1) {
-//       //   fireEvent.click(nextPokemon);
-//       // }
-//       expect(moreDetails.href).toBe(`http://localhost/pokemons/${idArray[index]}`);
-//       fireEvent.click(nextPokemon);
-//       // const pokemon = getByText(averageWeightValue[index]);
-//       // expect(pokemon).toBeInTheDocument();
+//       }
+
+
 //     }
 //   });
 // });
+
 
 describe('17 Fixed set of navigation links', () => {
   afterEach(cleanup);
@@ -217,31 +253,37 @@ describe('Routes', () => {
   afterEach(cleanup);
 
   test('18 page shows home page', () => {
-    const { getByText } = renderWithRouter(<App />);
+    const { getByText, history } = renderWithRouter(<App />);
 
     const homePage = getByText(/Encountered pokémons/i);
     expect(homePage).toBeInTheDocument();
 
     fireEvent.click(getByText(/home/i));
 
+    const link = `http://localhost${history.location.pathname}`;
+    expect(link).toBe('http://localhost/');
+
     const continuesHomePage = getByText(/Encountered pokémons/i);
     expect(continuesHomePage).toBeInTheDocument();
   });
 
   test('19 page shows about pokédex', () => {
-    const { getByText } = renderWithRouter(<App />);
+    const { getByText, history } = renderWithRouter(<App />);
 
     const homePage = getByText(/Encountered pokémons/i);
     expect(homePage).toBeInTheDocument();
 
     fireEvent.click(getByText(/About/i));
 
+    const link = `http://localhost${history.location.pathname}`;
+    expect(link).toBe('http://localhost/about');
+
     const aboutInfo = getByText(/About Pokédex/i);
     expect(aboutInfo).toBeInTheDocument();
   });
 
-  test('20 page shows home page', () => {
-    const { getByText } = renderWithRouter(<App />);
+  test('20 page shows favorite pokémons page', () => {
+    const { getByText, history } = renderWithRouter(<App />);
 
     const homePage = getByText(/Encountered pokémons/i);
     expect(homePage).toBeInTheDocument();
@@ -250,6 +292,9 @@ describe('Routes', () => {
 
     const favoritePage = getByText(/No favorite pokemon found/i);
     expect(favoritePage).toBeInTheDocument();
+
+    const link = `http://localhost${history.location.pathname}`;
+    expect(link).toBe('http://localhost/favorites');
   });
 });
 
