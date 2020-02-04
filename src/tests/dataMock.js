@@ -147,12 +147,21 @@ export const pokemons = [
 ];
 
 export const isPokemonFavoriteById = {
-  25: false,
+  25: true,
   4: true,
   10: false,
   65: false,
   151: true,
-  178: true,
+  78: false,
+};
+
+export const isNotPokemonFavoriteById = {
+  25: false,
+  4: false,
+  10: false,
+  65: false,
+  151: false,
+  78: false,
 };
 
 export const APILocation = () => (

@@ -272,30 +272,6 @@ describe('Routes', () => {
   });
 });
 
-// describe('22 Page shows favorites paokemons', () => {
-//   afterEach(cleanup);
-//   const namePokemon = ['Pikachu', 'Charmander', 'Caterpie', 'Ekans',
-//     'Alakazam', 'Mew', 'Rapidash', 'Snorlax', 'Dragonair'];
-
-//   test('22.1 the page shows all favorites pokemons, one pokemon', () => {
-//     const { getByText, getByLabelText } = renderWithRouter(<App />);
-//     for (let index = 0; index < namePokemon.length; index += 1) {
-//       for (let cont = 0; cont < index; cont += 1) {
-//         if (cont !== 0) {
-//           fireEvent.click(getByText(/Próximo pokémon/i));
-//         }
-//       }
-//       fireEvent.click(getByText(/More details/i));
-//       fireEvent.click(getByLabelText(/Pokémon favoritado?/i));
-//       fireEvent.click(getByText(/Favorite Pokémons/i));
-
-//       const firstTagP = document.getElementsByTagName('p')[0];
-//       expect(firstTagP.innerHTML).toBe(namePokemon[index]);
-//       fireEvent.click(getByText(/Home/i));
-//     }
-//   });
-// });
-
 describe('25 & 26 Locations', () => {
   afterEach(cleanup);
 
