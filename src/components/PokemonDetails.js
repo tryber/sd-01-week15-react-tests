@@ -72,7 +72,6 @@ class PokemonDetails extends React.Component {
       match: { params: { id } },
       isPokemonFavoriteById,
     } = this.props;
-
     const pokemon = this.findPokemon(parseInt(id, 10));
     const isFavorite = isPokemonFavoriteById[id];
 

@@ -1,18 +1,24 @@
 import React from 'react';
-import App from './App'
-import { MemoryRouter, Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import { render, fireEvent, cleanup, queryByText } from '@testing-library/react';
-import Pokedex from './components/Pokedex';
+import { MemoryRouter } from 'react-router-dom';
+import { render } from '@testing-library/react';
+import FavoritePokemons from './FavoritePokemons';
 
-function renderWithRouter(
-  ui,
-  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
-) {
-  return {
-    ...render(<Router history={history}>{ui}</Router>),
-    history,
-  };
+const favoriteOneElement = {
+  99: true,
+}
+
+const isPokemonFavoriteByIdAllTrue = {
+  25: true,
+  4: true,
+  10: true,
+  11: true,
+}
+
+const isPokemonFavoriteByIdAllFalse = {
+  25: false,
+  4: false,
+  10: false,
+  11: false,
 }
 
 const isPokemonFavoriteById = {
@@ -137,88 +143,65 @@ const pokemons = [
   },
 ]
 
+const pokemonsOneElement = [
+  {
+    id: 99,
+    name: 'Golem',
+    type: 'Terra',
+    averageWeight: {
+      value: '6.0',
+      measurementUnit: 'kg',
+    },
+    image: 'https://cdn.bulbagarden.net/upload/b/b2/Spr_5b_025_m.png',
+    moreInfo: 'https://bulbapedia.bulbagarden.net/wiki/Pikachu_(Pok%C3%A9mon)',
+    foundAt: [
+      {
+        location: 'Kanto Viridian Forest',
+        map: 'https://cdn.bulbagarden.net/upload/0/08/Kanto_Route_2_Map.png',
+      },
+      {
+        location: 'Kanto Power Plant',
+        map: 'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
+      },
+    ],
+    summary: 'This intelligent Pokémon roasts hard berries with electricity to make them tender enough to eat.',
+  },
+]
 
+describe('22- A página de pokémon favoritos deve exibir os pokémons favoritos', () => {
+  const test22 = (arrayPokemon, arrayFavorite) => {
 
-test('renders a reading with the text `Pokédex`', () => {
-  const { getByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const heading = getByText(/Pokédex/i);
-  expect(heading).toBeInTheDocument();
-});
+    const favoritePokemons = arrayPokemon.filter(({ id }) => arrayFavorite[id]);
+    const { getAllByText, queryByText, getByText} = render(
+      <MemoryRouter initialEntries={['/']}>
+        <FavoritePokemons pokemons={favoritePokemons} />
+      </MemoryRouter>,
+    );
+    if (favoritePokemons.length !== 0) {
+      const listDetails = getAllByText('More details')
+      expect(listDetails.length).toBe(favoritePokemons.length);
+      favoritePokemons.forEach(pokemon => {
+      const name = getByText(pokemon.name)
+      expect(name).toBeInTheDocument();
+      })
+    } else {
+      expect(queryByText('More details')).not.toBeInTheDocument();
+    }
+  }
 
-test('shows the Pokedéx when the route is `/`', () => {
-  const { getByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <App />
-    </MemoryRouter>,
-  );
-  expect(getByText('Encountered pokémons')).toBeInTheDocument();
-});
-
-test('No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
-  const { getByText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <App />
-    </MemoryRouter>,
-  );
-  expect(getByText('Home')).toBeInTheDocument();
-  expect(getByText('Home').href).toBe('http://localhost/' || '/');
-  expect(getByText('About')).toBeInTheDocument();
-  expect(getByText('About').href).toBe('http://localhost/about' || '/about');
-  expect(getByText('Favorite Pokémons')).toBeInTheDocument();
-  expect(getByText('Favorite Pokémons').href).toBe('http://localhost/favorites' || '/favorites');
-});
-
-describe('Rotas', () => {
-  afterEach(cleanup);
-
-  test('18- Navegação click no botao HOME ', () => {
-    const { getByText } = renderWithRouter(<App />);
-
-    fireEvent.click(getByText('Home'));
-
-    const titleHome = getByText('Encountered pokémons');
-    expect(titleHome).toBeInTheDocument();
+  test('22-1.1 - testando com array padrao', () => {
+    test22(pokemons, isPokemonFavoriteById);
   });
 
-  test('19- Navegação click no botao Pokédex', () => {
-    const { getByText } = renderWithRouter(<App />);
-
-    fireEvent.click(getByText('About'));
-
-    const about = getByText('About Pokédex');
-    expect(about).toBeInTheDocument();
+  test('22-1.2 - testando com array padrao todos favoritados', () => {
+    test22(pokemons, isPokemonFavoriteByIdAllTrue);
   });
 
-  test('20- Navegação click no botao Favoritos', () => {
-    const { getByText } = renderWithRouter(<App />);
-
-    fireEvent.click(getByText('Favorite Pokémons'));
-
-    const favorite = getByText('No favorite pokemon found');
-    expect(favorite).toBeInTheDocument();
+  test('22-1.3 - testando com array padrao sem favoritos', () => {
+    test22(pokemons, isPokemonFavoriteByIdAllFalse);
   });
 
-  test('Testando função update Favoritos', () => {
-    const { getByText, getByLabelText, getAllByRole, queryByText } = renderWithRouter(<App />);
-
-    fireEvent.click(getByText('More details'));
-    expect(getByText('Pikachu Details')).toBeInTheDocument();
-    expect(getByLabelText('Pokémon favoritado?').checked).toBe(false)
-    fireEvent.click(getByLabelText('Pokémon favoritado?'));
-    expect(getByLabelText('Pokémon favoritado?').checked).toBe(true)
-    fireEvent.click(getAllByRole('link')[2]);
-    expect(getByText('Pikachu')).toBeInTheDocument();
-
-    fireEvent.click(getByText('More details'));
-    expect(getByText('Pikachu Details')).toBeInTheDocument();
-    expect(getByLabelText('Pokémon favoritado?').checked).toBe(true)
-    fireEvent.click(getByLabelText('Pokémon favoritado?'));
-    expect(getByLabelText('Pokémon favoritado?').checked).toBe(false)
-    fireEvent.click(getAllByRole('link')[2]);
-    expect(queryByText('Pikachu')).not.toBeInTheDocument();
+  test('22-2 - testando com array com um elemento', () => {
+    test22(pokemonsOneElement, favoriteOneElement);
   });
 });
