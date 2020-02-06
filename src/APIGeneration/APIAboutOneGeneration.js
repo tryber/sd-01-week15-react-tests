@@ -16,7 +16,6 @@ class APIAboutOneGeneration extends Component {
     const POKE_API = `https://pokeapi.co/api/v2/generation/${this.props.location.pathname.substr(-1)}`;
     const response = await fetch(POKE_API);
     const data = await response.json();
-    console.log(data);
     this.setState({
       listSpecies: data.pokemon_species,
       nameGeneration: data.name,
@@ -42,5 +41,5 @@ class APIAboutOneGeneration extends Component {
 export default APIAboutOneGeneration;
 
 APIAboutOneGeneration.propTypes = {
-  location: PropTypes.string.isRequired,
+  location: PropTypes.objectOf(PropTypes.string).isRequired,
 };
