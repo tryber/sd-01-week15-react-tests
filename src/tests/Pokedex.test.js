@@ -3,7 +3,7 @@ import { Router } from 'react-router-dom';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import Pokedex from '../components/Pokedex';
-import { pokemons, isPokemonFavoriteById } from './dataMock';
+import { pokemons, isPokemonFavoriteById, isNotPokemonFavoriteById } from './dataMock';
 
 function renderWithRouter(
   ui,

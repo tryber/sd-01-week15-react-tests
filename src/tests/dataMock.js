@@ -87,6 +87,24 @@ export const pokemons = [
     summary: 'For protection, it releases a horrible stench from the antennae on its head to drive away enemies.',
   },
   {
+    id: 23,
+    name: 'Ekans',
+    type: 'Poison',
+    averageWeight: {
+      value: '6.9',
+      measurementUnit: 'kg',
+    },
+    image: 'https://cdn.bulbagarden.net/upload/1/18/Spr_5b_023.png',
+    moreInfo: 'https://bulbapedia.bulbagarden.net/wiki/Ekans_(Pok%C3%A9mon)',
+    foundAt: [
+      {
+        location: 'Goldenrod Game Corner',
+        map: 'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
+      },
+    ],
+    summary: 'It can freely detach its jaw to swallow large prey whole. It can become too heavy to move, however.',
+  },
+  {
     id: 65,
     name: 'Alakazam',
     type: 'Psychic',
@@ -150,6 +168,7 @@ export const isPokemonFavoriteById = {
   25: true,
   4: true,
   10: false,
+  23: true,
   65: false,
   151: true,
   78: false,
@@ -159,6 +178,7 @@ export const isNotPokemonFavoriteById = {
   25: false,
   4: false,
   10: false,
+  23: false,
   65: false,
   151: false,
   78: false,

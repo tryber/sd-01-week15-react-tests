@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 
 import { pokemons, isPokemonFavoriteById, isNotPokemonFavoriteById } from './dataMock';
 import PokemonDetails from '../components/PokemonDetails';
@@ -157,29 +157,36 @@ describe('14 The details page show locations maps', () => {
   });
 });
 
-// describe('15 page details allows favor a pokemon', () => {
-//   afterEach(cleanup);
+describe('15 page details allows favor a pokemon', () => {
+  afterEach(cleanup);
 
-//   const favorPokemon = (pokemon) => {
-//     const match = {
-//       params: {
-//         id: pokemon.id,
-//       },
-//     };
+  const favorPokemon = (pokemon) => {
+    const match = {
+      params: {
+        id: pokemon.id,
+      },
+    };
 
-//     const { getByText, getByLabelText } = renderWithRouter(
-//       <PokemonDetails
-//         pokemons={pokemons}
-//         onUpdateFavoritePokemons={func}
-//         isPokemonFavoriteById={isPokemonFavoriteById}
-//         match={match}
-//       />,
-//     );
-//   };
+    const { getByLabelText, debug } = renderWithRouter(
+      <PokemonDetails
+        pokemons={pokemons}
+        onUpdateFavoritePokemons={func}
+        isPokemonFavoriteById={isNotPokemonFavoriteById}
+        match={match}
+      />,
+    );
 
-//   pokemons.forEach((pokemon) => {
-//     test('15.1 The page must a checkbox and a label', () => {
-//       favorPokemon(pokemon);
-//     });
-//   });
-// });
+    const label = getByLabelText(/Pokémon favoritado?/i);
+    expect(label).toBeInTheDocument();
+    // expect(label.checked).toBe(false);
+    // fireEvent.click(label);
+    // expect(label.checked).toBe(true);
+
+  };
+
+  pokemons.forEach((pokemon) => {
+    test('15.1 The page must a checkbox and a label', () => {
+      favorPokemon(pokemon);
+    });
+  });
+});

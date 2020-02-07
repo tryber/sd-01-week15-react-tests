@@ -1,11 +1,10 @@
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup, fireEvent, getAllByAltText } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import Pokedex from './components/Pokedex';
 import App from './App';
 import APIAboutOneGeneration from './APIGeneration/APIAboutOneGeneration';
-import { pokemons, isPokemonFavoriteById, APILocation } from './tests/dataMock';
+import { pokemons, isPokemonFavoriteById, APILocation, isNotPokemonFavoriteById } from './tests/dataMock';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
@@ -84,24 +83,26 @@ describe('3 Next pokemon', () => {
   });
 });
 
-// describe('4 The Pokédexx must have filter buttons', () => {
-//   afterEach(cleanup);
-//   const { getByAllText, debug, getAllByRole, getByRole } = render(
-//     <MemoryRouter initialEntries={['/']}>
-//       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-//     </MemoryRouter>,
-//   );
-// debug();
+describe('4 The Pokédexx must have filter buttons', () => {
+  afterEach(cleanup);
 
-//   test('4.1 ThePokedex filter the pokemons and show them', () => {
-//     // let buttonAll = getByAllText(/All/i);
-//     const role = getAllByRole('button');
-//     console.log(role)
-//     const pokemonType = pokemons.map(({ type }) => type);
-//     expect(pokemonType.length).toBe(6);
-//     expect(pokemonType).toBe(['pikachu']);
-//   });
-// });
+  test('4.1 ThePokedex filter the pokemons and show them', () => {
+    const { getByText, queryAllByText } = renderWithRouter(<App />);
+
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    expect(nextPokemon).toBeInTheDocument();
+
+    pokemons.forEach((pokemon) => {
+      const buttonType = queryAllByText(pokemon.type)[1] || getByText(pokemon.type);
+      fireEvent.click(buttonType);
+      fireEvent.click(nextPokemon);
+      fireEvent.click(nextPokemon);
+      const samePokemon = queryAllByText(pokemon.type);
+      expect(samePokemon.length).toBe(2);
+      expect(pokemon.type).toBe(buttonType.innerHTML);
+    });
+  });
+});
 
 describe('5 reset filter', () => {
   afterEach(cleanup);
@@ -147,36 +148,75 @@ describe('5 reset filter', () => {
   });
 });
 
-// describe('6 Dinamic filter', () => {
-//   afterEach(cleanup);
-//   const { getAllByText, getByText, queryAllByText, debug } = render(
-//     <MemoryRouter initialEntries={['/']}>
-//       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-//     </MemoryRouter>,
-//   );
+describe('6 Dinamic filter', () => {
+  afterEach(cleanup);
 
-//   test('the pokedex genre a dinamic filter to each type pokemon', () => {
-//     pokemons.forEach(({ type }) => {
-//       const buttonType = queryAllByText(type)[1] || getByText(type);
-//       expect(buttonType).toBeInTheDocument();
-//       expect(getByText(/All/i)).toBeInTheDocument();
-//     });
-//   });
-// });
+  test('the pokedex genre a dinamic filter to each type pokemon', () => {
+    const { getByText, queryAllByText } = renderWithRouter(<App />);
 
-// describe('7 disable the button', () => {
-//   afterEach(cleanup);
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    expect(nextPokemon).toBeInTheDocument();
 
-//   const { getAllByText, getByText, debug } = render(
-//     <MemoryRouter initialEntries={['/']}>
-//       <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
-//     </MemoryRouter>,
-//   );
+    pokemons.forEach((pokemon) => {
+      const pokemonType = queryAllByText(`${pokemon.type}`);
+      expect(pokemonType.length).toBe(2);
+      expect(pokemonType[0].tagName).toBe('P');
+      expect(pokemonType[1].tagName).toBe('BUTTON');
 
-//   test('7.1 If the pokemons list has one pokemon, the button (proximo pokemon) must be disable', () => {
+      const all = getByText(/All/i);
+      expect(all.tagName).toBe('BUTTON');
 
-//   });
-// });
+      fireEvent.click(nextPokemon);
+    });
+  });
+});
+
+describe('7 disable the button', () => {
+  afterEach(cleanup);
+
+  test('7.1 disable pokemon with one type', () => {
+    const { getByText, queryAllByText } = renderWithRouter(<App />);
+
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    expect(nextPokemon).toBeInTheDocument();
+
+    pokemons.forEach((pokemon) => {
+      const buttonType = queryAllByText(pokemon.type)[1] || getByText(pokemon.type);
+      fireEvent.click(buttonType);
+      if (pokemon.type === 'Fire' || pokemon.type === 'Psychic') {
+        expect(nextPokemon).toBeEnabled();
+      } else {
+        expect(nextPokemon).toBeDisabled();
+      }
+    });
+  });
+});
+
+describe('8 The pokedéx show the pokemon', () => {
+  afterEach(cleanup);
+
+  test('8.1 The show name, type, weight and image', () => {
+    const { getByText, getByAltText, getAllByText } = renderWithRouter(<App />);
+
+    const nextPokemon = getByText(/More details/i);
+    expect(nextPokemon).toBeInTheDocument();
+
+    pokemons.forEach((pokemon) => {
+      expect(getByText(`${pokemon.name}`)).toBeInTheDocument();
+      const pokemonType = getAllByText(`${pokemon.type}`);
+      expect(pokemonType.length).toBe(2);
+
+      const averageWeight = getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`);
+      expect(averageWeight).toBeInTheDocument();
+
+      const imageAlt = getByAltText(`${pokemon.name} sprite`);
+      expect(imageAlt).toBeInTheDocument();
+      expect(imageAlt.src).toBe(pokemon.image);
+
+      fireEvent.click(getByText(/Próximo pokémon/i));
+    });
+  });
+});
 
 describe('9 navigation links, page of details', () => {
   afterEach(cleanup);
@@ -308,3 +348,32 @@ describe('28 & 29 Generations', () => {
     // expect(getByText(/generation-i/i)).toBeInTheDocument();
   });
 });
+
+// describe('15 page details allows favor a pokemon', () => {
+//   afterEach(cleanup);
+
+//   const favorPokemon = (pokemon) => {
+//     const { getByText, getByLabelText, debug } = renderWithRouter(
+//       <App
+//         pokemons={pokemons}
+//         isPokemonFavoriteById={isNotPokemonFavoriteById}
+//       />,
+//     );
+//     debug()
+
+//     fireEvent.click(getByText(/More details/i));
+//     debug()
+
+//     const label = getByLabelText(/Pokémon favoritado?/i);
+//     expect(label).toBeInTheDocument();
+//     expect(label.checked).toBe(true);
+//     fireEvent.click(label);
+//     expect(label.checked).toBe(true);
+//   };
+
+//   pokemons.forEach((pokemon) => {
+//     test('15.1 The page must a checkbox and a label', () => {
+//       favorPokemon(pokemon);
+//     });
+//   });
+// });
