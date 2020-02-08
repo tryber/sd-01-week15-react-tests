@@ -1,14 +1,17 @@
 import React from 'react';
-import { Router, MemoryRouter } from 'react-router-dom';
+import { Router, MemoryRouter, BrowserRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, fireEvent, cleanup, waitForElement } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import PropTypes from 'prop-types';
 import App from './App';
+
+afterEach(cleanup);
 
 jest.mock('react-router-dom', () => {
   const originalModule = jest.requireActual('react-router-dom');
   return {
     ...originalModule,
-    BrowserRouter: ({ children }) => (<div> {children} </div>),
+    BrowserRouter: ({ children }) => (<div>{children}</div>),
   };
 });
 
@@ -45,16 +48,6 @@ const pokemon = {
   summary: 'This intelligent Pokémon roasts hard berries with electricity to make them tender enough to eat.',
 };
 
-const isFavorite = true;
-
-function setIsPokemonFavoriteById() {
-  const favoritePokemonIds = readFavoritePokemonIds();
-  const isPokemonFavorite = pokemon.reduce((acc, poke) => {
-    acc[poke.id] = favoritePokemonIds.includes(poke.id);
-    return acc;
-  }, {});
-  return isPokemonFavorite;
-}
 describe('App component test suite', () => {
   test('renders a reading with the text `Pokédex`', () => {
     const { getByText } = render(
@@ -123,7 +116,7 @@ describe('App component test suite', () => {
       pokeList.push(newPoke);
     }
 
-    expect(oldPoke).toBe(newPoke);
+    return expect(oldPoke).toBe(newPoke);
   });
 
   test('check if filter works', () => {
@@ -217,7 +210,7 @@ describe('App component test suite', () => {
   });
 
   it('5 - check if "All" filter is default', () => {
-    const { getByText, queryByText } = render(
+    const { queryByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
@@ -237,7 +230,7 @@ describe('App component test suite', () => {
   });
 
   it('7 - next pokemon button should be disable if filtered pokes equals 1', () => {
-    const { getByText, queryByText, container } = render(
+    const { getByText, queryByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
@@ -265,7 +258,7 @@ describe('App component test suite', () => {
 
     const buttonNextPoke = queryByText(/Próximo pokémon/i);
     const lonePokes = pokeList.filter(([, poke]) => {
-      const oneOfAKindPoke = pokeList.filter((pokemon) => pokemon.includes(poke));
+      const oneOfAKindPoke = pokeList.filter((thisPokemon) => thisPokemon.includes(poke));
       if (oneOfAKindPoke.length === 1) return oneOfAKindPoke;
       return undefined;
     });
@@ -311,7 +304,7 @@ describe('App component test suite', () => {
   });
 
   it('12 - details page has not another detail link', () => {
-    const { getByText, container } = render(
+    const { getByText } = render(
       <MemoryRouter>
         <App />
       </MemoryRouter>,
@@ -322,7 +315,7 @@ describe('App component test suite', () => {
   });
 
   it('13 - details page contains summary paragraph', () => {
-    const { getByText, container } = render(
+    const { getByText } = render(
       <MemoryRouter>
         <App />
       </MemoryRouter>,
@@ -361,7 +354,7 @@ describe('App component test suite', () => {
   });
 
   it('15 - check if favorite button is correctly labeled and works appropriately', () => {
-    const { getByText, getByLabelText, getByAltText, container } = render(
+    const { getByText, getByLabelText } = render(
       <MemoryRouter>
         <App />
       </MemoryRouter>,
@@ -372,7 +365,6 @@ describe('App component test suite', () => {
       selector: 'input',
     });
     if (favoriteLabel.checked === false) {
-      console.log(favoriteLabel.checked);
       fireEvent.click(favoriteLabel);
     }
     expect(localStorage.getItem('favoritePokemonIds')).toBe(`[${pokemon.id}]`);
@@ -390,7 +382,6 @@ describe('App component test suite', () => {
     );
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
-    const container = document.body;
     const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
       selector: 'input',
     });
@@ -423,16 +414,16 @@ describe('App component test suite', () => {
     fireEvent.click(homeLink);
     expect(window.location.pathname).toBe('/');
   });
-  it('19 - check if linking is working for About', async () => {
+  it('19 - check if linking is working for About', () => {
     const { history, getByText } = renderWithRouter(
       <App />,
     );
     const aboutLink = getByText(/About/i);
     fireEvent.click(aboutLink);
     expect(history.location.pathname).toBe('/about');
-    console.log(history.location.pathname);
   });
-  it('20 - check if linking is working for Favorite Pokemons', async () => {
+
+  it('20 - check if linking is working for Favorite Pokemons', () => {
     const { history, getByText } = renderWithRouter(
       <App />,
     );
@@ -440,4 +431,23 @@ describe('App component test suite', () => {
     fireEvent.click(favoritesLink);
     expect(history.location.pathname).toBe('/favorites');
   });
+
+  it('23 - if the user types in an unknown url, page not found is displayed', () => {
+    const { getByText, container } = render(
+      <MemoryRouter initialEntries={['/blauealfb']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    const h2Header = getByText(/page requested not found/ig);
+    expect(h2Header.tagName).toBe('H2');
+    expect(h2Header.innerHTML).toBe('Page requested not found<span role="img" aria-label="Crying emoji"> 😭 </span>');
+
+    const tlImage = container.querySelector('img');
+    expect(tlImage.src).toBe('https://testing-library.com/');
+  });
 });
+
+BrowserRouter.propTypes = {
+  children: PropTypes.func,
+};
