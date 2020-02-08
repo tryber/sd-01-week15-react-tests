@@ -24,8 +24,7 @@ const pokemons = [
       },
       {
         location: 'Kanto Power Plant',
-        map:
-          'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/b/bd/Kanto_Celadon_City_Map.png',
       },
     ],
     summary:
@@ -40,8 +39,7 @@ const pokemons = [
       measurementUnit: 'kg',
     },
     image: 'https://cdn.bulbagarden.net/upload/0/0a/Spr_5b_004.png',
-    moreInfo:
-      'https://bulbapedia.bulbagarden.net/wiki/Charmander_(Pok%C3%A9mon)',
+    moreInfo: 'https://bulbapedia.bulbagarden.net/wiki/Charmander_(Pok%C3%A9mon)',
     foundAt: [
       {
         location: 'Alola Route 3',
@@ -57,8 +55,7 @@ const pokemons = [
       },
       {
         location: 'Kanto Rock Tunnel',
-        map:
-          'https://cdn.bulbagarden.net/upload/6/6f/Kanto_Rock_Tunnel_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/6/6f/Kanto_Rock_Tunnel_Map.png',
       },
     ],
     summary:
@@ -85,13 +82,11 @@ const pokemons = [
       },
       {
         location: 'Ilex Forest',
-        map:
-          'https://cdn.bulbagarden.net/upload/a/ae/Johto_Ilex_Forest_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/a/ae/Johto_Ilex_Forest_Map.png',
       },
       {
         location: 'Johto National Park',
-        map:
-          'https://cdn.bulbagarden.net/upload/4/4e/Johto_National_Park_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/4/4e/Johto_National_Park_Map.png',
       },
     ],
     summary:
@@ -110,8 +105,7 @@ const pokemons = [
     foundAt: [
       {
         location: 'Goldenrod Game Corner',
-        map:
-          'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
+        map: 'https://cdn.bulbagarden.net/upload/e/ec/Johto_Goldenrod_City_Map.png',
       },
     ],
     summary:
@@ -127,10 +121,7 @@ const isPokemonFavoriteById = {
 
 function renderWithRouter(
   ui,
-  {
-    route = '/',
-    history = createMemoryHistory({ initialEntries: [route] }),
-  } = {},
+  { route = '/', history = createMemoryHistory({ initialEntries: [route] }) } = {},
 ) {
   return {
     ...render(<Router history={history}>{ui}</Router>),
@@ -142,18 +133,12 @@ describe('Exigência → 10', () => {
   test(`Ao clicar no link de navegação do pokémon,
    a aplicação deve ser redirecionada para a página de detalhes de pokémon`, () => {
     const { history, getByRole } = renderWithRouter(
-      <Pokedex
-        pokemons={pokemons}
-        isPokemonFavoriteById={isPokemonFavoriteById}
-      />,
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
     );
-    const btnDetails = getByRole('link');
-    const linkDetails = btnDetails.href;
-    const local = history.location.pathname;
-    expect(btnDetails).toBeInTheDocument();
-    expect(local).toBe('/');
-    fireEvent.click(btnDetails);
-    expect(`http://localhost${history.location.pathname}`).toBe(linkDetails);
+    expect(history.location.pathname).toBe('/');
+    const link = getByRole('link');
+    fireEvent.click(link);
+    expect(`http://localhost/pokemons${history.location.pathname}`).toBe(link.href);
     afterEach(cleanup);
   });
 });
