@@ -10,11 +10,13 @@ describe('Exigência → 17', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(getByText('Home')).toBeInTheDocument();
-    expect(getByText('Home').href).toBe('http://localhost/' || '/');
-    expect(getByText('About')).toBeInTheDocument();
-    expect(getByText('About').href).toBe('http://localhost/about' || '/about');
-    expect(getByText('Favorite Pokémons')).toBeInTheDocument();
-    expect(getByText('Favorite Pokémons').href).toBe('http://localhost/favorites' || '/favorites');
+
+    const home = getByText('Home');
+    const about = getByText('About');
+    const favorite = getByText('Favorite Pokémons');
+    expect(home && about && favorite).toBeInTheDocument();
+    expect(home.href).toBe('http://localhost/');
+    expect(about.href).toBe('http://localhost/about');
+    expect(favorite.href).toBe('http://localhost/favorites');
   });
 });
