@@ -140,9 +140,9 @@ describe('Exigência → 15 ', () => {
     );
     const checkboxBtn = getByLabelText(/Pokémon favoritado?/i);
     expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
-    const isExtact = isPokemonFavoriteById[pokemon.id];
+    const isExact = isPokemonFavoriteById[pokemon.id];
     fireEvent.click(checkboxBtn);
-    expect(isExtact).not.toBe(isPokemonFavoriteById[pokemon.id]);
+    expect(isExact).not.toBe(isPokemonFavoriteById[pokemon.id]);
   }
 
   pokemons.forEach((pokemon) => test(`- A página de detalhes deve permitir 
