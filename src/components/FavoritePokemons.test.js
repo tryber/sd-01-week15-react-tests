@@ -33,7 +33,6 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
 
   const isPokemonFavoriteById = () => setIsPokemonFavoriteById();
 
-
   const {
     getByText,
     getByLabelText,
@@ -42,52 +41,69 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
   } = renderWithRouter(
     <App />,
   );
-  const nextPoke = () => fireEvent.click(getByText('Próximo pokémon'));
+  const nextPokeButton = getByText(/próximo pokémon/i);
+  const nextPoke = () => fireEvent.click(nextPokeButton);
+
+  const homeButton = getByText(/home/i);
+
   const favoriteThisPokemon = () => {
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
     const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
       selector: 'input',
     });
+
     if (favoriteLabel.checked === false) {
       fireEvent.click(favoriteLabel);
     }
-    fireEvent.click(getByText(/home/i));
+
+    fireEvent.click(homeButton);
   };
+
   const toFavoritePokemons = () => {
-    expect(getByText(/pikachu/i)).toBeInTheDocument();
+    const pikachu = getByText(/pikachu/i);
+    expect(pikachu).toBeInTheDocument();
     favoriteThisPokemon();
     nextPoke();
-    expect(getByText(/charmander/i)).toBeInTheDocument();
+    const charmander = getByText(/charmander/i);
+    expect(charmander).toBeInTheDocument();
     favoriteThisPokemon();
   };
+
   toFavoritePokemons();
 
   it('the page must only exhibit favorited pokemons', () => {
     fireEvent.click(getByText(/favorite Pokémons/i));
+
     const isPikachuFavorite = getByAltText(/pikachu is marked as favorite/i);
     const isCharmanderFavorite = getByAltText(/charmander is marked as favorite/i);
+
     expect(isPikachuFavorite).toBeInTheDocument();
     expect(isCharmanderFavorite).toBeInTheDocument();
+
     const allFavoritedPokes = container.querySelectorAll('.favorite-icon');
+
     expect(allFavoritedPokes.length).toBe(2);
     expect(allFavoritedPokes[0].alt).toBe(isPikachuFavorite.alt);
     expect(allFavoritedPokes[1].alt).toBe(isCharmanderFavorite.alt);
   });
 
   it('if no pokemon found, expected message returns', () => {
-    const { getByText, history } = renderWithRouter(
-      <App />
+    const { getByText } = renderWithRouter(
+      <App />,
     );
     const unfavoriteThisPokemon = () => {
       const url = getByText(/^More details$/g);
       fireEvent.click(url);
+
       const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
         selector: 'input',
       });
+
       if (favoriteLabel.checked === true) {
         fireEvent.click(favoriteLabel);
       }
+
       fireEvent.click(getByText(/home/i));
     };
 
@@ -98,6 +114,6 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
     const favPokeList = isPokemonFavoriteById();
     Object.keys(favPokeList).forEach((key) => expect(favPokeList[key]).toBeFalsy());
     fireEvent.click(getByText(/favorite pokémons/i));
-    expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument;
+    expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument();
   });
 });

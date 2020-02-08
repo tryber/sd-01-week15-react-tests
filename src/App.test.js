@@ -1,8 +1,7 @@
 import React from 'react';
-import { Router, MemoryRouter, BrowserRouter } from 'react-router-dom';
+import { Router, MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { render, fireEvent, cleanup } from '@testing-library/react';
-import PropTypes from 'prop-types';
 import App from './App';
 
 afterEach(cleanup);
@@ -49,7 +48,7 @@ const pokemon = {
 };
 
 describe('App component test suite', () => {
-  test('renders a reading with the text `Pokédex`', () => {
+  it('renders a reading with the text `Pokédex`', () => {
     const { getByText } = render(
       <MemoryRouter>
         <App />
@@ -59,7 +58,7 @@ describe('App component test suite', () => {
     expect(heading).toBeInTheDocument();
   });
 
-  test('shows the Pokedéx when the route is `/`', () => {
+  it('shows the Pokedéx when the route is `/`', () => {
     const { getByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
@@ -69,7 +68,7 @@ describe('App component test suite', () => {
     expect(getByText('Encountered pokémons')).toBeInTheDocument();
   });
 
-  test('ensures only one pokemón is rendered', () => {
+  it('ensures only one pokemón is rendered', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
@@ -79,7 +78,7 @@ describe('App component test suite', () => {
     expect(query.length).toBe(1);
   });
 
-  test('test if by clicking next button, it displays the next pokemon in the list', () => {
+  it('test if by clicking next button, it displays the next pokemon in the list', () => {
     const { queryByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
@@ -93,7 +92,7 @@ describe('App component test suite', () => {
     expect(oldPoke).not.toBe(newPoke);
   });
 
-  test('check if the pokedex returns to the first pokemon when button is pressed at the last one', () => {
+  it('check if the pokedex returns to the first pokemon when button is pressed at the last one', () => {
     const { queryByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
@@ -119,7 +118,7 @@ describe('App component test suite', () => {
     return expect(oldPoke).toBe(newPoke);
   });
 
-  test('check if filter works', () => {
+  it('check if filter works', () => {
     const { queryByText, container } = render(
       <MemoryRouter initialEntries={['/']}>
         <App />
@@ -143,6 +142,7 @@ describe('App component test suite', () => {
       'Psychic',
       'Normal',
       'Dragon'];
+
     const categoriesButtons = Array(buttons).filter((button) => (
       categories.map((category) => (button.innerHTML === category))));
 
@@ -178,12 +178,15 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
     const buttonNextPoke = queryByText(/Próximo pokémon/i);
+
     const goToNextPoke = () => {
       if (buttonNextPoke.disabled) return undefined;
       return fireEvent.click(buttonNextPoke);
     };
+
     const buttons = container.querySelectorAll('.button-text.filter-button');
     const categories = ['Electric',
       'Fire',
@@ -192,6 +195,7 @@ describe('App component test suite', () => {
       'Psychic',
       'Normal',
       'Dragon'];
+
     const categoriesButtons = Array(buttons).filter((button) => (
       categories.map((category) => (button.innerHTML === category))));
 
@@ -199,6 +203,7 @@ describe('App component test suite', () => {
 
     const buttonAll = getByText(/All/i);
     const clickButtonAll = () => fireEvent.click(buttonAll);
+
     const testFilterAll = () => {
       const defaultCategory = actualCategory();
       clickButtonBug();
@@ -206,6 +211,7 @@ describe('App component test suite', () => {
       while (defaultCategory === actualCategory()) goToNextPoke();
       expect(defaultCategory).not.toBe(actualCategory());
     };
+
     testFilterAll();
   });
 
@@ -215,17 +221,21 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
     const buttonNextPoke = queryByText(/Próximo pokémon/i);
+
     const goToNextPoke = () => {
       if (buttonNextPoke.disabled) return undefined;
       return fireEvent.click(buttonNextPoke);
     };
+
     const testFilterAll = () => {
       const defaultCategory = actualCategory();
       while (defaultCategory === actualCategory()) goToNextPoke();
       expect(defaultCategory).not.toBe(actualCategory());
     };
+
     testFilterAll();
   });
 
@@ -239,6 +249,7 @@ describe('App component test suite', () => {
     const actualCategory = () => (queryByText(/Average weight/i).previousSibling.innerHTML);
     const oldPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
     fireEvent.click(queryByText('Próximo pokémon'));
+
     let newPoke = queryByText(/Average weight/i).previousSibling.previousSibling.innerHTML;
     const pokeList = [];
 
@@ -254,9 +265,11 @@ describe('App component test suite', () => {
       }
       return pokeList;
     };
+
     getPokeList();
 
     const buttonNextPoke = queryByText(/Próximo pokémon/i);
+
     const lonePokes = pokeList.filter(([, poke]) => {
       const oneOfAKindPoke = pokeList.filter((thisPokemon) => thisPokemon.includes(poke));
       if (oneOfAKindPoke.length === 1) return oneOfAKindPoke;
@@ -288,6 +301,7 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const url = getByText('More details');
     fireEvent.click(url);
 
@@ -296,6 +310,7 @@ describe('App component test suite', () => {
     const avgWeight = getByText(/Average weight/i);
     const pokeImg = container.querySelector('img');
     const pokeType = getByText(/^Electric$/g);
+
     expect(pokeType.innerHTML).toMatch(pokemon.type);
     expect(title.innerHTML).toBe(`${pokemon.name} Details`);
     expect(avgWeight.innerHTML).toEqual(`Average weight: ${value} ${measurementUnit}`);
@@ -309,6 +324,7 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
     expect(() => fireEvent.click(getByText(/^More details$/g))).toThrow();
@@ -320,11 +336,14 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
+
     const summary = getByText(/^Summary$/g);
     expect(summary.innerHTML).toContain('Summary');
     expect(summary.tagName).toBe('H2');
+
     const descriptionP = summary.nextElementSibling;
     expect(descriptionP).not.toBeUndefined();
     expect(descriptionP.innerHTML).toContain('Pokémon');
@@ -336,14 +355,18 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
+
     const summary = getByText(/Game Locations of/g);
     expect(summary.innerHTML).toContain(`Game Locations of ${pokemon.name}`);
     expect(summary.tagName).toBe('H2');
+
     const locationDetails = summary.nextElementSibling;
     expect(locationDetails.tagName).toBe('DIV');
     expect(locationDetails.className).toBe('pokemon-habitat');
+
     const mapImage = container.querySelectorAll('img');
     expect(mapImage[1]).toHaveProperty('src', pokemon.foundAt[0].map);
     expect(mapImage[2]).toHaveProperty('src', pokemon.foundAt[1].map);
@@ -359,18 +382,24 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
+
     const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
       selector: 'input',
     });
+
     if (favoriteLabel.checked === false) {
       fireEvent.click(favoriteLabel);
     }
+
     expect(localStorage.getItem('favoritePokemonIds')).toBe(`[${pokemon.id}]`);
+
     if (favoriteLabel.checked === true) {
       fireEvent.click(favoriteLabel);
     }
+
     expect(localStorage.getItem('favoritePokemonIds')).not.toBe(`[${pokemon.id}]`);
   });
 
@@ -380,32 +409,40 @@ describe('App component test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const url = getByText(/^More details$/g);
     fireEvent.click(url);
+
     const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
       selector: 'input',
     });
+
     if (favoriteLabel.checked === false) {
       fireEvent.click(favoriteLabel);
     }
     const markedFavorite = getByAltText(/.* is marked as favorite/i, {
       selector: 'img',
     });
+
     expect(markedFavorite).toHaveProperty('src', 'http://localhost/star-icon.svg');
   });
+
   it('17 - check nav bar links', () => {
     const { getByText } = render(
       <MemoryRouter>
         <App />
       </MemoryRouter>,
     );
+
     const homeLink = getByText(/Home/i);
     const aboutLink = getByText(/About/i);
     const favoritesLink = getByText(/Favorite Pokémons/i);
+
     expect(homeLink).toHaveProperty('href', 'http://localhost/');
     expect(aboutLink).toHaveProperty('href', 'http://localhost/about');
     expect(favoritesLink).toHaveProperty('href', 'http://localhost/favorites');
   });
+
   it('18 - check if linking is working for Home', () => {
     const { getByText } = renderWithRouter(
       <App />,
@@ -414,6 +451,7 @@ describe('App component test suite', () => {
     fireEvent.click(homeLink);
     expect(window.location.pathname).toBe('/');
   });
+
   it('19 - check if linking is working for About', () => {
     const { history, getByText } = renderWithRouter(
       <App />,
@@ -427,6 +465,7 @@ describe('App component test suite', () => {
     const { history, getByText } = renderWithRouter(
       <App />,
     );
+
     const favoritesLink = getByText(/Favorite Pokémons/i);
     fireEvent.click(favoritesLink);
     expect(history.location.pathname).toBe('/favorites');
@@ -446,8 +485,50 @@ describe('App component test suite', () => {
     const tlImage = container.querySelector('img');
     expect(tlImage.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
   });
-});
 
-BrowserRouter.propTypes = {
-  children: PropTypes.func,
-};
+  it('25.1 - shows the Locations page when the route is `/locations`', () => {
+    const { getAllByText } = render(
+      <MemoryRouter initialEntries={['/locations']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(getAllByText(/locations/i)[1]).toBeInTheDocument();
+    expect(getAllByText(/locations/i)[1].tagName).toBe('H1');
+  });
+
+  it('26 - link contains "location" text and takes user to locations page', () => {
+    const { getByText, history } = renderWithRouter(
+      <App />,
+    );
+
+    const locationsLink = getByText(/location/i);
+    expect(locationsLink.tagName).toBe('A');
+
+    fireEvent.click(locationsLink);
+    expect(history.location.pathname).toBe('/locations');
+  });
+
+  it('28.1 - shows the Generations page when the route is `/locations`', () => {
+    const { getAllByText } = render(
+      <MemoryRouter initialEntries={['/generations']}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(getAllByText(/generations/i)[1]).toBeInTheDocument();
+    expect(getAllByText(/generations/i)[1].tagName).toBe('H1');
+  });
+
+  it('29 - link contains "generation" text and takes user to locations page', () => {
+    const { getByText, history } = renderWithRouter(
+      <App />,
+    );
+
+    const generationsLink = getByText(/generations/i);
+    expect(generationsLink.tagName).toBe('A');
+
+    fireEvent.click(generationsLink);
+    expect(history.location.pathname).toBe('/generations/');
+  });
+});

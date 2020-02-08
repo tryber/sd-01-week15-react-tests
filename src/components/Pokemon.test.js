@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, getByText, fireEvent, container, cleanup } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import Pokemon from './Pokemon';
 
 const pokemon = {
@@ -47,7 +47,7 @@ describe('Pokemon component test suite', () => {
   });
 
   it('9 - poke url', () => {
-    const { getByText, container } = render(
+    const { container } = render(
       <MemoryRouter>
         <Pokemon pokemon={pokemon} isFavorite={isFavorite} />
       </MemoryRouter>,

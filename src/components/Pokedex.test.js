@@ -8,7 +8,6 @@ import {
 
 afterEach(cleanup);
 
-
 describe('Pokedex component test suite', () => {
   it(' 6 - Pokedex generates a filter button for each pokemon type', () => {
     const pokemons = [
