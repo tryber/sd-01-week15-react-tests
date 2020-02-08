@@ -2,13 +2,12 @@ import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
-// import FavoritePokemons from './FavoritePokemons';
 import App from '../App';
-// import {
-//   readFavoritePokemonIds,
-// } from '../services/pokedexService';
+import {
+  readFavoritePokemonIds,
+} from '../services/pokedexService';
 
-// import pokemons from '../data';
+import pokemons from '../data';
 
 afterEach(cleanup);
 
@@ -23,18 +22,17 @@ function renderWithRouter(
 }
 
 describe('22 - the favorite pokemons page must exhibit the favorite pokemons', () => {
-  // function setIsPokemonFavoriteById() {
-  //   const favoritePokemonIds = readFavoritePokemonIds();
-  //   const isPokemonFavorite = pokemons.reduce((acc, pokemon) => {
-  //     acc[pokemon.id] = favoritePokemonIds.includes(pokemon.id);
-  //     return acc;
-  //   }, {});
-  //   return isPokemonFavorite;
-  // }
+  function setIsPokemonFavoriteById() {
+    const favoritePokemonIds = readFavoritePokemonIds();
+    const isPokemonFavorite = pokemons.reduce((acc, pokemon) => {
+      acc[pokemon.id] = favoritePokemonIds.includes(pokemon.id);
+      return acc;
+    }, {});
+    return isPokemonFavorite;
+  }
 
-  // const isPokemonFavoriteById = () => setIsPokemonFavoriteById();
+  const isPokemonFavoriteById = () => setIsPokemonFavoriteById();
 
-  // const favoritePokemons = pokemons.filter(({ id }) => isPokemonFavoriteById[id]);
 
   const {
     getByText,
@@ -75,5 +73,31 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
     expect(allFavoritedPokes.length).toBe(2);
     expect(allFavoritedPokes[0].alt).toBe(isPikachuFavorite.alt);
     expect(allFavoritedPokes[1].alt).toBe(isCharmanderFavorite.alt);
+  });
+
+  it('if no pokemon found, expected message returns', () => {
+    const { getByText, history } = renderWithRouter(
+      <App />
+    );
+    const unfavoriteThisPokemon = () => {
+      const url = getByText(/^More details$/g);
+      fireEvent.click(url);
+      const favoriteLabel = getByLabelText(/Pokémon favoritado/g, {
+        selector: 'input',
+      });
+      if (favoriteLabel.checked === true) {
+        fireEvent.click(favoriteLabel);
+      }
+      fireEvent.click(getByText(/home/i));
+    };
+
+    unfavoriteThisPokemon();
+    nextPoke();
+    unfavoriteThisPokemon();
+
+    const favPokeList = isPokemonFavoriteById();
+    Object.keys(favPokeList).forEach((key) => expect(favPokeList[key]).toBeFalsy());
+    fireEvent.click(getByText(/favorite pokémons/i));
+    expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument;
   });
 });

@@ -444,7 +444,7 @@ describe('App component test suite', () => {
     expect(h2Header.innerHTML).toBe('Page requested not found<span role="img" aria-label="Crying emoji"> 😭 </span>');
 
     const tlImage = container.querySelector('img');
-    expect(tlImage.src).toBe('https://testing-library.com/');
+    expect(tlImage.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
   });
 });
 

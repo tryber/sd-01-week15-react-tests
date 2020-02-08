@@ -1,14 +1,16 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, getByText, fireEvent, container } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import Pokedex from './Pokedex';
 import {
   readFavoritePokemonIds,
 } from '../services/pokedexService';
 
-describe('Pokedex component test suite', () => {
+afterEach(cleanup);
 
-  it.skip(' 6 - Pokedex generates a filter button for each pokemon type', () => {
+
+describe('Pokedex component test suite', () => {
+  it(' 6 - Pokedex generates a filter button for each pokemon type', () => {
     const pokemons = [
       {
         id: 25,

@@ -1,6 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import About from './About';
+
+afterEach(cleanup);
 
 describe('about testing suite', () => {
   describe('21 - about page has info about pokedéx', () => {
