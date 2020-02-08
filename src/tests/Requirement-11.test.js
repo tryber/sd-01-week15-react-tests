@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { PokemonDetails } from '../components';
 
 afterEach(cleanup);
@@ -118,36 +118,34 @@ const isPokemonFavoriteById = {
   4: false,
 };
 
-const func = jest.fn();
+describe('Exigência → 15 ', () => {
+  function testPossiblePoker(pokemon) {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const updateFavoritePokemons = jest.fn((list, id) => {
+      list[id] = !list[id];
+    });
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={() => updateFavoritePokemons(isPokemonFavoriteById, pokemon.id)}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const checkbox = getByLabelText(/Pokémon favoritado?/i);
+    expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
+    const isChecked = isPokemonFavoriteById[pokemon.id];
+    fireEvent.click(checkbox);
+    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+  }
 
-const testPossiblePoker = (poker, isPokemonId, pokemon) => {
-  const match = {
-    params: {
-      id: `${pokemon.id}`,
-    },
-  };
-  const { getByText, getByAltText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <PokemonDetails
-        pokemons={poker}
-        onUpdateFavoritePokemons={func}
-        isPokemonFavoriteById={isPokemonId}
-        match={match}
-      />
-    </MemoryRouter>,
-  );
-  const pokemonWeight = getByText(
-    `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`,
-  );
-  const pokemonImage = getByAltText(`${pokemon.name} sprite`);
-  expect(pokemonWeight).toBeInTheDocument();
-  expect(pokemonImage.src).toBe(pokemon.image);
-  expect(pokemonImage.alt).toBe(`${pokemon.name} sprite`);
-};
-
-describe('Exigência → 11', () => {
-  test(`A página de detalhes de pokémon deve exibir o nome, 
-  tipo, peso médio e imagem do pokémon exibido`, () => {
-    pokemons.forEach((select) => testPossiblePoker(pokemons, isPokemonFavoriteById, select));
-  });
+  pokemons.forEach((pokemon) => test(`- A página de detalhes deve permitir favoritar um pokémon com o nome ${pokemon.name}`, () => {
+    testPossiblePoker(pokemon);
+  }));
 });
