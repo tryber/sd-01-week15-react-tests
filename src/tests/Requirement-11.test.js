@@ -145,7 +145,8 @@ describe('Exigência → 15 ', () => {
     expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
   }
 
-  pokemons.forEach((pokemon) => test(`- A página de detalhes deve permitir favoritar um pokémon com o nome ${pokemon.name}`, () => {
+  pokemons.forEach((pokemon) => test(`- A página de detalhes deve permitir 
+  favoritar um pokémon com o nome ${pokemon.name}`, () => {
     testPossiblePoker(pokemon);
   }));
 });
