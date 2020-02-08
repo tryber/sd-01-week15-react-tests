@@ -138,11 +138,11 @@ describe('Exigência → 15 ', () => {
         />
       </MemoryRouter>,
     );
-    const checkbox = getByLabelText(/Pokémon favoritado?/i);
+    const checkboxBtn = getByLabelText(/Pokémon favoritado?/i);
     expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
-    const isChecked = isPokemonFavoriteById[pokemon.id];
-    fireEvent.click(checkbox);
-    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+    const isExtact = isPokemonFavoriteById[pokemon.id];
+    fireEvent.click(checkboxBtn);
+    expect(isExtact).not.toBe(isPokemonFavoriteById[pokemon.id]);
   }
 
   pokemons.forEach((pokemon) => test(`- A página de detalhes deve permitir 
