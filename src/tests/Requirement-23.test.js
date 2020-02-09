@@ -14,14 +14,15 @@ function renderWithRouter(
   };
 }
 
-// essa função quebra maior galho.
-
-// Tava pensando em colocar essas funções que usamos muito em um novo arquivo... deixa para depois.
-
 test('23 - Entrar em uma URL desconhecida exibe a página Not Found', () => {
-  const { getByText, getByAltText } = renderWithRouter(<NotFound />, { route: '/dougfunny' });
-  expect(getByText('Page requested not found')).toBeInTheDocument();
-  expect(getByText('Page requested not found').tagName).toBe('H2');
-  const imgError = getByAltText('Pikachu crying because the page requested was not found');
-  expect(imgError).toBeInTheDocument();
+  function testNotFoundError(nameError) {
+    const { getByText, getByAltText } = renderWithRouter(<NotFound />, { route: `/${nameError}` });
+    const found404 = getByText(/Page requested not found/i);
+    expect(found404).toBeInTheDocument();
+    expect(found404.tagName).toBe('H2');
+    const pikachuCry = getByAltText(/Pikachu crying because the page requested was not found/i);
+    expect(pikachuCry).toBeInTheDocument();
+    expect(pikachuCry.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
+  }
+  testNotFoundError('dougfunny');
 });
