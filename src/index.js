@@ -5,11 +5,12 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+const raiz = document.getElementById('root');
 ReactDOM.render(
   <BrowserRouter>
     <App />
   </BrowserRouter>,
-  document.getElementById('root'),
+  raiz,
 );
 
 // If you want your app to work offline and load faster, you can change

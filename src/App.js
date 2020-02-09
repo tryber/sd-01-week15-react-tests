@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 
 import {
-  About, FavoritePokemons, NotFound, Pokedex, PokemonDetails,
+  About,
+  FavoritePokemons,
+  NotFound,
+  Pokedex,
+  PokemonDetails,
+  PokemonsLocation,
 } from './components';
 
 import { readFavoritePokemonIds, updateFavoritePokemons } from './services/pokedexService';
@@ -62,6 +67,7 @@ class App extends Component {
         <Route path="/pokemons/:id" render={({ match }) => this.renderPokemonDetails(match)} />
         <Route path="/favorites" render={() => <FavoritePokemons pokemons={favoritePokemons} />} />
         <Route path="/about" component={About} />
+        <Route path="/locations" component={PokemonsLocation} />
         <Route component={NotFound} />
       </Switch>
     );
@@ -80,6 +86,9 @@ class App extends Component {
           </Link>
           <Link className="link" to="/favorites">
             Favorite Pokémons
+          </Link>
+          <Link className="link" to="/locations">
+            Locations
           </Link>
         </nav>
         {this.renderRoutes()}
