@@ -18,6 +18,8 @@ class PokemonsLocation extends Component {
     }));
     this.btnNext = this.btnNext.bind(this);
     this.bntPrevious = this.bntPrevious.bind(this);
+    this.btnN = this.btnN.bind(this);
+    this.btnP = this.btnP.bind(this);
   }
 
   async btnNext() {
@@ -38,6 +40,32 @@ class PokemonsLocation extends Component {
     }));
   }
 
+  btnP(count) {
+    return (
+      <button
+        data-testid="btn-previous"
+        type="button"
+        disabled={count === -100 || count === 0}
+        onClick={() => this.bntPrevious()}
+      >
+        Previous
+      </button>
+    );
+  }
+
+  btnN(count) {
+    return (
+      <button
+        data-testid="btn-next"
+        type="button"
+        disabled={count === 600}
+        onClick={() => this.btnNext()}
+      >
+        Next
+      </button>
+    );
+  }
+
   render() {
     const { date, loading, count } = this.state;
     if (loading) return <h1>LOADING...</h1>;
@@ -45,28 +73,15 @@ class PokemonsLocation extends Component {
     return (
       <div>
         <h1> Pokemons Location </h1>
+        <div />
         <div>
-          <button
-            data-testid="btn-previous"
-            type="button"
-            disabled={count === -100 || count === 0}
-            onClick={() => this.bntPrevious()}
-          >
-            Previous
-          </button>
-          <button
-            data-testid="btn-next"
-            type="button"
-            disabled={count === 600}
-            onClick={() => this.btnNext()}
-          >
-            Next
-          </button>
+          {this.btnP(count)}
+          {this.btnN(count)}
         </div>
         <label htmlFor="container-p">
           Pokemons Locations for number 20
           {date.map(({ name }, ind) => (
-            <p data-testid="element-p" key={ind} className="container-p">
+            <p data-testid="element-p" key={`number${ind}`} className="container-p">
               {name}
             </p>
           ))}
