@@ -24,8 +24,8 @@ export default class PokemonsGenerations extends Component {
         <div>
           <div className="container">
             <h2>Click in generation</h2>
-            {date.results.map(({ name }, ind) => (
-              <div data-testid="element-div" key={ind} className="div-for-generation">
+            {date.results.map(({ name }) => (
+              <div data-testid="element-div" key={`value${name}`} className="div-for-generation">
                 {name}
               </div>
             ))}

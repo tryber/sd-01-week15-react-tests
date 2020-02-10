@@ -80,8 +80,8 @@ class PokemonsLocation extends Component {
         </div>
         <label htmlFor="container-p">
           Pokemons Locations for number 20
-          {date.map(({ name }, ind) => (
-            <p data-testid="element-p" key={`number${ind}`} className="container-p">
+          {date.map(({ name }) => (
+            <p data-testid="element-p" key={`number${name}`} className="container-p">
               {name}
             </p>
           ))}
