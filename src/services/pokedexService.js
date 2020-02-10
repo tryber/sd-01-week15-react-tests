@@ -24,6 +24,5 @@ const removePokemonFromFavorites = (pokemonId) => {
   saveFavoritePokemons(newFavoritePokemons);
 };
 
-export const updateFavoritePokemons = (pokemonId, isFavorite) => {
-  return (isFavorite ? addPokemonToFavorites(pokemonId) : removePokemonFromFavorites(pokemonId));
-};
+export const updateFavoritePokemons = (pokemonId, isFavorite) =>
+  (isFavorite ? addPokemonToFavorites(pokemonId) : removePokemonFromFavorites(pokemonId));
