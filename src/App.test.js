@@ -318,17 +318,26 @@ describe('25 & 26 Locations', () => {
   jest.mock('./tests/dataMock');
 
   test('The URL of route is location', () => {
-    const { getByText, history } = renderWithRouter(<App />);
+    const { getByText, history, getAllByText, debug } = renderWithRouter(<App />);
 
     const location = getByText(/Locations/i);
     expect(location).toBeInTheDocument();
     expect(location.href).toBe('http://localhost/locations');
 
     fireEvent.click(location);
-
     expect(history.location.pathname).toBe('/locations');
+
+    // debug();
+
+    // const previousButton = getAllByText(/Previous/i)[0];
+    // const nextButton = getByText(/Next/i);
+    // expect(previousButton).toBeInTheDocument();
+    // expect(previousButton.tagName).toBe('BUTTON');
+    // expect(nextButton).toBeInTheDocument();
+    // expect(nextButton.tagName).toBe('BUTTON');
+
     // expect(APILocation).toHaveBeenCalledTimes(1);
-    //Implementar um método para pegar as informações da API;
+    // Implementar um método para pegar as informações da API;
   });
 });
 
@@ -349,31 +358,3 @@ describe('28 & 29 Generations', () => {
   });
 });
 
-// describe('15 page details allows favor a pokemon', () => {
-//   afterEach(cleanup);
-
-//   const favorPokemon = (pokemon) => {
-//     const { getByText, getByLabelText, debug } = renderWithRouter(
-//       <App
-//         pokemons={pokemons}
-//         isPokemonFavoriteById={isNotPokemonFavoriteById}
-//       />,
-//     );
-//     debug()
-
-//     fireEvent.click(getByText(/More details/i));
-//     debug()
-
-//     const label = getByLabelText(/Pokémon favoritado?/i);
-//     expect(label).toBeInTheDocument();
-//     expect(label.checked).toBe(true);
-//     fireEvent.click(label);
-//     expect(label.checked).toBe(true);
-//   };
-
-//   pokemons.forEach((pokemon) => {
-//     test('15.1 The page must a checkbox and a label', () => {
-//       favorPokemon(pokemon);
-//     });
-//   });
-// });

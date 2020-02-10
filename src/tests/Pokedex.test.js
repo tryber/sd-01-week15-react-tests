@@ -52,3 +52,4 @@ describe('16 Favorites pokemons must have a star', () => {
     });
   });
 });
+

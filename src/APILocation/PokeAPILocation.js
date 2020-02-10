@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ListLocation from './ListLocation';
-// import ExportPokeAPILocation from './ExportPokeAPILocation';
+// import getPokeAPILocation from '../services/getPokeAPILocation';
 
 class PokeAPILocation extends Component {
   constructor(props) {
@@ -28,27 +28,25 @@ class PokeAPILocation extends Component {
   async nextList() {
     const { next, count, previous } = this.state;
     const POKE_API = `https://pokeapi.co/api/v2/location/?offset=${next}&limit=100`;
-    // const response = await fetch(POKE_API);
-    // const data = await response.json();
-    fetch(POKE_API)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState((state) => {
-          return ({
-            next: state.next + 100,
-            previous: previous + 100,
-            poke: data.results,
-            count: count + 1,
-          });
-        });
-      });
+    const response = await fetch(POKE_API);
+    const data = await response.json();
+
+    this.setState((state) => ({
+      next: state.next + 100,
+      previous: previous + 100,
+      poke: data.results,
+      count: count + 1,
+    }));
   }
 
   async previousList() {
     const { next, previous, count } = this.state;
+    // const data = getPokeAPILocation(previous);
+
     const POKE_API = `https://pokeapi.co/api/v2/location/?offset=${previous}&limit=100`;
     const response = await fetch(POKE_API);
     const data = await response.json();
+
     this.setState({
       count: count - 1,
       next: next - 100,

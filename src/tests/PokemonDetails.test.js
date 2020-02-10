@@ -167,10 +167,14 @@ describe('15 page details allows favor a pokemon', () => {
       },
     };
 
-    const { getByLabelText, debug } = renderWithRouter(
+    const updateFavoritePokemons = jest.fn((array, id) => {
+      array[id] = !array[id];
+    });
+
+    const { getByLabelText } = renderWithRouter(
       <PokemonDetails
         pokemons={pokemons}
-        onUpdateFavoritePokemons={func}
+        onUpdateFavoritePokemons={() => updateFavoritePokemons(isNotPokemonFavoriteById, pokemon.id)}
         isPokemonFavoriteById={isNotPokemonFavoriteById}
         match={match}
       />,
@@ -178,15 +182,16 @@ describe('15 page details allows favor a pokemon', () => {
 
     const label = getByLabelText(/Pokémon favoritado?/i);
     expect(label).toBeInTheDocument();
-    // expect(label.checked).toBe(false);
-    // fireEvent.click(label);
-    // expect(label.checked).toBe(true);
-
+    const checked = isNotPokemonFavoriteById[pokemon.id];
+    fireEvent.click(label);
+    expect(isNotPokemonFavoriteById[pokemon.id]).not.toBe(checked);
+    fireEvent.click(label);
+    expect(isNotPokemonFavoriteById[pokemon.id]).toBe(checked);
   };
 
-  pokemons.forEach((pokemon) => {
+  pokemons.forEach((pokemon, index) => {
     test('15.1 The page must a checkbox and a label', () => {
-      favorPokemon(pokemon);
+      favorPokemon(pokemon, index);
     });
   });
 });
