@@ -17,7 +17,6 @@ export default class PokemonsGenerations extends Component {
 
   render() {
     const { date, loading } = this.state;
-    console.log(date.results);
     if (loading) return <h1>LOADING...</h1>;
     return (
       <div>
@@ -26,8 +25,8 @@ export default class PokemonsGenerations extends Component {
           <div className="container">
             <h2>Click in generation</h2>
             {date.results.map(({ name, url }, ind) => (
-              <a key="url">
-                <div data-testid="element-p" key={ind} className="div-for-generation">
+              <a key={url}>
+                <div data-testid="element-div" key={ind} className="div-for-generation">
                   {name}
                 </div>
               </a>
