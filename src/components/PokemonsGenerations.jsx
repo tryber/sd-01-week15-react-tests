@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { apiGenerationsPokemons } from '../services/pokedexService';
 import '../App.css';
 
@@ -27,11 +26,11 @@ export default class PokemonsGenerations extends Component {
           <div className="container">
             <h2>Click in generation</h2>
             {date.results.map(({ name, url }, ind) => (
-              <Link to={`${url}`}>
+              <a key="url">
                 <div data-testid="element-p" key={ind} className="div-for-generation">
                   {name}
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
