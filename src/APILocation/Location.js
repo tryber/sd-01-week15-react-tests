@@ -6,7 +6,7 @@ class Location extends Component {
     const { name } = this.props.location;
     return (
       <div>
-        <p>{name}</p>
+        <p data-testid="location-name">{name}</p>
       </div>
     );
   }

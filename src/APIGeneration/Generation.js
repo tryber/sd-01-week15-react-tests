@@ -12,7 +12,7 @@ class Generation extends Component {
       <div className="generation">
         <div className="div-generations">
           <Link to={`/generations/${url}`}>
-            <p>{name}</p>
+            <p data-testid="generation">{name}</p>
           </Link>
         </div>
       </div>

@@ -1,10 +1,14 @@
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
-import { render, cleanup, fireEvent, getAllByAltText } from '@testing-library/react';
+import {
+  render,
+  cleanup,
+  fireEvent,
+  waitForDomChange,
+} from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import APIAboutOneGeneration from './APIGeneration/APIAboutOneGeneration';
-import { pokemons, isPokemonFavoriteById, APILocation, isNotPokemonFavoriteById } from './tests/dataMock';
+import { pokemons } from './tests/dataMock';
 
 test('renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
@@ -25,15 +29,6 @@ test('1 shows the Pokedéx when the route is `/`', () => {
 
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
 });
-
-// jest.mock('react-router-dom', () => {
-//   const originalModule = jest.requireActual('react-router-dom');
-
-//   return {
-//     ...originalModule,
-//     BrowserRouter: ({ children }) => (<div>{children}</div>),
-//   };
-// });
 
 function renderWithRouter(
   ui,
@@ -317,8 +312,8 @@ describe('25 & 26 Locations', () => {
 
   jest.mock('./tests/dataMock');
 
-  test('The URL of route is location', () => {
-    const { getByText, history, getAllByText, debug } = renderWithRouter(<App />);
+  test('The URL of route is location', async () => {
+    const { getByText, history } = renderWithRouter(<App />);
 
     const location = getByText(/Locations/i);
     expect(location).toBeInTheDocument();
@@ -327,14 +322,14 @@ describe('25 & 26 Locations', () => {
     fireEvent.click(location);
     expect(history.location.pathname).toBe('/locations');
 
-    // debug();
+    await waitForDomChange();
 
-    // const previousButton = getAllByText(/Previous/i)[0];
-    // const nextButton = getByText(/Next/i);
-    // expect(previousButton).toBeInTheDocument();
-    // expect(previousButton.tagName).toBe('BUTTON');
-    // expect(nextButton).toBeInTheDocument();
-    // expect(nextButton.tagName).toBe('BUTTON');
+    const previousButton = getByText(/Previous/i);
+    const nextButton = getByText(/Next/i);
+    expect(previousButton).toBeInTheDocument();
+    expect(previousButton.tagName).toBe('BUTTON');
+    expect(nextButton).toBeInTheDocument();
+    expect(nextButton.tagName).toBe('BUTTON');
 
     // expect(APILocation).toHaveBeenCalledTimes(1);
     // Implementar um método para pegar as informações da API;
@@ -344,8 +339,8 @@ describe('25 & 26 Locations', () => {
 describe('28 & 29 Generations', () => {
   afterEach(cleanup);
 
-  test('The URL route is generations', () => {
-    const { getByText, history } = renderWithRouter(<App />);
+  test('The URL route is generations', async () => {
+    const { getByText, history, queryAllByTestId } = renderWithRouter(<App />);
 
     const generation = getByText(/Generations/i);
     expect(generation).toBeInTheDocument();
@@ -354,7 +349,48 @@ describe('28 & 29 Generations', () => {
     fireEvent.click(generation);
     expect(history.location.pathname).toBe('/generations');
     expect(getByText(/Loading.../i)).toBeInTheDocument();
-    // expect(getByText(/generation-i/i)).toBeInTheDocument();
-  });
-});
 
+    await waitForDomChange();
+    expect(queryAllByTestId(/generation/i).length).toBe(7);
+  });
+
+  const ELEMENTS_WITH_SAME_TEXT = 4;
+  // itens with the text generation-i in the page /generations;
+
+  for (let index = 0; index < ELEMENTS_WITH_SAME_TEXT; index += 1) {
+    test('List generations, link and name of generations pokemons', async () => {
+      const { getAllByText, history } = renderWithRouter(<App />, { route: '/generations' });
+
+      await waitForDomChange();
+
+      const generation = getAllByText(/Generations/i)[0];
+      const generations = getAllByText(/generation-i/i);
+
+      expect(generations[index]).toBeInTheDocument();
+      fireEvent.click(generations[index]);
+
+      expect(history.location.pathname).toBe(`/generations/${index + 1}`);
+      fireEvent.click(generation);
+    });
+  }
+
+  const ELEMENTS_WITH_SAME_TEXTS = 3;
+  // itens with the text generation-v in the page /generations;
+
+  for (let index = 0; index < ELEMENTS_WITH_SAME_TEXTS; index += 1) {
+    test('List generations, link and name of generations pokemons', async () => {
+      const { getAllByText, history } = renderWithRouter(<App />, { route: '/generations' });
+
+      await waitForDomChange();
+
+      const generation = getAllByText(/Generations/i)[0];
+      const generations = getAllByText(/generation-v/i);
+
+      expect(generations[index]).toBeInTheDocument();
+      fireEvent.click(generations[index]);
+
+      expect(history.location.pathname).toBe(`/generations/${index + 5}`);
+      fireEvent.click(generation);
+    });
+  }
+});
