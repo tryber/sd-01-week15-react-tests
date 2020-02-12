@@ -118,7 +118,7 @@ const isPokemonFavoriteById = {
   4: false,
 };
 
-describe('Exigência → 15 ', () => {
+describe('Exigência → 11 ', () => {
   function testPossiblePoker(pokemon) {
     const match = {
       params: {
