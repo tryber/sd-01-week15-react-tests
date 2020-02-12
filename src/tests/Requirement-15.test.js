@@ -112,12 +112,6 @@ const pokemons = [
   },
 ];
 
-const isPokemonFavoriteById2 = {
-  1: true,
-  2: false,
-  3: false,
-  4: false,
-};
 const isPokemonFavoriteById = {
   1: false,
   2: true,
