@@ -112,49 +112,41 @@ const pokemons = [
   },
 ];
 
-const isPokemonFavoriteById2 = {
-  1: true,
-  2: false,
-  3: false,
-  4: false,
-};
 const isPokemonFavoriteById = {
   1: false,
-  2: false,
+  2: true,
   3: false,
-  4: false,
-};
-
-const func = jest.fn();
-
-const testPossiblePoker = (poker, pokerId, pokemon) => {
-  const match = {
-    params: {
-      id: `${pokemon.id}`,
-    },
-  };
-  const { getByText, getByLabelText } = render(
-    <MemoryRouter initialEntries={['/']}>
-      <PokemonDetails
-        pokemons={poker}
-        onUpdateFavoritePokemons={func}
-        isPokemonFavoriteById={pokerId}
-        match={match}
-      />
-    </MemoryRouter>,
-  );
-  const pokemonFavorite = getByText(/Pokémon favoritado?/i);
-  const pokemonFavoriteCheckbox = getByLabelText('Pokémon favoritado?');
-  expect(pokemonFavorite).toBeInTheDocument();
-  expect(pokemonFavoriteCheckbox).toBeInTheDocument();
-  expect(pokemonFavorite.tagName).toBe('LABEL');
-  fireEvent.click(pokemonFavorite);
-  expect(pokemonFavoriteCheckbox.checked).not.toBe(isPokemonFavoriteById);
+  4: true,
 };
 
 describe('Exigência → 15', () => {
-  pokemons.forEach((select) => test(`A página de detalhes deve permitir
-   favoritar um pokémon. Nenhum favoritado`, () => {
-    testPossiblePoker(pokemons, isPokemonFavoriteById2, select);
+  const testPossiblePoker = (pokemon) => {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const funcSimulate = jest.fn((list, id) => {
+      list[id] = !list[id];
+    });
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={() => funcSimulate(isPokemonFavoriteById, pokemon.id)}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const isCheckbox = getByLabelText(/Pokémon favoritado?/i);
+    expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
+    const isChecked = isPokemonFavoriteById[pokemon.id];
+    fireEvent.click(isCheckbox);
+    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+  };
+
+  pokemons.forEach((select) => test(`Caso o Pokemons seja o → ${select.name}`, () => {
+    testPossiblePoker(select);
   }));
 });

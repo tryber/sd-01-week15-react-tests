@@ -121,23 +121,22 @@ const isPokemonFavoriteById = {
 
 describe('Exigência → 4', () => {
   test(' 4 - A Pokédex deve conter botões de filtro', () => {
-    const { queryAllByText, getByText, getAllByText } = render(
+    const { getByText, getAllByText } = render(
       <MemoryRouter initialEntries={['/']}>
         <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
       </MemoryRouter>,
     );
 
     const listaPokemon = [...new Set(pokemons.map((tiposPokemons) => tiposPokemons.type))];
-    const buttonAll = getByText(/All/i);
-    let auxiliar = buttonAll;
+
+    const proximoPokemon = getByText('Próximo pokémon');
+    const moreDetails = getByText('More details');
     for (let i = 0; i < listaPokemon.length; i += 1) {
-      expect(auxiliar.nextSibling.textContent).toBe(listaPokemon[i]);
-      auxiliar = auxiliar.nextSibling;
-      const buttonType = getAllByText(listaPokemon[i])[1] || getByText(listaPokemon[i]);
-      fireEvent.click(buttonType);
-      expect(queryAllByText(listaPokemon[i]).length).toBe(2);
-      fireEvent.click(getByText(/Próximo pokémon/i));
-      expect(getByText(/Average weight:/i).previousSibling.textContent).toBe(listaPokemon[i]);
+      const pokerType = getAllByText(listaPokemon[i])[1] || getByText(listaPokemon[i]);
+      expect(pokerType).toBeInTheDocument();
+      fireEvent.click(pokerType);
+      fireEvent.click(proximoPokemon);
+      expect(moreDetails.previousSibling.previousSibling.innerHTML).toBe(pokerType.innerHTML);
     }
   });
 });
