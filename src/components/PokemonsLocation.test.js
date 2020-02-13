@@ -90,11 +90,15 @@ Lets'go!!!`, () => {
     expect(elementP.length).toBe(100);
   });
   clear();
-  test('Testar a api com nock', () => {
+  test('Testar botão previus ', async () => {
     const scope = nock('https://pokeapi.co')
       .get('/api/v2/location/?limit=100&offset=100')
       .reply(200, { data: dataOfComparition });
   });
+  const { queryByTestId } = renderWithRouter(<PokemonsLocation />);
+  const btnNext = queryByTestId('btn-next');
+  fireEvent.click(btnNext);
+
   clear();
   test('Testar se os botões se desativam no inicio ou no final respectivamente', async () => {
     const { queryByTestId } = renderWithRouter(<PokemonsLocation />);
