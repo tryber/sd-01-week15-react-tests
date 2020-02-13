@@ -15,6 +15,9 @@ import {
 } from './services/pokedexService';
 
 import pokemons from './data';
+import PokeAPILocation from './APILocation/PokeAPILocation';
+import PokeAPIGeneration from './APIGeneration/PokeAPIGeneration';
+import APIAboutOneGeneration from './APIGeneration/APIAboutOneGeneration';
 
 import './App.css';
 
@@ -83,6 +86,10 @@ class App extends Component {
         />
         <Route path="/favorites" render={() => <FavoritePokemons pokemons={favoritePokemons} />} />
         <Route path="/about" component={About} />
+        <Route path="/locations" component={PokeAPILocation} />
+        <Route exact path="/generations" component={PokeAPIGeneration} />
+        <Route exact path="/generations/:id" component={APIAboutOneGeneration} />
+        <Route path="/generatios/details/:id" />
         <Route component={NotFound} />
       </Switch>
     );
@@ -96,6 +103,8 @@ class App extends Component {
           <Link className="link" to="/">Home</Link>
           <Link className="link" to="/about">About</Link>
           <Link className="link" to="/favorites">Favorite Pokémons</Link>
+          <Link className="link" to="/locations">Locations</Link>
+          <Link className="link" to="/generations">Generations</Link>
         </nav>
         {this.renderRoutes()}
       </div>
