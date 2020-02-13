@@ -6,7 +6,7 @@ class OneGeneration extends Component {
     const { name } = this.props.generation;
     return (
       <div>
-        <p>{name}</p>
+        <p data-testid="pokemon-species">{name}</p>
       </div>
     );
   }

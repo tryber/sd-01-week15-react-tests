@@ -243,9 +243,11 @@ describe('17 Fixed set of navigation links', () => {
     const firstLink = queryAllByRole('link')[0].innerHTML;
     const secondLink = queryAllByRole('link')[1].innerHTML;
     const thirdLink = queryAllByRole('link')[2].innerHTML;
+    const fourthLink = queryAllByRole('link')[3].innerHTML;
     expect(firstLink).toBe('Home');
     expect(secondLink).toBe('About');
     expect(thirdLink).toBe('Favorite Pokémons');
+    expect(fourthLink).toBe('Locations');
 
     const home = getByText(/Home/i);
     expect(home.href).toBe('http://localhost/');
@@ -305,92 +307,4 @@ describe('Routes', () => {
     const link = `http://localhost${history.location.pathname}`;
     expect(link).toBe('http://localhost/favorites');
   });
-});
-
-describe('25 & 26 Locations', () => {
-  afterEach(cleanup);
-
-  jest.mock('./tests/dataMock');
-
-  test('The URL of route is location', async () => {
-    const { getByText, history } = renderWithRouter(<App />);
-
-    const location = getByText(/Locations/i);
-    expect(location).toBeInTheDocument();
-    expect(location.href).toBe('http://localhost/locations');
-
-    fireEvent.click(location);
-    expect(history.location.pathname).toBe('/locations');
-
-    await waitForDomChange();
-
-    const previousButton = getByText(/Previous/i);
-    const nextButton = getByText(/Next/i);
-    expect(previousButton).toBeInTheDocument();
-    expect(previousButton.tagName).toBe('BUTTON');
-    expect(nextButton).toBeInTheDocument();
-    expect(nextButton.tagName).toBe('BUTTON');
-
-    // expect(APILocation).toHaveBeenCalledTimes(1);
-    // Implementar um método para pegar as informações da API;
-  });
-});
-
-describe('28 & 29 Generations', () => {
-  afterEach(cleanup);
-
-  test('The URL route is generations', async () => {
-    const { getByText, history, queryAllByTestId } = renderWithRouter(<App />);
-
-    const generation = getByText(/Generations/i);
-    expect(generation).toBeInTheDocument();
-    expect(generation.href).toBe('http://localhost/generations');
-
-    fireEvent.click(generation);
-    expect(history.location.pathname).toBe('/generations');
-    expect(getByText(/Loading.../i)).toBeInTheDocument();
-
-    await waitForDomChange();
-    expect(queryAllByTestId(/generation/i).length).toBe(7);
-  });
-
-  const ELEMENTS_WITH_SAME_TEXT = 4;
-  // itens with the text generation-i in the page /generations;
-
-  for (let index = 0; index < ELEMENTS_WITH_SAME_TEXT; index += 1) {
-    test('List generations, link and name of generations pokemons', async () => {
-      const { getAllByText, history } = renderWithRouter(<App />, { route: '/generations' });
-
-      await waitForDomChange();
-
-      const generation = getAllByText(/Generations/i)[0];
-      const generations = getAllByText(/generation-i/i);
-
-      expect(generations[index]).toBeInTheDocument();
-      fireEvent.click(generations[index]);
-
-      expect(history.location.pathname).toBe(`/generations/${index + 1}`);
-      fireEvent.click(generation);
-    });
-  }
-
-  const ELEMENTS_WITH_SAME_TEXTS = 3;
-  // itens with the text generation-v in the page /generations;
-
-  for (let index = 0; index < ELEMENTS_WITH_SAME_TEXTS; index += 1) {
-    test('List generations, link and name of generations pokemons', async () => {
-      const { getAllByText, history } = renderWithRouter(<App />, { route: '/generations' });
-
-      await waitForDomChange();
-
-      const generation = getAllByText(/Generations/i)[0];
-      const generations = getAllByText(/generation-v/i);
-
-      expect(generations[index]).toBeInTheDocument();
-      fireEvent.click(generations[index]);
-
-      expect(history.location.pathname).toBe(`/generations/${index + 5}`);
-      fireEvent.click(generation);
-    });
-  }
 });

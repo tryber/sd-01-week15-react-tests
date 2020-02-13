@@ -24,7 +24,7 @@ describe('11 details page', () => {
   const pageDetails = (pokemon) => {
     const match = {
       params: {
-        id: pokemon.id,
+        id: String(pokemon.id),
       },
     };
 
@@ -61,7 +61,7 @@ describe('12 No link about more details', () => {
   const noLinkMoreDetails = (pokemon) => {
     const match = {
       params: {
-        id: pokemon.id,
+        id: String(pokemon.id),
       },
     };
 
@@ -90,7 +90,7 @@ describe('13 The details page must show a Summary', () => {
   const summaryPokemon = (pokemon) => {
     const match = {
       params: {
-        id: pokemon.id,
+        id: String(pokemon.id),
       },
     };
 
@@ -124,7 +124,7 @@ describe('14 The details page show locations maps', () => {
   const locationsMaps = (pokemon) => {
     const match = {
       params: {
-        id: pokemon.id,
+        id: String(pokemon.id),
       },
     };
 
@@ -163,7 +163,7 @@ describe('15 page details allows favor a pokemon', () => {
   const favorPokemon = (pokemon) => {
     const match = {
       params: {
-        id: pokemon.id,
+        id: String(pokemon.id),
       },
     };
 
