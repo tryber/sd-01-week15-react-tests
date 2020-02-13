@@ -5,16 +5,18 @@ class PokemonsLocation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: [],
+      data: [],
       loading: true,
       count: 0,
+      totalPokémons: 0,
     };
   }
 
   componentDidMount() {
     apiLocationPokemons().then((values) => this.setState({
-      date: values.results,
+      data: values.results,
       loading: false,
+      totalPokémons: values.count,
     }));
     this.btnNext = this.btnNext.bind(this);
     this.bntPrevious = this.bntPrevious.bind(this);
@@ -25,7 +27,7 @@ class PokemonsLocation extends Component {
   async btnNext() {
     const { count } = this.state;
     await apiLocationPokemons(count).then((values) => this.setState({
-      date: values.results,
+      data: values.results,
       loading: false,
       count: count + 100,
     }));
@@ -34,7 +36,7 @@ class PokemonsLocation extends Component {
   async bntPrevious() {
     const { count } = this.state;
     await apiLocationPokemons(count).then((values) => this.setState({
-      date: values.results,
+      data: values.results,
       loading: false,
       count: count - 100,
     }));
@@ -53,12 +55,12 @@ class PokemonsLocation extends Component {
     );
   }
 
-  btnN(count) {
+  btnN() {
     return (
       <button
         data-testid="btn-next"
         type="button"
-        disabled={count === 600}
+        disabled={this.totalPokémons === null}
         onClick={() => this.btnNext()}
       >
         Next
@@ -67,7 +69,7 @@ class PokemonsLocation extends Component {
   }
 
   render() {
-    const { date, loading, count } = this.state;
+    const { data, loading, count } = this.state;
     if (loading) return <h1>LOADING...</h1>;
 
     return (
@@ -80,7 +82,7 @@ class PokemonsLocation extends Component {
         </div>
         <label htmlFor="container-p">
           Pokemons Locations for number 20
-          {date.map(({ name }) => (
+          {data.map(({ name }) => (
             <p data-testid="element-p" key={`number${name}`} className="container-p">
               {name}
             </p>
