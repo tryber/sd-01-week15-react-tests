@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
+import { Router, BrowserRouter } from 'react-router-dom';
 import App from '../App';
 import {
   readFavoritePokemonIds,
@@ -64,7 +64,7 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
     const pikachu = getByText(/pikachu/i);
     expect(pikachu).toBeInTheDocument();
     favoriteThisPokemon();
-    nextPoke();
+    fireEvent.click(getByText(/próximo pokémon/i));
     const charmander = getByText(/charmander/i);
     expect(charmander).toBeInTheDocument();
     favoriteThisPokemon();
@@ -89,8 +89,10 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
   });
 
   it('if no pokemon found, expected message returns', () => {
-    const { getByText } = renderWithRouter(
-      <App />,
+    const { getByText } = render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>,
     );
     const unfavoriteThisPokemon = () => {
       const url = getByText(/^More details$/g);
@@ -108,10 +110,11 @@ describe('22 - the favorite pokemons page must exhibit the favorite pokemons', (
     };
 
     unfavoriteThisPokemon();
-    nextPoke();
+    fireEvent.click(getByText(/próximo pokémon/i));
     unfavoriteThisPokemon();
 
     const favPokeList = isPokemonFavoriteById();
+    // console.log(favPokeList);
     Object.keys(favPokeList).forEach((key) => expect(favPokeList[key]).toBeFalsy());
     fireEvent.click(getByText(/favorite pokémons/i));
     expect(getByText(/No favorite pokemon found/i)).toBeInTheDocument();

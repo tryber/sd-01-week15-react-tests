@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, cleanup, fireEvent, queryByAltText } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import Locations from './Locations';
@@ -18,8 +18,8 @@ function renderWithRouter(
 afterEach(cleanup);
 
 describe('locations page test suite', () => {
-  function fetchPokeLocations() {
-    const resultsList = fetch('https://pokeapi.co/api/v2/location/')
+  async function fetchPokeLocations() {
+    const resultsList = await fetch('https://pokeapi.co/api/v2/location/')
       .then((response) => response.json())
       .then(({ results }) => results.map(({ name, url }) => [name, url]));
 
@@ -29,7 +29,7 @@ describe('locations page test suite', () => {
   }
 
   it('25.2 - the page must exhibit a list with the returned locations', () => {
-    const { container } = render(
+    const { container } = renderWithRouter(
       <Locations />,
     );
     const locationList = container.querySelectorAll('li');

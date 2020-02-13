@@ -8,6 +8,7 @@ class Generations extends Component {
       table: [],
     };
     this.fetchPokeGenerations = this.fetchPokeGenerations.bind(this);
+    this.generateContent = this.generateContent.bind(this);
   }
 
 
@@ -15,20 +16,20 @@ class Generations extends Component {
     this.fetchPokeGenerations();
   }
 
-  fetchPokeGenerations() {
+  async fetchPokeGenerations() {
     let { match: { params: { id } } } = this.props;
     if (id === undefined) {
       id = '';
     }
     const URL = `https://pokeapi.co/api/v2/generation/${id}`;
     if (id === '') {
-      fetch(URL)
+      await fetch(URL)
         .then((response) => response.json())
         .then(({ results }) => (
           results.map(({ name, url }) => (
             this.setState((state) => ({ table: [...state.table, [name, url]] }))))));
     } else {
-      fetch(URL)
+      await fetch(URL)
         .then((response) => response.json())
         .then(({ pokemon_species }) => (
           pokemon_species.map(({ name, url }) => (
@@ -36,21 +37,24 @@ class Generations extends Component {
     }
   }
 
-  render() {
-    const generateContent = () => {
-      const { table } = this.state;
-      return table.map(([name, url]) => (
-        <li key={url}>
-          {`Name: ${name}  /  URL: ${url}`}
-        </li>
-      ));
-    };
+  generateContent() {
+    const { table } = this.state;
+    return table.map(([name, url]) => (
+      <li key={url}>
+        Name:
+        {name}
+        /  URL:
+        <a href={`/generations/${Number(table.findIndex((item) => item.includes(url))) + 1}`}>{url}</a>
+      </li>
+    ));
+  }
 
+  render() {
     return (
       <div className="generations-container">
         <h1>Generations</h1>
         <ul>
-          {generateContent()}
+          {this.generateContent()}
         </ul>
       </div>
     );

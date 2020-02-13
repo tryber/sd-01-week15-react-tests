@@ -506,7 +506,7 @@ describe('App component test suite', () => {
     expect(locationsLink.tagName).toBe('A');
 
     fireEvent.click(locationsLink);
-    expect(history.location.pathname).toBe('/locations');
+    expect(history.location.pathname).toBe('/locations/');
   });
 
   it('28.1 - shows the Generations page when the route is `/locations`', () => {
