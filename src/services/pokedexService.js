@@ -2,7 +2,7 @@ export const readFavoritePokemonIds = () => JSON.parse(localStorage.getItem('fav
 
 const endPointLocations = (offset) => `https://pokeapi.co/api/v2/location/?limit=100&offset=${offset}`;
 
-export const apiLocationPokemons = (offset = 100) => fetch(`${endPointLocations(offset)}`).then((response) => response.json().then((json) => (response.ok ? Promise.resolve(json) : Promise.reject(json))));
+export const apiLocationPokemons = (offset = 0) => fetch(`${endPointLocations(offset)}`).then((response) => response.json().then((json) => (response.ok ? Promise.resolve(json) : Promise.reject(json))));
 
 const endPointGenerations = () => 'https://pokeapi.co/api/v2/generation/';
 

@@ -7,8 +7,8 @@ class PokemonsLocation extends Component {
     this.state = {
       data: [],
       loading: true,
-      count: 0,
-      totalPokémons: 0,
+      counter: 0,
+      maxOfLengthTheAPI: 0,
     };
   }
 
@@ -16,7 +16,7 @@ class PokemonsLocation extends Component {
     apiLocationPokemons().then((values) => this.setState({
       data: values.results,
       loading: false,
-      totalPokémons: values.count,
+      maxOfLengthTheAPI: Math.trunc(values.count / 100) * 100,
     }));
     this.btnNext = this.btnNext.bind(this);
     this.bntPrevious = this.bntPrevious.bind(this);
@@ -25,29 +25,33 @@ class PokemonsLocation extends Component {
   }
 
   async btnNext() {
-    const { count } = this.state;
-    await apiLocationPokemons(count).then((values) => this.setState({
-      data: values.results,
-      loading: false,
-      count: count + 100,
-    }));
+    const { counter, maxOfLengthTheAPI } = this.state;
+    await apiLocationPokemons(counter).then((values) => {
+      this.setState({
+        data: values.results,
+        loading: false,
+        counter: counter >= maxOfLengthTheAPI - 100 ? maxOfLengthTheAPI : counter + 100,
+      });
+    });
   }
 
   async bntPrevious() {
-    const { count } = this.state;
-    await apiLocationPokemons(count).then((values) => this.setState({
-      data: values.results,
-      loading: false,
-      count: count - 100,
-    }));
+    const { counter } = this.state;
+    await apiLocationPokemons(counter).then((values) => {
+      this.setState({
+        data: values.results,
+        loading: false,
+        counter: counter - 100,
+      });
+    });
   }
 
-  btnP(count) {
+  btnP(condition) {
     return (
       <button
         data-testid="btn-previous"
         type="button"
-        disabled={count === -100 || count === 0}
+        disabled={condition === 0}
         onClick={() => this.bntPrevious()}
       >
         Previous
@@ -55,12 +59,12 @@ class PokemonsLocation extends Component {
     );
   }
 
-  btnN() {
+  btnN(condition, stoper) {
     return (
       <button
         data-testid="btn-next"
         type="button"
-        disabled={this.totalPokémons === null}
+        disabled={condition === stoper}
         onClick={() => this.btnNext()}
       >
         Next
@@ -69,7 +73,10 @@ class PokemonsLocation extends Component {
   }
 
   render() {
-    const { data, loading, count } = this.state;
+    const {
+      data, loading, maxOfLengthTheAPI, counter,
+    } = this.state;
+
     if (loading) return <h1>LOADING...</h1>;
 
     return (
@@ -77,8 +84,8 @@ class PokemonsLocation extends Component {
         <h1> Pokemons Location </h1>
         <div />
         <div>
-          {this.btnP(count)}
-          {this.btnN(count)}
+          {this.btnP(counter)}
+          {this.btnN(counter, maxOfLengthTheAPI)}
         </div>
         <label htmlFor="container-p">
           Pokemons Locations for number 20
