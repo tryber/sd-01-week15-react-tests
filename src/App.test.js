@@ -3,7 +3,7 @@ import { MemoryRouter, Router } from 'react-router-dom';
 import { render, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from './App';
-import { NotFound, Pokedex, PokemonDetails, About, favoritePokemons } from './components';
+import { NotFound, Pokedex, PokemonDetails, About, FavoritePokemons } from './components';
 
 const pokemons = [
   {
@@ -578,51 +578,55 @@ describe('Requisito 14', () => {
   });
 });
 
-// describe('Requisito 15', () => {
-//   const favorPokemon = (pokemon) => {
-//     const match = {
-//       params: {
-//         id: String(pokemon.id),
-//       },
-//     };
+describe('Requisito 15', () => {
+  const testingPossible = (pokemon) => {
+    const match = {
+      params: {
+        id: `${pokemon.id}`,
+      },
+    };
+    const func = jest.fn((list, id) => {
+      list[id] = !list[id];
+    });
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={() => func(isPokemonFavoriteById, pokemon.id)}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const isCheck = getByLabelText(/Pokémon favoritado?/i);
+    expect(getByLabelText(/Pokémon favoritado?/i)).toBeInTheDocument();
+    const isChecked = isPokemonFavoriteById[pokemon.id];
+    fireEvent.click(isCheck);
+    expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
+  };
 
-//     const updateFavoritePokemons = jest.fn((array, id) => {
-//       array[id] = !array[id];
-//     });
+  pokemons.forEach((select) => test(`Caso o Pokemons seja o → ${select.name}`, () => {
+    testingPossible(select);
+  }));
+});
 
-//     const { getByLabelText } = renderWithRouter(
-//       <PokemonDetails
-//         pokemons={pokemons}
-//         onUpdateFavoritePokemons={() => updateFavoritePokemons(isNotPokemonFavoriteById, pokemon.id)}
-//         isPokemonFavoriteById={isNotPokemonFavoriteById}
-//         match={match}
-//       />,
-//     );
-
-//     const label = getByLabelText(/Pokémon favoritado?/i);
-//     expect(label).toBeInTheDocument();
-//     const checked = isNotPokemonFavoriteById[pokemon.id];
-//     fireEvent.click(label);
-//     expect(isNotPokemonFavoriteById[pokemon.id]).not.toBe(checked);
-//     fireEvent.click(label);
-//     expect(isNotPokemonFavoriteById[pokemon.id]).toBe(checked);
-//   };
-
-//   pokemons.forEach((pokemon, index) => {
-//     test('15.1 A página deve conter um checkbox que permita favoritar um pokémon. Cliques no checkbox devem, alternadadamente, adicionar e remover o pokémon da lista de favoritos', () => {
-//       favorPokemon(pokemon, index);
-//     });
-//   });
-// });
-
-test('16- Pokémons favoritados devem exibir um ícone de uma estrela', () => {
-  const { queryAllByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const onePokemon = queryAllByText(/Average weight/i);
-  expect(onePokemon.length).toBe(1);
+describe('Requisito 16 - Pokémons favoritados devem exibir um ícone de uma estrela', () => {
+  test('16.1 O ícone deve ser uma imagem, com o atributo src igual /star-icon.svg', () => {
+    const { getByText, getByAltText, queryByAltText } = renderWithRouter(
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
+    );
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    pokemons.forEach((favoriteStar) => {
+      if (isPokemonFavoriteById[favoriteStar.id]) {
+        const imageStar = getByAltText(`${favoriteStar.name} is marked as favorite`);
+        expect(imageStar).toBeInTheDocument();
+        expect(imageStar.src).toBe('http://localhost/star-icon.svg');
+      } else {
+        expect(queryByAltText(`${favoriteStar.name} is marked as favorite`)).not.toBeInTheDocument();
+      }
+      fireEvent.click(nextPokemon);
+    });
+  });
 });
 
 describe('Requisito 17 - No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
