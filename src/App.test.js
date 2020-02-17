@@ -605,7 +605,7 @@ describe('Requisito 15', () => {
     expect(isChecked).not.toBe(isPokemonFavoriteById[pokemon.id]);
   };
 
-  pokemons.forEach((select) => test(`Caso o Pokemons seja o → ${select.name}`, () => {
+  pokemons.forEach((select) => test(`Caso o Pokemons seja o ${select.name}`, () => {
     testingPossible(select);
   }));
 });
