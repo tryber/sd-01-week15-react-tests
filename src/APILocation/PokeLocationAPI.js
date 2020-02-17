@@ -9,12 +9,11 @@ class PokeLocationAPI extends Component {
     this.state = {
       pokeResults: [],
       loading: false,
-    }
+    };
   }
 
   async componentDidMount() {
-    const POKE_API = 'https://pokeapi.co/api/v2/location/?offset=0&limit=100';
-    const response = await fetch(POKE_API);
+    const response = await fetch('https://pokeapi.co/api/v2/location/?offset=0&limit=100');
     const data = await response.json();
     this.setState({
       pokeResults: data.results,
@@ -25,7 +24,7 @@ class PokeLocationAPI extends Component {
   render() {
     const { pokeResults } = this.state;
     return (
-      <ListPokemonsLocation locations={pokeResults} />
+      <ListPokemonsLocation location={pokeResults} />
     );
   }
 }

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import Location from './Location';
 
 class ListPokemonsLocation extends Component {
@@ -6,10 +8,14 @@ class ListPokemonsLocation extends Component {
     const { location } = this.props;
     return (
       <div>
-        {location.map((pokemon) => <Location location={pokemon} key={pokemon.name} />)}
+        {location.map((pokemon) => <Location key={pokemon.name} location={pokemon} />)}
       </div>
     );
   }
 }
 
 export default ListPokemonsLocation;
+
+ListPokemonsLocation.propTypes = {
+  location: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
