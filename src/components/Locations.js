@@ -30,21 +30,21 @@ class Locations extends Component {
           this.setState((state) => ({ table: [...state.table, [name, url]] }))))));
   }
 
-  nextPage() {
+  next() {
     this.setState({ table: [] }, () => {
       this.setState((state) => ({ offset: state.offset + 20 }),
         () => this.fetchPokeLocations());
     });
   }
 
-  previousPage() {
+  back() {
     this.setState({ table: [] }, () => {
       this.setState((state) => ({ offset: state.offset - 20 }),
         () => this.fetchPokeLocations());
     });
   }
 
-  prevButtonControler() {
+  pBtn() {
     const { offset } = this.state;
     if (offset === 0) {
       return true;
@@ -52,7 +52,7 @@ class Locations extends Component {
     return false;
   }
 
-  nextButtonController() {
+  nBtn() {
     const { offset } = this.state;
     if (offset === 780) {
       return true;
@@ -69,7 +69,6 @@ class Locations extends Component {
         </li>
       ));
     };
-
     const { limit, offset } = this.state;
     return (
       <div className="locations-container">
@@ -78,18 +77,10 @@ class Locations extends Component {
           {generateContent()}
         </ul>
         <div className="button-container">
-          <button
-            type="button"
-            disabled={this.prevButtonControler()}
-            onClick={() => this.previousPage()}
-          >
+          <button type="button" disabled={this.pBtn()} onClick={() => this.back()}>
               Previous Page
           </button>
-          <button
-            type="button"
-            disabled={this.nextButtonController()}
-            onClick={() => this.nextPage()}
-          >
+          <button type="button" disabled={this.nBtn()} onClick={() => this.next()}>
             Next Page
           </button>
         </div>
