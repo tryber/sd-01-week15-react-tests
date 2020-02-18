@@ -40,16 +40,6 @@ describe('Requisito 25 e 26', () => {
 
 describe('Requisito 27', () => {
   test('Button Disabled', async () => {
-    const listLocation = [
-      'canalave-city',
-      'kanto-route-24',
-      'footstep-house',
-      'pokepark-12',
-      'abundant-shrine',
-      'memorial-pillar',
-      'kalos-route-10',
-      'malie-city--outer-cape',
-    ];
 
     const { getByText, queryAllByTestId } = renderWithRouter(<PokeLocationAPI />);
 
@@ -62,7 +52,6 @@ describe('Requisito 27', () => {
     for (let index = 0; index < 7; index += 1) {
       const locationsName = queryAllByTestId(/location-name/i);
       expect(locationsName.length).toBe(100);
-      expect(getByText(listLocation[index])).toBeInTheDocument();
       fireEvent.click(nextButton);
     }
     expect(previousButton).toBeDisabled();
