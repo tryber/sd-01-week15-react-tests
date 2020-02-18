@@ -78,16 +78,24 @@ class Locations extends Component {
           {generateContent()}
         </ul>
         <div className="button-container">
-          <button type="button" disabled={this.prevButtonControler()} onClick={() => this.previousPage()}>
+          <button
+            type="button"
+            disabled={this.prevButtonControler()}
+            onClick={() => this.previousPage()}
+          >
               Previous Page
           </button>
-          <button type="button" disabled={this.nextButtonController()} onClick={() => this.nextPage()}>
+          <button
+            type="button"
+            disabled={this.nextButtonController()}
+            onClick={() => this.nextPage()}
+          >
             Next Page
           </button>
         </div>
         <br />
         <br />
-        <span>{`Page ${offset / limit + 1}`}</span>
+        <span>{`Page ${(offset / limit) + 1}`}</span>
       </div>
     );
   }
