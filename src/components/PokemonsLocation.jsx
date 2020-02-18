@@ -16,7 +16,7 @@ class PokemonsLocation extends Component {
     apiLocationPokemons().then((values) => this.setState({
       data: values.results,
       loading: false,
-      maxOfLengthTheAPI: Math.trunc(values.count / 100) * 100,
+      maxOfLengthTheAPI: Math.round(values.count / 100) * 100,
     }));
     this.btnNext = this.btnNext.bind(this);
     this.bntPrevious = this.bntPrevious.bind(this);
@@ -26,6 +26,7 @@ class PokemonsLocation extends Component {
 
   async btnNext() {
     const { counter, maxOfLengthTheAPI } = this.state;
+
     await apiLocationPokemons(counter).then((values) => {
       this.setState({
         data: values.results,
