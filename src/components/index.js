@@ -5,3 +5,5 @@ export { default as NotFound } from './NotFound';
 export { default as Pokedex } from './Pokedex';
 export { default as Pokemon } from './Pokemon';
 export { default as PokemonDetails } from './PokemonDetails';
+export { default as PokemonsLocation } from './PokemonsLocation';
+export { default as PokemonsGenerations } from './PokemonsGenerations';

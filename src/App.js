@@ -7,12 +7,11 @@ import {
   NotFound,
   Pokedex,
   PokemonDetails,
+  PokemonsLocation,
+  PokemonsGenerations,
 } from './components';
 
-import {
-  readFavoritePokemonIds,
-  updateFavoritePokemons,
-} from './services/pokedexService';
+import { readFavoritePokemonIds, updateFavoritePokemons } from './services/pokedexService';
 
 import pokemons from './data';
 
@@ -37,18 +36,13 @@ class App extends Component {
   onUpdateFavoritePokemons(pokemonId, isFavorite) {
     updateFavoritePokemons(pokemonId, isFavorite);
 
-    this.setState(({ isPokemonFavoriteById: App.setIsPokemonFavoriteById() }));
+    this.setState({ isPokemonFavoriteById: App.setIsPokemonFavoriteById() });
   }
 
   renderPokedex() {
     const { isPokemonFavoriteById } = this.state;
 
-    return (
-      <Pokedex
-        pokemons={pokemons}
-        isPokemonFavoriteById={isPokemonFavoriteById}
-      />
-    );
+    return <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />;
   }
 
   renderPokemonDetails(match) {
@@ -59,9 +53,8 @@ class App extends Component {
         isPokemonFavoriteById={isPokemonFavoriteById}
         match={match}
         pokemons={pokemons}
-        onUpdateFavoritePokemons={(pokemonId, isFavorite) => (
-          this.onUpdateFavoritePokemons(pokemonId, isFavorite)
-        )}
+        onUpdateFavoritePokemons={(pokemonId, isFavorite) =>
+          this.onUpdateFavoritePokemons(pokemonId, isFavorite)}
       />
     );
   }
@@ -72,17 +65,12 @@ class App extends Component {
 
     return (
       <Switch>
-        <Route
-          exact
-          path="/"
-          render={({ match }) => this.renderPokedex(match)}
-        />
-        <Route
-          path="/pokemons/:id"
-          render={({ match }) => this.renderPokemonDetails(match)}
-        />
+        <Route exact path="/" render={({ match }) => this.renderPokedex(match)} />
+        <Route path="/pokemons/:id" render={({ match }) => this.renderPokemonDetails(match)} />
         <Route path="/favorites" render={() => <FavoritePokemons pokemons={favoritePokemons} />} />
         <Route path="/about" component={About} />
+        <Route path="/locations" component={PokemonsLocation} />
+        <Route path="/generations" component={PokemonsGenerations} />
         <Route component={NotFound} />
       </Switch>
     );
@@ -93,9 +81,21 @@ class App extends Component {
       <div className="App">
         <h1>Pokédex</h1>
         <nav>
-          <Link className="link" to="/">Home</Link>
-          <Link className="link" to="/about">About</Link>
-          <Link className="link" to="/favorites">Favorite Pokémons</Link>
+          <Link className="link" to="/">
+            Home
+          </Link>
+          <Link className="link" to="/about">
+            About
+          </Link>
+          <Link className="link" to="/favorites">
+            Favorite Pokémons
+          </Link>
+          <Link className="link" to="/locations">
+            Locations
+          </Link>
+          <Link className="link" to="/generations">
+            Generations
+          </Link>
         </nav>
         {this.renderRoutes()}
       </div>

@@ -1,0 +1,42 @@
+b32d8fa38eb174e6f8827594a7eb1928
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _react2 = require("@testing-library/react");
+
+var _About = _interopRequireDefault(require("../components/About"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/Requirement-21.test.js";
+describe('Exigência → 21', () => {
+  test('A página "About" deve exibir informações sobre a Pokédex', () => {
+    const _render = (0, _react2.render)(_react.default.createElement(_reactRouterDom.MemoryRouter, {
+      initialEntries: ['/'],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 9
+      },
+      __self: void 0
+    }, _react.default.createElement(_About.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: void 0
+    }))),
+          getByText = _render.getByText;
+
+    const link = 'https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png';
+    const text = 'About Pokédex';
+    expect(getByText(text)).toBeInTheDocument();
+    expect(getByText(text).tagName).toBe('H2');
+    expect(getByText(text).nextSibling.firstChild.tagName).toBe('P');
+    expect(getByText(text).nextSibling.firstChild.nextSibling.tagName).toBe('P');
+    expect(getByText(text).nextSibling.firstChild.nextSibling.nextSibling.src).toBe(link);
+  });
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlJlcXVpcmVtZW50LTIxLnRlc3QuanMiXSwibmFtZXMiOlsiZGVzY3JpYmUiLCJ0ZXN0IiwiZ2V0QnlUZXh0IiwibGluayIsInRleHQiLCJleHBlY3QiLCJ0b0JlSW5UaGVEb2N1bWVudCIsInRhZ05hbWUiLCJ0b0JlIiwibmV4dFNpYmxpbmciLCJmaXJzdENoaWxkIiwic3JjIl0sIm1hcHBpbmdzIjoiOzs7O0FBQUE7O0FBQ0E7O0FBQ0E7O0FBQ0E7OztBQUVBQSxRQUFRLENBQUMsZ0JBQUQsRUFBbUIsTUFBTTtBQUMvQkMsRUFBQUEsSUFBSSxDQUFDLDBEQUFELEVBQTZELE1BQU07QUFBQSxvQkFDL0Msb0JBQ3BCLDZCQUFDLDRCQUFEO0FBQWMsTUFBQSxjQUFjLEVBQUUsQ0FBQyxHQUFELENBQTlCO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLE9BQ0UsNkJBQUMsY0FBRDtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxNQURGLENBRG9CLENBRCtDO0FBQUEsVUFDN0RDLFNBRDZELFdBQzdEQSxTQUQ2RDs7QUFNckUsVUFBTUMsSUFBSSxHQUFHLG1HQUFiO0FBQ0EsVUFBTUMsSUFBSSxHQUFHLGVBQWI7QUFDQUMsSUFBQUEsTUFBTSxDQUFDSCxTQUFTLENBQUNFLElBQUQsQ0FBVixDQUFOLENBQXdCRSxpQkFBeEI7QUFDQUQsSUFBQUEsTUFBTSxDQUFDSCxTQUFTLENBQUNFLElBQUQsQ0FBVCxDQUFnQkcsT0FBakIsQ0FBTixDQUFnQ0MsSUFBaEMsQ0FBcUMsSUFBckM7QUFDQUgsSUFBQUEsTUFBTSxDQUFDSCxTQUFTLENBQUNFLElBQUQsQ0FBVCxDQUFnQkssV0FBaEIsQ0FBNEJDLFVBQTVCLENBQXVDSCxPQUF4QyxDQUFOLENBQXVEQyxJQUF2RCxDQUE0RCxHQUE1RDtBQUNBSCxJQUFBQSxNQUFNLENBQUNILFNBQVMsQ0FBQ0UsSUFBRCxDQUFULENBQWdCSyxXQUFoQixDQUE0QkMsVUFBNUIsQ0FBdUNELFdBQXZDLENBQW1ERixPQUFwRCxDQUFOLENBQW1FQyxJQUFuRSxDQUF3RSxHQUF4RTtBQUNBSCxJQUFBQSxNQUFNLENBQUNILFNBQVMsQ0FBQ0UsSUFBRCxDQUFULENBQWdCSyxXQUFoQixDQUE0QkMsVUFBNUIsQ0FBdUNELFdBQXZDLENBQW1EQSxXQUFuRCxDQUErREUsR0FBaEUsQ0FBTixDQUEyRUgsSUFBM0UsQ0FBZ0ZMLElBQWhGO0FBQ0QsR0FiRyxDQUFKO0FBY0QsQ0FmTyxDQUFSIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IE1lbW9yeVJvdXRlciB9IGZyb20gJ3JlYWN0LXJvdXRlci1kb20nO1xuaW1wb3J0IHsgcmVuZGVyIH0gZnJvbSAnQHRlc3RpbmctbGlicmFyeS9yZWFjdCc7XG5pbXBvcnQgQWJvdXQgZnJvbSAnLi4vY29tcG9uZW50cy9BYm91dCc7XG5cbmRlc2NyaWJlKCdFeGlnw6puY2lhIOKGkiAyMScsICgpID0+IHtcbiAgdGVzdCgnQSBww6FnaW5hIFwiQWJvdXRcIiBkZXZlIGV4aWJpciBpbmZvcm1hw6fDtWVzIHNvYnJlIGEgUG9rw6lkZXgnLCAoKSA9PiB7XG4gICAgY29uc3QgeyBnZXRCeVRleHQgfSA9IHJlbmRlcihcbiAgICAgIDxNZW1vcnlSb3V0ZXIgaW5pdGlhbEVudHJpZXM9e1snLyddfT5cbiAgICAgICAgPEFib3V0IC8+XG4gICAgICA8L01lbW9yeVJvdXRlcj4sXG4gICAgKTtcbiAgICBjb25zdCBsaW5rID0gJ2h0dHBzOi8vY2RuLmJ1bGJhZ2FyZGVuLm5ldC91cGxvYWQvdGh1bWIvOC84Ni9HZW5fSV9Qb2slQzMlQTlkZXgucG5nLzgwMHB4LUdlbl9JX1BvayVDMyVBOWRleC5wbmcnO1xuICAgIGNvbnN0IHRleHQgPSAnQWJvdXQgUG9rw6lkZXgnO1xuICAgIGV4cGVjdChnZXRCeVRleHQodGV4dCkpLnRvQmVJblRoZURvY3VtZW50KCk7XG4gICAgZXhwZWN0KGdldEJ5VGV4dCh0ZXh0KS50YWdOYW1lKS50b0JlKCdIMicpO1xuICAgIGV4cGVjdChnZXRCeVRleHQodGV4dCkubmV4dFNpYmxpbmcuZmlyc3RDaGlsZC50YWdOYW1lKS50b0JlKCdQJyk7XG4gICAgZXhwZWN0KGdldEJ5VGV4dCh0ZXh0KS5uZXh0U2libGluZy5maXJzdENoaWxkLm5leHRTaWJsaW5nLnRhZ05hbWUpLnRvQmUoJ1AnKTtcbiAgICBleHBlY3QoZ2V0QnlUZXh0KHRleHQpLm5leHRTaWJsaW5nLmZpcnN0Q2hpbGQubmV4dFNpYmxpbmcubmV4dFNpYmxpbmcuc3JjKS50b0JlKGxpbmspO1xuICB9KTtcbn0pO1xuIl19

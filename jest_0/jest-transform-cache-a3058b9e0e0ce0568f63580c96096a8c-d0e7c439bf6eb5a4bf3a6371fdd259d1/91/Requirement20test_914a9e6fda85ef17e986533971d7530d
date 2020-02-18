@@ -1,0 +1,40 @@
+d5790785a64229046dd5cdc839f74c6d
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _react2 = require("@testing-library/react");
+
+var _App = _interopRequireDefault(require("../App"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/Requirement-20.test.js";
+describe('Exigência → 19', () => {
+  test(`Ao clicar no link "Favorite Pokémons" na barra de navegação, a aplicação
+   deve ser redirecionada para a página de pokémons favoritados, na URL "/favorites"`, () => {
+    const _render = (0, _react2.render)(_react.default.createElement(_reactRouterDom.MemoryRouter, {
+      initialEntries: ['/'],
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: void 0
+    }, _react.default.createElement(_App.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 11
+      },
+      __self: void 0
+    }))),
+          getByText = _render.getByText;
+
+    _react2.fireEvent.click(getByText('Favorite Pokémons'));
+
+    const favoritePokemon = getByText('No favorite pokemon found');
+    expect(favoritePokemon).toBeInTheDocument();
+  });
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIlJlcXVpcmVtZW50LTIwLnRlc3QuanMiXSwibmFtZXMiOlsiZGVzY3JpYmUiLCJ0ZXN0IiwiZ2V0QnlUZXh0IiwiZmlyZUV2ZW50IiwiY2xpY2siLCJmYXZvcml0ZVBva2Vtb24iLCJleHBlY3QiLCJ0b0JlSW5UaGVEb2N1bWVudCJdLCJtYXBwaW5ncyI6Ijs7OztBQUFBOztBQUNBOztBQUNBOztBQUNBOzs7QUFFQUEsUUFBUSxDQUFDLGdCQUFELEVBQW1CLE1BQU07QUFDL0JDLEVBQUFBLElBQUksQ0FBRTtxRkFBRixFQUNpRixNQUFNO0FBQUEsb0JBQ25FLG9CQUNwQiw2QkFBQyw0QkFBRDtBQUFjLE1BQUEsY0FBYyxFQUFFLENBQUMsR0FBRCxDQUE5QjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUNFLDZCQUFDLFlBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsTUFERixDQURvQixDQURtRTtBQUFBLFVBQ2pGQyxTQURpRixXQUNqRkEsU0FEaUY7O0FBTXpGQyxzQkFBVUMsS0FBVixDQUFnQkYsU0FBUyxDQUFDLG1CQUFELENBQXpCOztBQUNBLFVBQU1HLGVBQWUsR0FBR0gsU0FBUyxDQUFDLDJCQUFELENBQWpDO0FBQ0FJLElBQUFBLE1BQU0sQ0FBQ0QsZUFBRCxDQUFOLENBQXdCRSxpQkFBeEI7QUFDRCxHQVZHLENBQUo7QUFXRCxDQVpPLENBQVIiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuaW1wb3J0IHsgTWVtb3J5Um91dGVyIH0gZnJvbSAncmVhY3Qtcm91dGVyLWRvbSc7XG5pbXBvcnQgeyByZW5kZXIsIGZpcmVFdmVudCB9IGZyb20gJ0B0ZXN0aW5nLWxpYnJhcnkvcmVhY3QnO1xuaW1wb3J0IEFwcCBmcm9tICcuLi9BcHAnO1xuXG5kZXNjcmliZSgnRXhpZ8OqbmNpYSDihpIgMTknLCAoKSA9PiB7XG4gIHRlc3QoYEFvIGNsaWNhciBubyBsaW5rIFwiRmF2b3JpdGUgUG9rw6ltb25zXCIgbmEgYmFycmEgZGUgbmF2ZWdhw6fDo28sIGEgYXBsaWNhw6fDo29cbiAgIGRldmUgc2VyIHJlZGlyZWNpb25hZGEgcGFyYSBhIHDDoWdpbmEgZGUgcG9rw6ltb25zIGZhdm9yaXRhZG9zLCBuYSBVUkwgXCIvZmF2b3JpdGVzXCJgLCAoKSA9PiB7XG4gICAgY29uc3QgeyBnZXRCeVRleHQgfSA9IHJlbmRlcihcbiAgICAgIDxNZW1vcnlSb3V0ZXIgaW5pdGlhbEVudHJpZXM9e1snLyddfT5cbiAgICAgICAgPEFwcCAvPlxuICAgICAgPC9NZW1vcnlSb3V0ZXI+LFxuICAgICk7XG4gICAgZmlyZUV2ZW50LmNsaWNrKGdldEJ5VGV4dCgnRmF2b3JpdGUgUG9rw6ltb25zJykpO1xuICAgIGNvbnN0IGZhdm9yaXRlUG9rZW1vbiA9IGdldEJ5VGV4dCgnTm8gZmF2b3JpdGUgcG9rZW1vbiBmb3VuZCcpO1xuICAgIGV4cGVjdChmYXZvcml0ZVBva2Vtb24pLnRvQmVJblRoZURvY3VtZW50KCk7XG4gIH0pO1xufSk7XG4iXX0=

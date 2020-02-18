@@ -1,0 +1,36 @@
+c882c07f04ac0c12a6dabea763351ed7
+"use strict";
+
+var _interopRequireDefault = require("/home/doug/projetos-trybe/sd-01-week15-react-tests/node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/interopRequireDefault");
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _react2 = require("@testing-library/react");
+
+var _App = _interopRequireDefault(require("../App"));
+
+var _jsxFileName = "/home/doug/projetos-trybe/sd-01-week15-react-tests/src/tests/App.test.js";
+describe('Teste amostra da Trybe', () => {
+  test('renders a reading with the text `Pokédex`', () => {
+    const _render = (0, _react2.render)(_react.default.createElement(_reactRouterDom.MemoryRouter, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 9
+      },
+      __self: void 0
+    }, _react.default.createElement(_App.default, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 10
+      },
+      __self: void 0
+    }))),
+          getByText = _render.getByText;
+
+    const heading = getByText(/Pokédex/i);
+    expect(heading).toBeInTheDocument();
+  });
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkFwcC50ZXN0LmpzIl0sIm5hbWVzIjpbImRlc2NyaWJlIiwidGVzdCIsImdldEJ5VGV4dCIsImhlYWRpbmciLCJleHBlY3QiLCJ0b0JlSW5UaGVEb2N1bWVudCJdLCJtYXBwaW5ncyI6Ijs7OztBQUFBOztBQUNBOztBQUNBOztBQUNBOzs7QUFFQUEsUUFBUSxDQUFDLHdCQUFELEVBQTJCLE1BQU07QUFDdkNDLEVBQUFBLElBQUksQ0FBQywyQ0FBRCxFQUE4QyxNQUFNO0FBQUEsb0JBQ2hDLG9CQUNwQiw2QkFBQyw0QkFBRDtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxPQUNFLDZCQUFDLFlBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsTUFERixDQURvQixDQURnQztBQUFBLFVBQzlDQyxTQUQ4QyxXQUM5Q0EsU0FEOEM7O0FBTXRELFVBQU1DLE9BQU8sR0FBR0QsU0FBUyxDQUFDLFVBQUQsQ0FBekI7QUFDQUUsSUFBQUEsTUFBTSxDQUFDRCxPQUFELENBQU4sQ0FBZ0JFLGlCQUFoQjtBQUNELEdBUkcsQ0FBSjtBQVNELENBVk8sQ0FBUiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyBNZW1vcnlSb3V0ZXIgfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJztcbmltcG9ydCB7IHJlbmRlciB9IGZyb20gJ0B0ZXN0aW5nLWxpYnJhcnkvcmVhY3QnO1xuaW1wb3J0IEFwcCBmcm9tICcuLi9BcHAnO1xuXG5kZXNjcmliZSgnVGVzdGUgYW1vc3RyYSBkYSBUcnliZScsICgpID0+IHtcbiAgdGVzdCgncmVuZGVycyBhIHJlYWRpbmcgd2l0aCB0aGUgdGV4dCBgUG9rw6lkZXhgJywgKCkgPT4ge1xuICAgIGNvbnN0IHsgZ2V0QnlUZXh0IH0gPSByZW5kZXIoXG4gICAgICA8TWVtb3J5Um91dGVyPlxuICAgICAgICA8QXBwIC8+XG4gICAgICA8L01lbW9yeVJvdXRlcj4sXG4gICAgKTtcbiAgICBjb25zdCBoZWFkaW5nID0gZ2V0QnlUZXh0KC9Qb2vDqWRleC9pKTtcbiAgICBleHBlY3QoaGVhZGluZykudG9CZUluVGhlRG9jdW1lbnQoKTtcbiAgfSk7XG59KTtcbiJdfQ==
