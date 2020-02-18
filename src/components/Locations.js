@@ -64,9 +64,7 @@ class Locations extends Component {
     const generateContent = () => {
       const { table } = this.state;
       return table.map(([name, url]) => (
-        <li key={url}>
-          {`Name: ${name}  /  URL: ${url}`}
-        </li>
+        <li key={url}>{`Name: ${name}  /  URL: ${url}`}</li>
       ));
     };
     const { limit, offset } = this.state;
