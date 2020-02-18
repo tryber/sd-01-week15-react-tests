@@ -76,8 +76,8 @@ describe('Generations page test suite', () => {
     // console.log (link)
     // fireEvent.click(link[0]);
 
-    await wait(() => getAllByText(/Name:/));
-    const pokesList = getAllByText(/Name:/);
+    await wait(() => getAllByText(/this poke:/));
+    const pokesList = getAllByText(/this poke:/);
     // console.log(pokesList)
     const XGenPokes = await fetchRandomGen();
 
@@ -106,16 +106,26 @@ describe('Generations page test suite', () => {
         <App />
       </MemoryRouter>,
     );
+
     const genButton = getByText(/Generations/i);
     fireEvent.click(genButton);
 
-    await wait(() => getAllByText(/https/));
-    const generationsList = getAllByText(/https/);
-    console.log(generationsList);
+    await wait(() => getAllByText(/generation-/));
+    const generationsList = getAllByText(/generation-/);
 
+    const buttonArray = generationsList.map((li) => {
+      const buttons = [];
+      buttons.push(li.childNodes[3]);
+      return buttons;
+    });
+    // console.log(buttonArray[0][0]);
 
+    // fireEvent.click(buttonArray[0][0]);
+    await wait(() => getAllByText(/this poke:/));
+    const pokesList = getAllByText(/this poke:/);
+    console.log(pokesList);
 
-    const XGenPokes = await fetchPokebyGeneration(1);
+    // const XGenPokes = await fetchPokebyGeneration(1);
 
     // console.log(XGenPokes);
 
@@ -125,6 +135,5 @@ describe('Generations page test suite', () => {
     //   expect(listItem.innerHTML).toEqual(expect.stringMatching(`${name}`));
     //   expect(listItem.innerHTML).toEqual(expect.stringMatching(`${url}`));
     // });
-
   }, 300000);
 });

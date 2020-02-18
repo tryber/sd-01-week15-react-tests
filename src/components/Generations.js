@@ -33,7 +33,7 @@ class Generations extends Component {
         .then((response) => response.json())
         .then(({ pokemon_species }) => (
           pokemon_species.map(({ name, url }) => (
-            this.setState((state) => ({ table: [...state.table, [name, url]] }))))));
+            this.setState((state) => ({ table: [...state.table, [`this poke:${name}`, url]] }))))));
     }
   }
 
@@ -41,7 +41,7 @@ class Generations extends Component {
     const { table } = this.state;
     return table.map(([name, url]) => (
       <li key={url}>
-        Name:
+        Name
         {name}
         /  URL:
         <a href={`/generations/${Number(table.findIndex((item) => item.includes(url))) + 1}`}>{url}</a>
