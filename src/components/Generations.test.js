@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
-import { Router, MemoryRouter } from 'react-router-dom';
+import { render, cleanup, fireEvent, wait, waitForDomChange, waitForElementToBeRemoved } from '@testing-library/react';
+import { Router, MemoryRouter, Redirect } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import Generations from './Generations';
 import App from '../App';
@@ -30,89 +30,101 @@ describe('Generations page test suite', () => {
   }
 
   it('28.2 - the page must exhibit a list with the returned locations', async () => {
-    const { getByText, queryAllByText } = renderWithRouter(
+    const { getByText, getAllByText } = renderWithRouter(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
     );
     const genButton = getByText(/Generations/i);
     fireEvent.click(genButton);
-    const generationsList = queryAllByText(/generations/gm);
-    const generations = fetchPokeGenerations();
 
-    console.log(generationsList);
+    await wait(() => getAllByText(/generation-/));
+    const generationsList = getAllByText(/generation-/);
+    const generations = await fetchPokeGenerations();
 
-    generationsList.forEach((listItem) => generations.forEach(([name, url]) => (
-      expect(listItem).toEqual(expect.arrayContaining(name, 'oi')))));
+    generationsList.forEach((listItem) => {
+      const [name, url] = generations[generationsList.indexOf(listItem)];
+      expect(listItem.innerHTML).toEqual(expect.stringMatching(`${name}`));
+      expect(listItem.innerHTML).toEqual(expect.stringMatching(`${url}`));
+    });
   });
 
+  const randomNum = Math.floor((Math.random() * 7) + 1);
+  async function fetchRandomGen() {
+    const resultsList = await fetch(`https://pokeapi.co/api/v2/generation/${randomNum}`)
+      .then((response) => response.json())
+      .then(({ pokemon_species }) => pokemon_species.map(({ name, url }) => [name, url]));
 
-  it.skip('30.2 - the generations/id page should exhibit a list with pokemons and their urls', async () => {
-    const randomNum = Math.floor((Math.random() * 7) + 1);
-    async function fetchPokebyGeneration() {
-      const resultsList = await fetch(`https://pokeapi.co/api/v2/generation/${randomNum}`)
-        .then((response) => response.json())
-        .then(({ pokemon_species }) => pokemon_species.map(({ name, url }) => [name, url]));
+    // enable to check results list from fetch
+    // console.log(resultsList);
+    return resultsList;
+  }
 
-      // enable to check results list from fetch
-      // console.log(resultsList);
-      return resultsList;
-    }
-
-    const { container, getByText } = renderWithRouter(
-      <MemoryRouter initialEntries={['/']}>
+  it('30.2 - the generations/id page should exhibit a list with pokemons and their urls', async () => {
+    const { getAllByText } = renderWithRouter(
+      <MemoryRouter initialEntries={[`/generations/${randomNum}`]}>
         <App />
       </MemoryRouter>,
     );
 
-    const isGen = getByText(/Name:generation/i);
-    expect(isGen).toBeInTheDocument();
 
-    const pokesList = container.querySelectorAll('li');
-    const XGenPokes = await fetchPokebyGeneration();
+    // await wait(() => getAllByText(/generation-/));
+    // const generationsList = getAllByText(/generation-/)
+    // console.log(generationsList)
+
+    // const link = getAllByText(/https/i);
+    // console.log (link)
+    // fireEvent.click(link[0]);
+
+    await wait(() => getAllByText(/Name:/));
+    const pokesList = getAllByText(/Name:/);
+    // console.log(pokesList)
+    const XGenPokes = await fetchRandomGen();
 
     // console.log(XGenPokes);
 
-    pokesList.forEach((listItem) => XGenPokes.forEach(([name, url]) => (
-      expect(listItem).toEqual(expect.arrayContaining(name, url)))));
-  });
+    pokesList.forEach((listItem) => {
+      const [name, url] = XGenPokes[pokesList.indexOf(listItem)];
+      expect(listItem.innerHTML).toEqual(expect.stringMatching(`${name}`));
+      expect(listItem.innerHTML).toEqual(expect.stringMatching(`${url}`));
+    });
+  }, 300000);
+
+  async function fetchPokebyGeneration(gen) {
+    const resultsList = await fetch(`https://pokeapi.co/api/v2/generation/${gen}`)
+      .then((response) => response.json())
+      .then(({ pokemon_species }) => pokemon_species.map(({ name, url }) => [name, url]));
+
+    // enable to check results list from fetch
+    // console.log(resultsList);
+    return resultsList;
+  }
 
   it.skip('31 - each generation has a link to its own page', async () => {
-    // const params = { id: [1, 2, 3, 4, 5, 6, 7] };
-
-    async function fetchPokebyGeneration(gen) {
-      const resultsList = await fetch(`https://pokeapi.co/api/v2/generation/${gen}`)
-        .then((response) => response.json())
-        .then(({ pokemon_species }) => pokemon_species.map(({ name, url }) => [name, url]));
-
-      // enable to check results list from fetch
-      // console.log(resultsList);
-      return resultsList;
-    }
-
-    // params.id.forEach((number) => {
-    const match = { params: { id: undefined } };
-    const { container, getByText } = render(
+    const { getAllByText, getByText } = renderWithRouter(
       <MemoryRouter initialEntries={['/']}>
-        <Generations />
+        <App />
       </MemoryRouter>,
     );
-    // console.log(match);
+    const genButton = getByText(/Generations/i);
+    fireEvent.click(genButton);
+
+    await wait(() => getAllByText(/https/));
+    const generationsList = getAllByText(/https/);
+    console.log(generationsList);
 
 
-    // const isGen = getByText(/Name:generation/i);
-    // expect(isGen).toBeInTheDocument();
 
-    const links = container.querySelectorAll('a');
-    // console.log(links);
-    // links.forEach((link) => {
-    //   // console.log(fetchPokebyGeneration(Array(links).indexOf(link) + 1))
-    //   fetchPokebyGeneration(randomNum).forEach((poke) => {
-    //     fireEvent.click(link);
-    //     const newList = container.querySelectorAll('li');
-    //     newList.forEach((entry) => expect(entry).toEqual(expect.stringMatching(poke)));
-    //   });
+    const XGenPokes = await fetchPokebyGeneration(1);
+
+    // console.log(XGenPokes);
+
+    // return pokesList.forEach((listItem) => {
+    //   const [name, url] = XGenPokes[pokesList.indexOf(listItem)]
+    //   console.log(name, url)
+    //   expect(listItem.innerHTML).toEqual(expect.stringMatching(`${name}`));
+    //   expect(listItem.innerHTML).toEqual(expect.stringMatching(`${url}`));
     // });
-    // });
-  });
+
+  }, 300000);
 });
