@@ -18,7 +18,7 @@ function renderWithRouter(
 
 describe('Requisito 25 e 26', () => {
   test('The URL of route is location', async () => {
-    const { getByText, history } = renderWithRouter(<App />);
+    const { getByText, history, queryAllByTestId } = renderWithRouter(<App />);
 
     const location = getByText(/Locations/i);
     expect(location).toBeInTheDocument();
@@ -26,8 +26,9 @@ describe('Requisito 25 e 26', () => {
 
     fireEvent.click(location);
     expect(history.location.pathname).toBe('/locations');
-
     await waitForDomChange();
+    const locationsName = queryAllByTestId(/location-name/i);
+    expect(locationsName.length).toBe(100);
 
     const previousButton = getByText(/Previous/i);
     const nextButton = getByText(/Next/i);
