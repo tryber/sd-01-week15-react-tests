@@ -213,9 +213,9 @@ const pokemons = [
   },
 ];
 
-test('renders a reading with the text `Pokédex`', () => {
+test('test 1, renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
-    <MemoryRouter >
+    <MemoryRouter>
       <App />
     </MemoryRouter>,
   );
@@ -223,7 +223,7 @@ test('renders a reading with the text `Pokédex`', () => {
   expect(heading).toBeInTheDocument();
 });
 
-test('render router is "/"', () => {
+test('test 1, render router is "/"', () => {
   const { getByText } = render(
     <MemoryRouter initialEntries={['/']}>
       <App />
@@ -232,7 +232,7 @@ test('render router is "/"', () => {
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
 });
 
-test('render text "Average weight:"', () => {
+test('test 2, render text "Average weight:"', () => {
   const { getByText } = render(
     <MemoryRouter initialEntries={['/']}>
       <App />
@@ -241,7 +241,7 @@ test('render text "Average weight:"', () => {
   expect(getByText(/Average weight:/i)).toBeInTheDocument();
 });
 
-test('renders a reading with the text `Próximo pokémon`', () => {
+test('test 3, renders a reading with the text `Próximo pokémon`', () => {
   const { getByText } = render(
     <MemoryRouter>
       <App />
@@ -255,7 +255,7 @@ test('renders a reading with the text `Próximo pokémon`', () => {
   });
 });
 
-test('render filter pokemons type', () => {
+test('test 4, render filter pokemons type', () => {
   const { getByText, getAllByText } = render(
     <MemoryRouter>
       <App />
@@ -275,7 +275,7 @@ test('render filter pokemons type', () => {
   });
 });
 
-test('click reset filter pokemons type', () => {
+test('test 5, click reset filter pokemons type', () => {
   const { getByText } = render(
     <MemoryRouter>
       <App />
@@ -293,7 +293,7 @@ test('click reset filter pokemons type', () => {
   });
 });
 
-test('dynamic button filter pokemon', () => {
+test('test 6, dynamic button filter pokemon', () => {
   const { getByText, getAllByText } = render(
     <MemoryRouter>
       <App />
@@ -306,7 +306,7 @@ test('dynamic button filter pokemon', () => {
   });
 });
 
-test('disable button "Proximo pokémon" if filter only pokemon ', () => {
+test('test 7, disable button "Proximo pokémon" if filter only pokemon ', () => {
   const { getByText, getAllByText } = render(
     <MemoryRouter>
       <App />
@@ -321,7 +321,7 @@ test('disable button "Proximo pokémon" if filter only pokemon ', () => {
   expect(currentPokemon).toBe(previousPokemon);
 });
 
-test('pokemon "nome", "tipo", "peso médio", imagem', () => {
+test('test 8, pokemon "nome", "tipo", "peso médio", imagem', () => {
   const { getByText, getByAltText } = render(
     <MemoryRouter>
       <App />
@@ -376,7 +376,7 @@ test('9 and 10 tests, render next pokemons URL, "URL/pokemons/id"', () => {
   expect(currentButtonMoreDetails.href).toBe(`http://localhost/pokemons/${pokemons[1].id}`);
 });
 
-test('Page more details render name, type, average and image', () => {
+test('test 11, Page more details render name, type, average and image', () => {
   const { getByText, getByAltText, getAllByText } = render(
     <MemoryRouter>
       <App />
@@ -397,7 +397,7 @@ test('Page more details render name, type, average and image', () => {
   expect(average.innerHTML).toBe(averageData);
 });
 
-test('Page more details not render link more details', () => {
+test('test 12, Page more details not render link more details', () => {
   const { getByText, getByAltText, getAllByText } = render(
     <MemoryRouter>
       <App />
@@ -411,7 +411,7 @@ test('Page more details not render link more details', () => {
   expect(previousButtonMoreDetails).not.toBe(currentButtonMoreDetails);
 });
 
-test('Page more details render Summary, paragraph', () => {
+test('test 13, Page more details render Summary, paragraph', () => {
   const { getByText } = render(
     <MemoryRouter>
       <App />
@@ -429,7 +429,7 @@ test('Page more details render Summary, paragraph', () => {
   expect(summaryParagraph.tagName).toBe('P');
 });
 
-test('Page more details render maps, details maps', () => {
+test('test 14, Page more details render maps, details maps', () => {
   const { getByText } = render(
     <MemoryRouter>
       <App />
