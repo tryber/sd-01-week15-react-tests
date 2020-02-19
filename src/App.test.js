@@ -1,7 +1,12 @@
 import React from 'react';
 import { Router, MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { render, fireEvent, cleanup } from '@testing-library/react';
+import {
+  render,
+  fireEvent,
+  cleanup,
+  wait,
+} from '@testing-library/react';
 import App from './App';
 
 afterEach(cleanup);
@@ -283,16 +288,18 @@ describe('App component test suite', () => {
     });
   });
 
-  it('10 - poke url navigates to deatils page', () => {
-    const { getByText, container } = render(
-      <MemoryRouter initialEntries={['/']}>
-        <App />
-      </MemoryRouter>,
+  it('10 - poke url navigates to details page', () => {
+    const { getByText, container, history } = renderWithRouter(
+      <App />,
     );
 
     const url = getByText('More details');
     fireEvent.click(url);
     expect(container.innerHTML).toMatch(`${pokemon.name} Details`);
+
+    // URL testing
+
+    expect(history.location.pathname).toBe(`/pokemons/${pokemon.id}`);
   });
 
   it('11 - details has correct pokemon info', () => {
@@ -497,19 +504,26 @@ describe('App component test suite', () => {
     expect(getAllByText(/locations/i)[1].tagName).toBe('H1');
   });
 
-  it('26 - link contains "location" text and takes user to locations page', () => {
-    const { getByText, history } = renderWithRouter(
+  it('26 - link contains "Locations" text and takes user to locations page where a lsit of locations is displayed', async () => {
+    const { getByText, history, getAllByText } = renderWithRouter(
       <App />,
     );
 
-    const locationsLink = getByText(/location/i);
+    const locationsLink = getByText(/Locations/g);
     expect(locationsLink.tagName).toBe('A');
 
     fireEvent.click(locationsLink);
     expect(history.location.pathname).toBe('/locations/');
+    await wait(() => getAllByText(/Name: /g));
+    const locationsList = getAllByText(/Name: /g);
+    // console.log(locationsList);
+    locationsList.forEach((item) => {
+      // console.log(item.innerHTML);
+      expect(item.innerHTML).toMatch(/Name: .*https.*location\/[0-9]*\//g);
+    });
   });
 
-  it('28.1 - shows the Generations page when the route is `/locations`', () => {
+  it('28.1 - shows the Generations page when the route is `/generations`', () => {
     const { getAllByText } = render(
       <MemoryRouter initialEntries={['/generations']}>
         <App />
@@ -520,15 +534,23 @@ describe('App component test suite', () => {
     expect(getAllByText(/generations/i)[1].tagName).toBe('H1');
   });
 
-  it('29 - link contains "generation" text and takes user to locations page', () => {
-    const { getByText, history } = renderWithRouter(
+  it('29 - link contains "Generations" text and takes user to generations page where a list of generations is displayed', async () => {
+    const { getByText, history, getAllByText } = renderWithRouter(
       <App />,
     );
 
-    const generationsLink = getByText(/generations/i);
+    const generationsLink = getByText(/Generations/g);
     expect(generationsLink.tagName).toBe('A');
 
     fireEvent.click(generationsLink);
     expect(history.location.pathname).toBe('/generations/');
-  });
+
+    await wait(() => getAllByText(/generation-/g));
+    const generationsList = getAllByText(/generation-/g);
+    // console.log(generationsList);
+    generationsList.forEach((item) => {
+      // console.log(item.innerHTML);
+      expect(item.innerHTML).toMatch(/Name.*https.*generation\/[0-9]*\//g);
+    });
+  }, 600000);
 });

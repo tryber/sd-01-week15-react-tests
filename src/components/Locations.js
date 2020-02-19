@@ -10,10 +10,10 @@ class Locations extends Component {
       offset: 0,
     };
     this.fetchPokeLocations = this.fetchPokeLocations.bind(this);
-    this.nextPage = this.nextPage.bind(this);
-    this.previousPage = this.previousPage.bind(this);
-    this.prevButtonControler = this.prevButtonControler.bind(this);
-    this.nextButtonController = this.nextButtonController.bind(this);
+    this.next = this.next.bind(this);
+    this.back = this.back.bind(this);
+    this.pBtn = this.pBtn.bind(this);
+    this.nBtn = this.nBtn.bind(this);
   }
 
   componentDidMount() {
