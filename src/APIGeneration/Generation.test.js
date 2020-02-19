@@ -48,6 +48,7 @@ describe('Requisito 28 e 29', () => {
 
     const generationPokemon = getByText(generationX[0]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/1');
     fireEvent.click(generationPokemon);
     await waitForDomChange();
     expect(queryAllByTestId(/pokemon-species/i).length).toBe(amountPokemonsGeneraion[0]);
@@ -60,6 +61,7 @@ describe('Requisito 28 e 29', () => {
     await waitForDomChange();
     const generationPokemon = getByText(generationX[1]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/2');
 
     fireEvent.click(generationPokemon);
     await waitForDomChange();
@@ -73,6 +75,7 @@ describe('Requisito 28 e 29', () => {
     await waitForDomChange();
     const generationPokemon = getByText(generationX[2]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/3');
 
     fireEvent.click(generationPokemon);
     await waitForDomChange();
@@ -86,6 +89,7 @@ describe('Requisito 28 e 29', () => {
     await waitForDomChange();
     const generationPokemon = getByText(generationX[3]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/4');
 
     fireEvent.click(generationPokemon);
     await waitForDomChange();
@@ -99,6 +103,7 @@ describe('Requisito 28 e 29', () => {
     await waitForDomChange();
     const generationPokemon = getByText(generationX[4]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/5');
 
     fireEvent.click(generationPokemon);
     await waitForDomChange();
@@ -112,6 +117,7 @@ describe('Requisito 28 e 29', () => {
     await waitForDomChange();
     const generationPokemon = getByText(generationX[5]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/6');
 
     fireEvent.click(generationPokemon);
     await waitForDomChange();
@@ -125,6 +131,7 @@ describe('Requisito 28 e 29', () => {
     await waitForDomChange();
     const generationPokemon = getByText(generationX[6]);
     expect(generationPokemon).toBeInTheDocument();
+    expect(generationPokemon.href).toBe('http://localhost/generations/7');
 
     fireEvent.click(generationPokemon);
     await waitForDomChange();

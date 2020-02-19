@@ -11,8 +11,8 @@ class Generation extends Component {
     return (
       <div className="generation">
         <div className="div-generations">
-          <Link to={`/generations/${url}`}>
-            <p data-testid="generation">{name}</p>
+          <Link to={`/generations/${url}`} data-testid="generation">
+            {name}
           </Link>
         </div>
       </div>
