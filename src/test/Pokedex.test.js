@@ -856,20 +856,24 @@ describe('test 27, Adicione uma rota para exibir uma lista de localizações', (
   });
 });
 describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizações', () => {
-  test('28 and 29,', () => {
-    const { getByText, history } = renderWithRouter(<App />);
+  test('28 and 29,', async () => {
+    const { getByText, history, getAllByText } = renderWithRouter(<App />);
 
     expect(history.location.pathname).toBe('/');
     const btnGenerations = getByText(/Generations/i);
     fireEvent.click(btnGenerations);
     expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
-    expect(getByText(/generation-i/i)).toBeInTheDocument();
-    expect(getByText(/generation-ii/i)).toBeInTheDocument();
-    expect(getByText(/generation-iii/i)).toBeInTheDocument();
-    expect(getByText(/generation-iv/i)).toBeInTheDocument();
-    expect(getByText(/generation-v/i)).toBeInTheDocument();
-    expect(getByText(/generation-vi/i)).toBeInTheDocument();
-    expect(getByText(/generation-vii/i)).toBeInTheDocument();
+    await waitForDomChange();
+    const generation1 = getAllByText(/generation-i/i);
+    const generation2 = getAllByText(/generation-v/i);
+
+    expect(generation1[0]).toBeInTheDocument();
+    expect(generation1[1]).toBeInTheDocument();
+    expect(generation1[2]).toBeInTheDocument();
+    expect(generation1[3]).toBeInTheDocument();
+    expect(generation2[0]).toBeInTheDocument();
+    expect(generation2[1]).toBeInTheDocument();
+    expect(generation2[2]).toBeInTheDocument();
   });
 });
 
@@ -880,12 +884,5 @@ describe('test 31, Adicione uma rota para exibir uma lista de localizações', (
     await waitForDomChange();
     const elementDiv = queryAllByTestId('element-div');
     expect(elementDiv.length).toBe(7);
-    expect(getByText(/generation-i/i)).toBeInTheDocument();
-    expect(getByText(/generation-ii/i)).toBeInTheDocument();
-    expect(getByText(/generation-iii/i)).toBeInTheDocument();
-    expect(getByText(/generation-iv/i)).toBeInTheDocument();
-    expect(getByText(/generation-v/i)).toBeInTheDocument();
-    expect(getByText(/generation-vi/i)).toBeInTheDocument();
-    expect(getByText(/generation-vii/i)).toBeInTheDocument();
   });
 });
