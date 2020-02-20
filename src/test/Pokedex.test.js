@@ -846,12 +846,12 @@ describe('test 27, Adicione uma rota para exibir uma lista de localizações', (
     const elementP = queryAllByTestId('element-p');
     expect(elementP.length).toBe(100);
     const previousButton = getByText(/Previous/i);
-    const nextButton = getByText(/Next/i);
     expect(previousButton).toBeDisabled();
-    for (let index = 0; index < 8; index += 1) {
+    for (let index = 0; index < 7; index += 1) {
+      const nextButton = getByText(/Next/i);
       fireEvent.click(nextButton);
     }
-
+    const nextButton = getByText(/Next/i);
     expect(nextButton).toBeDisabled();
   });
 });

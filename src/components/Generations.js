@@ -18,7 +18,7 @@ class Generations extends Component {
       loading: false,
     }));
   }
-  
+
   render() {
     const { date, loading } = this.state;
     if (loading) return <h1>LOADING...</h1>;
