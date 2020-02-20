@@ -879,27 +879,114 @@ describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizaç�
 
 describe('test 30, Adicione uma rota para exibir uma lista de localizações', () => {
   test('Testar a quantidade de item na tela sendo renderizado', async () => {
-    const { getByText, history, getAllByText } = renderWithRouter(<App />);
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
 
     expect(history.location.pathname).toBe('/');
     const btnGenerations = getByText(/Generations/i);
     fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    await waitForDomChange();
+    const btnGenerationsx = queryByText(array[0]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/1`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  });
+  test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
     fireEvent.click(btnGenerations);
     expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
     await waitForDomChange();
-    const btnGenerationsY = getAllByText(/generation-i/i);
-    fireEvent.click(btnGenerationsY[0]);
-    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations/1');
-  });
-});
+    const btnGenerationsx = queryByText(array[1]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/2`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  });test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
 
-
-describe('test 31, Adicione uma rota para exibir uma lista de localizações', () => {
-  test('Testar a quantidade de item na tela sendo renderizado', async () => {
-    const { queryAllByTestId, getByText } = renderWithRouter(<App />);
-    fireEvent.click(getByText(/Generations/i));
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
     await waitForDomChange();
-    const elementDiv = queryAllByTestId('element-div');
-    expect(elementDiv.length).toBe(7);
-  });
+    const btnGenerationsx = queryByText(array[2]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/3`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  });test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    await waitForDomChange();
+    const btnGenerationsx = queryByText(array[3]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/4`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  });test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    await waitForDomChange();
+    const btnGenerationsx = queryByText(array[4]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/5`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  });test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    await waitForDomChange();
+    const btnGenerationsx = queryByText(array[5]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/6`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  });test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const array = ["generation-i", "generation-ii", "generation-iii", "generation-iv", "generation-v", "generation-vi","generation-vii"]
+    const { getByText, history, queryByText } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    await waitForDomChange();
+    const btnGenerationsx = queryByText(array[6]);
+    fireEvent.click(btnGenerationsx);
+    expect(`http://localhost${history.location.pathname}`).toBe(`http://localhost/generations/7`);
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+  })
 });
+
+
+// describe('test 31, Adicione uma rota para exibir uma lista de localizações', () => {
+//   test('Testar a quantidade de item na tela sendo renderizado', async () => {
+//     const { queryAllByTestId, getByText } = renderWithRouter(<App />);
+//     fireEvent.click(getByText(/Generations/i));
+//     await waitForDomChange();
+//     const elementDiv = queryAllByTestId('element-div');
+//     expect(elementDiv.length).toBe(7);
+//   });
+// });
