@@ -852,7 +852,7 @@ describe('test 27, Adicione uma rota para exibir uma lista de localizações', (
       fireEvent.click(nextButton);
     }
     const nextButton = getByText(/Next/i);
-    expect(nextButton).toBeDisabled();
+    expect(nextButton).toBeNull();
   });
 });
 describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizações', () => {
@@ -876,6 +876,23 @@ describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizaç�
     expect(generation2[2]).toBeInTheDocument();
   });
 });
+
+describe('test 30, Adicione uma rota para exibir uma lista de localizações', () => {
+  test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const { getByText, history, getAllByText } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    await waitForDomChange();
+    const btnGenerationsY = getAllByText(/generation-i/i);
+    fireEvent.click(btnGenerationsY[0]);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations/1');
+  });
+});
+
 
 describe('test 31, Adicione uma rota para exibir uma lista de localizações', () => {
   test('Testar a quantidade de item na tela sendo renderizado', async () => {
