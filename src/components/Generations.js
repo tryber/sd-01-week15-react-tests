@@ -20,7 +20,7 @@ class Generations extends Component {
     const { date, loading } = this.state;
     if (loading) return <h1>LOADING...</h1>;
     console.log(date);
-    function splitUrl(url){
+    function splitUrl(url) {
       return url.split('generation/')[1];
     }
     return (

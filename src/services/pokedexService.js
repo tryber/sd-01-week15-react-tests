@@ -1,5 +1,5 @@
 const locationPokeAPI = (offset) => `https://pokeapi.co/api/v2/location/?limit=100&offset=${offset}`;
-export const getLocationPokemonAPI = (offset = 0) => {
+export function getLocationPokemonAPI(offset = 0) {
   return fetch(locationPokeAPI(offset))
     .then((response) => (
       response.json().then((json) => response && Promise.resolve(json))));
@@ -7,11 +7,11 @@ export const getLocationPokemonAPI = (offset = 0) => {
 
 const generationPokeAPI = 'https://pokeapi.co/api/v2/generation/';
 
-export const getGenerationPokemonAPI = () => {
+export function getGenerationPokemonAPI() {
   return fetch(generationPokeAPI)
     .then((response) => (
       response.json().then((json) => response && Promise.resolve(json))));
-}
+};
 export const readFavoritePokemonIds = () => (
   JSON.parse(localStorage.getItem('favoritePokemonIds')) || []
 );
