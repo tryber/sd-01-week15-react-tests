@@ -863,6 +863,7 @@ describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizaç�
     const btnGenerations = getByText(/Generations/i);
     fireEvent.click(btnGenerations);
     expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+    expect(elementDiv.length).toBe(7);
   });
 });
 
@@ -873,6 +874,12 @@ describe('test 31, Adicione uma rota para exibir uma lista de localizações', (
     await waitForDomChange();
     const elementDiv = queryAllByTestId('element-div');
     expect(elementDiv.length).toBe(7);
-    
+    expect(getByText(/generation-i/i)).toBeInTheDocument()
+    expect(getByText(/generation-ii/i)).toBeInTheDocument()
+    expect(getByText(/generation-iii/i)).toBeInTheDocument()
+    expect(getByText(/generation-iv/i)).toBeInTheDocument()
+    expect(getByText(/generation-v/i)).toBeInTheDocument()
+    expect(getByText(/generation-vi/i)).toBeInTheDocument()
+    expect(getByText(/generation-vii/i)).toBeInTheDocument()
   });
 });
