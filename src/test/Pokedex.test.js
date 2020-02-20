@@ -843,7 +843,7 @@ describe('test 27, Adicione uma rota para exibir uma lista de localizações', (
     const { getByText, queryAllByTestId } = renderWithRouter(<App />);
     fireEvent.click(getByText(/Locations/i));
     await waitForDomChange();
-    const elementP = queryAllByTestId('element-p');
+    const elementP = queryAllByTestId('location-name');
     expect(elementP.length).toBe(100);
     const previousButton = getByText(/Previous/i);
     expect(previousButton).toBeDisabled();
@@ -863,5 +863,14 @@ describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizaç�
     const btnGenerations = getByText(/Generations/i);
     fireEvent.click(btnGenerations);
     expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
+  });
+});
+
+describe('test 31, Adicione uma rota para exibir uma lista de localizações', () => {
+  test('Testar a quantidade de item na tela sendo renderizado', async () => {
+    const { queryAllByTestId } = renderWithRouter(<PokemonsGenerations />);
+    await waitForDomChange();
+    const elementDiv = queryAllByTestId('element-div');
+    expect(elementDiv.length).toBe(7);
   });
 });
