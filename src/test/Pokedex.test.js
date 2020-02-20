@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from '../App';
+import { Pokedex, PokemonDetails, About, FavoritePokemons, NotFound } from '../components';
 
 // jest.mock('react-router-dom', () => {
 //   const originalModule = jest.requireActual('react-router-dom');
@@ -213,6 +214,23 @@ const pokemons = [
   },
 ];
 
+const isPokemonFavoriteById = {
+  25: true,
+  4: false,
+  10: true,
+  11: false,
+};
+
+const isNotPokemonFavoriteById = {
+  25: false,
+  4: false,
+  10: false,
+  23: false,
+  65: false,
+  151: false,
+  78: false,
+};
+
 test('test 1, renders a reading with the text `Pokédex`', () => {
   const { getByText } = render(
     <MemoryRouter>
@@ -232,112 +250,221 @@ test('test 1, render router is "/"', () => {
   expect(getByText('Encountered pokémons')).toBeInTheDocument();
 });
 
-test('test 2, render text "Average weight:"', () => {
-  const { getByText } = render(
+test('test 2, A Pokédex deve exibir apenas um pokémon por vez"', () => {
+  const { queryAllByText, getByText } = render(
     <MemoryRouter initialEntries={['/']}>
-      <App />
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
     </MemoryRouter>,
   );
-  expect(getByText(/Average weight:/i)).toBeInTheDocument();
+  pokemons.forEach((pokemon) => {
+    const pokemonName = queryAllByText(pokemon.name);
+    expect(pokemonName.length).toBe(1);
+    fireEvent.click(getByText(/Próximo pokémon/i));
+  });
 });
 
-test('test 3, renders a reading with the text `Próximo pokémon`', () => {
+test('test 3.1, O botão deve conter o texto Próximo pokémon;', () => {
   const { getByText } = render(
-    <MemoryRouter>
-      <App />
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
     </MemoryRouter>,
   );
   const nextPokemon = getByText(/Próximo pokémon/i);
   expect(nextPokemon).toBeInTheDocument();
-  pokemons.map((pokemon) => {
-    getByText(`${pokemon.name}`);
-    fireEvent.click(nextPokemon);
-  });
 });
 
-test('test 4, render filter pokemons type', () => {
+test('test 3.2, Cliques sucessivos no botão P devem mostrar o próximo pokémon da lista', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+  for (let i = 0; i < pokemons.length; i += 1) {
+    expect(getByText(pokemons[i].name)).toBeInTheDocument()
+    fireEvent.click(getByText(/Próximo pokémon/i));
+  }
+});
+
+test('test 3.3, Ao se chegar ao último pokémon da lista, a Pokédex deve voltar para o primeiro pokémon no apertar do botão.', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+  for (let i = 0; i < pokemons.length; i += 1) {
+    expect(getByText(pokemons[i].name)).toBeInTheDocument()
+    fireEvent.click(getByText(/Próximo pokémon/i));
+  }
+  const pokemonFirst = getByText(pokemons[0].name);
+  expect(pokemonFirst).toBeInTheDocument();
+});
+
+test('test 4.1, A partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo;', () => {
   const { getByText, getAllByText } = render(
-    <MemoryRouter>
-      <App />
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
     </MemoryRouter>,
   );
 
-  const pokemonTypes = new Set(pokemons.map((pokemon) => pokemon.type))
+  const pokemonTypes = [...new Set(pokemons.map((pokemon) => pokemon.type))];
   pokemonTypes.forEach((type) => {
     const typeButton = getAllByText(type)[1] || getByText(type);
     fireEvent.click(typeButton);
-    const pokemonType = getByText(/Average weight:/i).previousSibling;
-    const pokelist = pokemons.filter((pokemon) => pokemon.type === type);
-    for (let i = 0; i < pokelist.length; i += 1) {
-      expect(pokemonType.textContent).toBe(type);
-      fireEvent.click(getByText(/Próximo pokémon/i));
-    }
+    const pokemonTypeText = getAllByText(type)[0];
+    expect(pokemonTypeText.innerHTML).toBe(type);
+    fireEvent.click(getByText(/Próximo pokémon/i));
   });
 });
 
-test('test 5, click reset filter pokemons type', () => {
+test('test 4.2, O texto do botão deve ser o nome do tipo, p. ex. Psychic.', () => {
+  const { getByText, getAllByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+
+  const pokemonTypes = [...new Set(pokemons.map((pokemon) => pokemon.type))];
+  pokemonTypes.forEach((type) => {
+    const typeButton = getAllByText(type)[1] || getByText(type);
+    fireEvent.click(typeButton);
+    const typePokemon = getAllByText(type)[0];
+    expect(typePokemon.innerHTML).toBe(type);
+    const buttonType = getAllByText(type)[1];
+    expect(buttonType.innerHTML).toBe(type);
+    fireEvent.click(getByText(/Próximo pokémon/i));
+  });
+});
+
+test('test 5.1, O texto do botão deve ser All;', () => {
   const { getByText } = render(
-    <MemoryRouter>
-      <App />
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+
+  const All = getByText(/All/i);
+  expect(All).toBeInTheDocument();
+});
+
+test('test 5.2, Após clicá-lo, a Pokédex deve voltar a circular por todos os pokémons;', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
     </MemoryRouter>,
   );
   const All = getByText(/All/i);
   fireEvent.click(All);
-  const previousPokemon = getByText(/Average weight:/i).previousSibling.previousSibling;
-  pokemons.map((pokemon) => {
-    for (let i = 0; i < pokemon.length; i += 1) {
-      fireEvent.click(getByText(/Próximo pokémon/i));
-      const currentPokemon = getByText(/Average weight:/i).previousSibling.previousSibling
-      expect(currentPokemon).not.toBe(previousPokemon);
-    }
-  });
-});
-
-test('test 6, dynamic button filter pokemon', () => {
-  const { getByText, getAllByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const pokemonTypes = new Set(pokemons.map((pokemon) => pokemon.type))
-  pokemonTypes.forEach((type) => {
-    const pokemonTextType = getAllByText(type)[1] || getByText(type);
-    expect(pokemonTextType.innerHTML).toBe(type);
-  });
-});
-
-test('test 7, disable button "Proximo pokémon" if filter only pokemon ', () => {
-  const { getByText, getAllByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const pokemonElectricType = getAllByText(/Electric/i)[1] || getByText(/Electric/i);
-  const previousPokemon = getByText(/Average weight:/i).previousSibling.previousSibling
-  fireEvent.click(pokemonElectricType);
   const nextPokemon = getByText(/Próximo pokémon/i);
-  fireEvent.click(nextPokemon);
-  const currentPokemon = getByText(/Average weight:/i).previousSibling.previousSibling
-  expect(currentPokemon).toBe(previousPokemon);
+  const pokemonName = document.getElementsByTagName('p')[0];
+  for (let i = 0; i < pokemons.length; i += 1) {
+    expect(pokemonName.innerHTML).toBe(pokemons[i].name);
+    fireEvent.click(nextPokemon);
+  }
 });
 
-test('test 8, pokemon "nome", "tipo", "peso médio", imagem', () => {
-  const { getByText, getByAltText } = render(
-    <MemoryRouter>
-      <App />
+test('test 5.3, Quando a página carrega, o filtro selecionado deve ser o All.', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+  const nextPokemon = getByText(/Próximo pokémon/i);
+  const pokemonName = document.getElementsByTagName('p')[0];
+  for (let i = 0; i < pokemons.length; i += 1) {
+    expect(pokemonName.innerHTML).toBe(pokemons[i].name);
+    fireEvent.click(nextPokemon);
+  }
+});
+
+test('test 6, A Pokédex deve gerar, dinamicamente, um botão de filtro para cada tipo de pokémon', () => {
+  const { getByText, queryAllByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+  const pokemonTypes = [...new Set(pokemons.map((pokemon) => pokemon.type))];
+  const All = getByText(/All/i);
+
+  pokemonTypes.map((type) => {
+    const pokemonButtonType = queryAllByText(type)[1] || getByText(type);
+    expect(pokemonButtonType).toBeInTheDocument();
+    expect(All).toBeInTheDocument();
+  });
+});
+
+test('test 7, O botão de Próximo pokémon deve ser desabilitado se a lista filtrada de pokémons tiver um só pokémon ', () => {
+  const { getByText, getAllByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
+    </MemoryRouter>,
+  );
+  const nextPokemon = getByText(/Próximo pokémon/i);
+  const pokemonTypes = [...new Set(pokemons.map((pokemon) => pokemon.type))];
+  pokemonTypes.map((type) => {
+    const pokemonButtonType = getAllByText(type)[1] || getByText(type);
+    fireEvent.click(pokemonButtonType);
+    const previousPokemonName = getByText(/Average weight:/i).previousSibling.previousSibling.textContent;
+    fireEvent.click(nextPokemon);
+    const currentPokemonName = getByText(/Average weight:/i).previousSibling.previousSibling.textContent;
+    if (previousPokemonName === currentPokemonName) expect(nextPokemon).toBeDisabled();
+    else expect(nextPokemon).toBeEnabled();
+  });
+});
+
+test('test 8, A Pokedéx deve exibir o nome, tipo, peso médio e imagem do pokémon exibido', () => {
+  const { getByText, getByAltText, queryAllByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex
+        pokemons={pokemons}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+      />
     </MemoryRouter>,
   );
 
-  pokemons.map((pokemon) => {
+  pokemons.forEach((pokemon) => {
     const imageAlt = getByAltText(`${pokemon.name} sprite`);
     expect(imageAlt.src).toBe(pokemon.image);
-    const type = getByText(/Average weight:/i).previousSibling;
-    expect(type.innerHTML).toBe(pokemon.type);
-    const nome = getByText(/Average weight:/i).previousSibling.previousSibling;
-    expect(nome.innerHTML).toBe(pokemon.name);
-    const average = getByText(/More details/i).previousSibling;
+    const type = queryAllByText(pokemon.type)[0];
+    expect(type.tagName).toBe("P");
+    expect(type).toBeInTheDocument();
+    const nome = getByText(pokemon.name);
+    expect(nome).toBeInTheDocument();
+    const averageWeight = getByText(/Average weight:/i).textContent;
     const averageData = `Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`;
-    expect(average.innerHTML).toBe(averageData);
+    expect(averageWeight).toBe(averageData);
     fireEvent.click(getByText(/Próximo pokémon/i));
   });
 });
@@ -352,99 +479,349 @@ function renderWithRouter(
   };
 }
 
-test('9 and 10 tests, render pokemons URL, "URL/pokemons/id"', () => {
-  const { getByText } = renderWithRouter(<App />);
-  const buttonMoreDetails = getByText(/More details/i);
-  fireEvent.click(buttonMoreDetails);
-  expect(buttonMoreDetails.href).toBe(`http://localhost/pokemons/${pokemons[0].id}`);
-  const pageDetails = getByText(/Pikachu Details/i);
-  expect(pageDetails).toBeInTheDocument();
-});
-
-test('9 and 10 tests, render next pokemons URL, "URL/pokemons/id"', () => {
-  const { getByText } = renderWithRouter(<App />);
-  const previousButtonMoreDetails = getByText(/More details/i);
-  fireEvent.click(previousButtonMoreDetails);
-  const previousPageDetails = getByText(/Pikachu Details/i);
-  expect(previousPageDetails).toBeInTheDocument();
-  fireEvent.click(getByText(/Home/i));
-  fireEvent.click(getByText(/Próximo pokémon/i));
-  const currentButtonMoreDetails = getByText(/More details/i);
-  fireEvent.click(currentButtonMoreDetails);
-  const currentPageDetails = getByText(/Charmander Details/i);
-  expect(currentPageDetails).toBeInTheDocument();
-  expect(currentButtonMoreDetails.href).toBe(`http://localhost/pokemons/${pokemons[1].id}`);
-});
-
-test('test 11, Page more details render name, type, average and image', () => {
-  const { getByText, getByAltText, getAllByText } = render(
-    <MemoryRouter>
-      <App />
+test('test 9, O link deve possuir a URL /pokemons/<id>, onde <id> é o id do pokémon exibido.', () => {
+  const { getByText } = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />
     </MemoryRouter>,
+  );
+  const nextPokemon = getByText(/Próximo pokémon/i);
+  pokemons.forEach((pokemon) => {
+    const buttonMoreDetails = getByText(/More details/i);
+    expect(buttonMoreDetails.href).toBe(`http://localhost/pokemons/${pokemon.id}`);
+    fireEvent.click(nextPokemon);
+  });
+});
+
+test('test 10, Ao clicar no link de navegação do pokémon, a aplicação deve ser redirecionada para a página de detalhes de pokémon', () => {
+  const { getByText, history } = renderWithRouter(
+    <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
   );
   const buttonMoreDetails = getByText(/More details/i);
+  expect(buttonMoreDetails).toBeInTheDocument();
+  expect(history.location.pathname).toBe('/');
   fireEvent.click(buttonMoreDetails);
-  const PageDetails = getByText(/Pikachu Details/i);
-  expect(PageDetails).toBeInTheDocument();
-  const imageAlt = getByAltText(`${pokemons[0].name} sprite`);
-  expect(imageAlt.src).toBe(pokemons[0].image);
-  const type = getByText(/Average weight:/i).previousSibling;
-  expect(type.innerHTML).toBe(pokemons[0].type);
-  const nome = getByText(/Average weight:/i).previousSibling.previousSibling;
-  expect(nome.innerHTML).toBe(pokemons[0].name);
-  const average = getAllByText(/Electric/i)[0].nextSibling;
-  const averageData = `Average weight: ${pokemons[0].averageWeight.value} ${pokemons[0].averageWeight.measurementUnit}`;
-  expect(average.innerHTML).toBe(averageData);
+  expect(history.location.pathname).toBe(`/pokemons/${pokemons[0].id}`);
+});
+const func = jest.fn();
+test('test 11, A página de detalhes de pokémon deve exibir o nome, tipo, peso médio e imagem do pokémon exibido', () => {
+  const pageDetails = (pokemon) => {
+    const match = {
+      params: {
+        id: String(pokemon.id),
+      },
+    };
+    const { getByText, getByAltText, queryAllByText} = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const imageAlt = getByAltText(`${pokemon.name} sprite`);
+    expect(imageAlt.src).toBe(pokemon.image);
+    const type = queryAllByText(pokemon.type)[0];
+    expect(type.tagName).toBe('P');
+    expect(type).toBeInTheDocument();
+    const nome = getByText(pokemon.name);
+    expect(nome).toBeInTheDocument();
+    const averageWeight = getByText(`Average weight: ${pokemon.averageWeight.value} ${pokemon.averageWeight.measurementUnit}`);
+    expect(averageWeight).toBeInTheDocument();
+  };
+
+  pokemons.forEach((pokemon) => {
+    pageDetails(pokemon);
+  });
 });
 
-test('test 12, Page more details not render link more details', () => {
-  const { getByText, getByAltText, getAllByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const previousButtonMoreDetails = getByText(/Average weight:/i).nextSibling;
-  fireEvent.click(previousButtonMoreDetails);
-  const PageDetails = getByText(/Pikachu Details/i);
-  expect(PageDetails).toBeInTheDocument();
-  const currentButtonMoreDetails = getByText(/Average weight:/i).nextSibling;
-  expect(previousButtonMoreDetails).not.toBe(currentButtonMoreDetails);
+test('test 12, O pokémon exibido na página de detalhes não deve conter um link de navegação para exibir detalhes deste pokémon', () => {
+  const pageDetails = (pokemon) => {
+    const match = {
+      params: {
+        id: String(pokemon.id),
+      },
+    };
+    const { queryByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    expect(queryByText(/More details/i)).toBeNull();
+  };
+
+  pokemons.forEach((pokemon) => {
+    pageDetails(pokemon);
+  });
 });
 
-test('test 13, Page more details render Summary, paragraph', () => {
-  const { getByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const ButtonMoreDetails = getByText(/Average weight:/i).nextSibling;
-  fireEvent.click(ButtonMoreDetails);
-  const summary = getByText(/Summary/i);
-  expect(summary).toBeInTheDocument();
-  expect(summary.tagName).toBe('H2');
-  const summaryParagraph = getByText(/Summary/i).nextSibling;
-  expect(summaryParagraph).toBeInTheDocument();
-  const sumaryData = pokemons[0].summary;
-  expect(summaryParagraph.innerHTML).toBe(sumaryData);
-  expect(summaryParagraph.tagName).toBe('P');
+
+describe('test 13, A página de detalhes deve exibir uma seção com um resumo do pokémon', () => {
+  afterEach(cleanup);
+
+  const summaryPokemon = (pokemon) => {
+    const match = {
+      params: {
+        id: String(pokemon.id),
+      },
+    };
+
+    const { getByText } = renderWithRouter(
+      <PokemonDetails
+        pokemons={pokemons}
+        onUpdateFavoritePokemons={func}
+        isPokemonFavoriteById={isPokemonFavoriteById}
+        match={match}
+      />,
+    );
+
+    const summaryTitle = getByText(/Summary/i);
+    expect(summaryTitle).toBeInTheDocument();
+    expect(summaryTitle.tagName).toBe('H2');
+
+    const summaryText = getByText(`${pokemon.summary}`);
+    expect(summaryText).toBeInTheDocument();
+  };
+
+  pokemons.forEach((pokemon) => {
+    test(`13 case ${pokemon.name}`, () => {
+      summaryPokemon(pokemon);
+    });
+  });
+});
+describe('test 14, O pokémon exibido na página de detalhes não deve conter um link de navegação para exibir detalhes deste pokémon', () => {
+  afterEach(cleanup);
+  const pageDetails = (pokemon) => {
+    const match = {
+      params: {
+        id: String(pokemon.id),
+      },
+    };
+    const { getByText, getAllByAltText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={func}
+          isPokemonFavoriteById={isPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const pokemonLocation = getByText(`Game Locations of ${pokemon.name}`);
+    expect(pokemonLocation.tagName).toBe('H2');
+    expect(pokemonLocation).toBeInTheDocument();
+    expect(pokemonLocation.nextSibling.childNodes.length).toBe(pokemon.foundAt.length);
+
+    pokemon.foundAt.forEach((tag, index) => {
+      expect(getByText(tag.location)).toBeInTheDocument();
+      const imageAlt = getAllByAltText(`${pokemon.name} location`);
+      expect(imageAlt[index].src).toBe(tag.map);
+      expect(imageAlt[index]).toBeInTheDocument();
+    });
+  };
+
+  pokemons.forEach((pokemon) => {
+    test(`14 case ${pokemon.name}`, () => {
+      pageDetails(pokemon);
+    });
+  });
 });
 
-test('test 14, Page more details render maps, details maps', () => {
-  const { getByText } = render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>,
-  );
-  const ButtonMoreDetails = getByText(/Average weight:/i).nextSibling;
-  fireEvent.click(ButtonMoreDetails);
-  const gameLocation = getByText(`${pokemons[0].name} Details`).nextSibling.nextSibling.nextSibling.firstChild;
-  expect(gameLocation.innerHTML).toBe(`Game Locations of ${pokemons[0].name}`);
-  expect(gameLocation.tagName).toBe('H2');
-  const pokemonLocationData = pokemons[0].foundAt.map((log) => log.location);
-  const pokemonLocation = gameLocation.nextSibling;
-  console.log(em.tagName.innerHTML);
-  const listLocation = []
-  // const summaryParagraph = getByText(/Summary/i).nextSibling;
-  // expect(summaryParagraph).toBeInTheDocument();
-  // expect(summaryParagraph.tagName).toBe('P');
+describe('test 15, A página de detalhes deve permitir favoritar um pokémon', () => {
+  afterEach(cleanup);
+  const pageDetails = (pokemon) => {
+    const match = {
+      params: {
+        id: String(pokemon.id),
+      },
+    };
+
+    const updateFavoritePokemons = jest.fn((array, id) => {
+      array[id] = !array[id];
+    });
+
+    const { getByLabelText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <PokemonDetails
+          pokemons={pokemons}
+          onUpdateFavoritePokemons={() => updateFavoritePokemons(isNotPokemonFavoriteById, pokemon.id)}
+          isPokemonFavoriteById={isNotPokemonFavoriteById}
+          match={match}
+        />
+      </MemoryRouter>,
+    );
+    const label = getByLabelText(/Pokémon favoritado?/i);
+    expect(label).toBeInTheDocument();
+    const checked = true;
+    fireEvent.click(label);
+    expect(isNotPokemonFavoriteById[pokemon.id]).toBe(checked);
+    fireEvent.click(label);
+    expect(isNotPokemonFavoriteById[pokemon.id]).not.toBe(checked);
+  };
+
+  pokemons.forEach((pokemon) => {
+    test(`15 case ${pokemon.name}`, () => {
+      pageDetails(pokemon);
+    });
+  });
+});
+
+describe('test 16, Fokémons favoritados devem exibir um ícone de uma estrela', () => {
+  afterEach(cleanup);
+
+  test('16', () => {
+    const { getByText, getByAltText, queryByAltText } = renderWithRouter(
+      <Pokedex pokemons={pokemons} isPokemonFavoriteById={isPokemonFavoriteById} />,
+    );
+    const nextPokemon = getByText(/Próximo pokémon/i);
+    pokemons.forEach((starFavorite) => {
+      if (isPokemonFavoriteById[starFavorite.id]) {
+        const iconStar = getByAltText(`${starFavorite.name} is marked as favorite`);
+        expect(iconStar).toBeInTheDocument();
+        const starIcon = '/star-icon.svg'
+        expect(iconStar.src).toBe(`http://localhost${starIcon}`);
+      } else {
+        expect(queryByAltText(`${starFavorite.name} is marked as favorite`)).not.toBeInTheDocument();
+      }
+      fireEvent.click(nextPokemon);
+    });
+  });
+});
+
+describe('test 17, No topo da aplicação, deve haver um conjunto fixo de links de navegação', () => {
+  test('test 17', () => {
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>,
+    );
+    const linkHome = getByText(/Home/i);
+    const linkAbout = getByText(/About/i);
+    const linkFavoritePokémons = getByText(/Favorite Pokémons/i);
+    expect(linkHome).toBeInTheDocument();
+    expect(linkAbout).toBeInTheDocument();
+    expect(linkFavoritePokémons).toBeInTheDocument();
+    expect(linkHome.href).toBe('http://localhost/');
+    expect(linkAbout.href).toBe('http://localhost/about');
+    expect(linkFavoritePokémons.href).toBe('http://localhost/favorites');
+  });
+});
+
+describe('test 18, Ao clicar no link "Home" na barra de navegação, a aplicação deve ser redirecionada para a página inicial, na URL "/"', () => {
+  test('test 18', () => {
+    const { getByText, history } = renderWithRouter(
+      <App />,
+    );
+    expect(history.location.pathname).toBe('/');
+    const buttonHome = getByText(/Home/i);
+    fireEvent.click(buttonHome);
+    expect(`http://localhost${history.location.pathname}`).toBe(buttonHome.href);
+  });
+});
+
+describe('test 19, Ao clicar no link "About" na barra de navegação, a aplicação deve ser redirecionada para a página de About, na URL "/about"', () => {
+  test('test 19', () => {
+    const { getByText, history } = renderWithRouter(
+      <App />,
+    );
+    expect(history.location.pathname).toBe('/');
+    const buttonAbout = getByText(/About/i);
+    fireEvent.click(buttonAbout);
+    expect(`http://localhost${history.location.pathname}`).toBe(buttonAbout.href);
+  });
+});
+
+describe('test 20, Ao clicar no link "Favorite Pokémons" na barra de navegação, a aplicação deve ser redirecionada para a página de pokémons favoritados, na URL "/favorites"', () => {
+  test('test 20', () => {
+    const { getByText, history } = renderWithRouter(
+      <App />,
+    );
+    expect(history.location.pathname).toBe('/');
+    const buttonFavorite = getByText(/Favorite Pokémons/i);
+    fireEvent.click(buttonFavorite);
+    expect(`http://localhost${history.location.pathname}`).toBe(buttonFavorite.href);
+  });
+});
+
+describe('test 21, A página "About" deve exibir informações sobre a Pokédex', () => {
+  test('test 21.1, A página deve conter um heading h2 com o texto About Pokédex;', () => {
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <About />
+      </MemoryRouter>,
+    );
+    const aboutTitle = getByText(/About Pokédex/i);
+    expect(aboutTitle).toBeInTheDocument();
+    expect(aboutTitle.tagName).toBe('H2');
+  });
+  test('test 21.2, A página deve conter dois parágrafos com texto sobre a Pokédex;;', () => {
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <About />
+      </MemoryRouter>,
+    );
+    const aboutTitle = getByText(/About Pokédex/i);
+    const aboutParagraph = aboutTitle.nextSibling.childNodes;
+    expect(aboutParagraph[0].tagName).toBe('P');
+    expect(aboutParagraph[1].tagName).toBe('P');
+  });
+  test('test 21.3, A página deve conter a seguinte imagem de uma Pokédex: https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png', () => {
+    const { getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <About />
+      </MemoryRouter>,
+    );
+    const aboutTitle = getByText(/About Pokédex/i);
+    const aboutParagraph = aboutTitle.nextSibling.childNodes;
+    expect(aboutParagraph[2].src).toBe('https://cdn.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png');
+  });
+});
+
+
+describe('Test 22, A página de pokémon favoritos deve exibir os pokémons favoritos', () => {
+  const testPossiblePoker = (poker, isFavoritePoker) => {
+    const pokemonFavorited = poker.filter(({ id }) => isFavoritePoker[id]);
+    const { getAllByText, queryByText, getByText } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <FavoritePokemons pokemons={pokemonFavorited} />
+      </MemoryRouter>,
+    );
+    if (pokemonFavorited.length !== 0) {
+      const listDetails = getAllByText('More details');
+      expect(listDetails.length).toBe(pokemonFavorited.length);
+      pokemonFavorited.forEach((pokemon) => {
+        const name = getByText(pokemon.name);
+        expect(name).toBeInTheDocument();
+      });
+    } else {
+      expect(queryByText('More details')).not.toBeInTheDocument();
+    }
+  };
+  test('test 22 ', () => {
+    testPossiblePoker(pokemons, isPokemonFavoriteById);
+  });
+});
+
+describe('test 23, Entrar em uma URL desconhecida exibe a página Not Found', () => {
+  test('23.1 A página deve conter um heading h2 com o texto Page requested not found 😭;', () => {
+    const { getByText } = renderWithRouter(<NotFound />, { route: '/4H0rase4damanhã' });
+    const notfound = getByText(/Page requested not found/i)
+    expect(notfound).toBeInTheDocument();
+    expect(notfound.tagName).toBe('H2');
+  });
+
+  test('23.2 A página deve exibir a imagem https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif.', () => {
+    const { getByAltText } = renderWithRouter(<NotFound />, { route: '/exaustrror' });
+
+    const imagePageError = getByAltText(/Pikachu crying because the page requested was not found/i);
+    expect(imagePageError).toBeInTheDocument();
+    expect(imagePageError.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
+  });
 });
