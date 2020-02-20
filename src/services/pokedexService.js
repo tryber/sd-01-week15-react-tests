@@ -3,7 +3,7 @@ export function getLocationPokemonAPI(offset = 0) {
   return fetch(locationPokeAPI(offset))
     .then((response) => (
       response.json().then((json) => response && Promise.resolve(json))));
-};
+}
 
 const generationPokeAPI = 'https://pokeapi.co/api/v2/generation/';
 
@@ -11,7 +11,7 @@ export function getGenerationPokemonAPI() {
   return fetch(generationPokeAPI)
     .then((response) => (
       response.json().then((json) => response && Promise.resolve(json))));
-};
+}
 export const readFavoritePokemonIds = () => (
   JSON.parse(localStorage.getItem('favoritePokemonIds')) || []
 );
