@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-
 import {
   About,
   FavoritePokemons,
@@ -15,6 +14,9 @@ import {
 } from './services/pokedexService';
 
 import pokemons from './data';
+import PokeAPILocation from './components/PokeAPILocation';
+import PokeAPIGeneration from './components/PokeAPIGeneration';
+import APIAboutOneGeneration from './components/APIAboutOneGeneration';
 
 import './App.css';
 
@@ -83,6 +85,10 @@ class App extends Component {
         />
         <Route path="/favorites" render={() => <FavoritePokemons pokemons={favoritePokemons} />} />
         <Route path="/about" component={About} />
+        <Route path="/locations" component={PokeAPILocation} />
+        <Route exact path="/generations" component={PokeAPIGeneration} />
+        <Route exact path="/generations/:id" component={APIAboutOneGeneration} />
+        <Route path="/generatios/details/:id" />
         <Route component={NotFound} />
       </Switch>
     );
@@ -96,6 +102,8 @@ class App extends Component {
           <Link className="link" to="/">Home</Link>
           <Link className="link" to="/about">About</Link>
           <Link className="link" to="/favorites">Favorite Pokémons</Link>
+          <Link className="link" to="/locations">Locations</Link>
+          <Link className="link" to="/generations">Generations</Link>
         </nav>
         {this.renderRoutes()}
       </div>
