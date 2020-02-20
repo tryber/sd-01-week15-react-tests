@@ -3,6 +3,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import Locations from './components/Locations';
 import Generations from './components/Generations';
 import OneGeneration from './components/OneGeneration';
+// import { id } from './components/Generations';
 import {
   About,
   FavoritePokemons,
@@ -87,7 +88,7 @@ class App extends Component {
         <Route path="/about" component={About} />
         <Route path="/locations" component={Locations} />
         <Route path="/generations" component={Generations} />
-        <Route exact path="/generations/:id" component={OneGeneration} />
+        <Route exact path="/generations/1" component={OneGeneration} />
         <Route component={NotFound} />
       </Switch>
     );

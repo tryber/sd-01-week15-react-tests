@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getGenerationPokemonAPI } from '../services/pokedexService';
 
+export function id(url) {
+  return url.split('generation/')[1];
+}
 
 class Generations extends Component {
   constructor(props) {
@@ -15,14 +18,11 @@ class Generations extends Component {
       loading: false,
     }));
   }
-
+  
   render() {
     const { date, loading } = this.state;
     if (loading) return <h1>LOADING...</h1>;
     console.log(date);
-    function splitUrl(url) {
-      return url.split('generation/')[1];
-    }
     return (
       <div>
         <h1> Pokemons Generations </h1>
@@ -31,7 +31,7 @@ class Generations extends Component {
             <h2>Click in generation</h2>
             {date.results.map(({ name, url }) => (
               <div data-testid="element-div" key={`value${name}`} className="div-for-generation">
-                <Link className="link" to={`/generation/${splitUrl(url)}`}>{name}</Link>
+                <Link className="link" to={`/generation/${id(url)}`}>{name}</Link>
               </div>
             ))}
           </div>

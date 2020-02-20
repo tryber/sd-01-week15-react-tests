@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
-import { render, fireEvent, cleanup } from '@testing-library/react';
+import { render, fireEvent, cleanup, waitForDomChange } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import App from '../App';
+import Locations from '../components/Locations';
 import { Pokedex, PokemonDetails, About, FavoritePokemons, NotFound } from '../components';
 
 // jest.mock('react-router-dom', () => {
@@ -823,5 +824,44 @@ describe('test 23, Entrar em uma URL desconhecida exibe a página Not Found', ()
     const imagePageError = getByAltText(/Pikachu crying because the page requested was not found/i);
     expect(imagePageError).toBeInTheDocument();
     expect(imagePageError.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
+  });
+});
+
+describe('test 25 and 26, Adicione uma rota para exibir uma lista de localizações', () => {
+  test('25 and 26, ', () => {
+    const { getByText, history } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnLocation = getByText(/Location/i);
+    const location = btnLocation.href;
+    fireEvent.click(btnLocation);
+    expect(`http://localhost${history.location.pathname}`).toBe(location);
+  });
+});
+describe('test 27, Adicione uma rota para exibir uma lista de localizações', () => {
+  test('27, ', async () => {
+    const { getByText, queryAllByTestId } = renderWithRouter(<App />);
+    fireEvent.click(getByText(/Locations/i));
+    await waitForDomChange();
+    const elementP = queryAllByTestId('element-p');
+    expect(elementP.length).toBe(100);
+    const previousButton = getByText(/Previous/i);
+    const nextButton = getByText(/Next/i);
+    expect(previousButton).toBeDisabled();
+    for (let index = 0; index < 8; index += 1) {
+      fireEvent.click(nextButton);
+    }
+
+    expect(nextButton).toBeDisabled();
+  });
+});
+describe('test 28 and 29, Adicione uma rota para exibir uma lista de localizações', () => {
+  test('28 and 29,', () => {
+    const { getByText, history } = renderWithRouter(<App />);
+
+    expect(history.location.pathname).toBe('/');
+    const btnGenerations = getByText(/Generations/i);
+    fireEvent.click(btnGenerations);
+    expect(`http://localhost${history.location.pathname}`).toBe('http://localhost/generations');
   });
 });
